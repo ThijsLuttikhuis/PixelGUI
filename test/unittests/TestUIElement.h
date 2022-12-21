@@ -14,31 +14,19 @@ namespace testing {
 
 using namespace PG;
 
-
 class TestUIElement : public Test {
 
 protected:
 
     void SetUp() override {
-        xPixels = 1024;
-        yPixels = 576;
-
-        window = std::make_shared<Window>(xPixels, yPixels);
-        game = std::make_shared<Game>();
-
-        window->setGame(game);
-        window->initialize();
+        uiElement = std::make_shared<UIElement>("uiElement", glm::vec2{}, glm::vec2{});
     }
 
     void TearDown() override {
-        window->closeWindow();
     }
 
 public:
-    int xPixels;
-    int yPixels;
-    std::shared_ptr<Window> window;
-    std::shared_ptr<Game> game;
+    std::shared_ptr<UIElement> uiElement;
 };
 
 }

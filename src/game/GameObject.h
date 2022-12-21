@@ -18,17 +18,11 @@ private:
     static int uniqueIDCounter;
     int uniqueID;
 
-    bool isPositionInBox(double x, double y);
-
-    static bool isPositionInBox(double x, double y, glm::vec2 pos, glm::vec2 size);
-
 protected:
     std::string name;
-
     glm::vec2 position{};
     glm::vec2 size{};
 
-    bool mouseIsHovering = false;
 public:
     GameObject() {
         uniqueID = uniqueIDCounter++;
@@ -49,10 +43,6 @@ public:
         return uniqueID == other.uniqueID;
     }
 
-    /// draw
-    virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
-                      const std::unique_ptr<TextRenderer> &textRenderer) const;
-
     /// setters
     void forceSetUniqueID(int uniqueID_);
 
@@ -64,8 +54,6 @@ public:
 
     void setSize(int width, int height);
 
-    void setIsMouseHovering(bool hover);
-
     /// getters
     [[nodiscard]] int getUniqueID() const;
 
@@ -74,11 +62,6 @@ public:
     [[nodiscard]] const glm::vec2 &getSize() const;
 
     [[nodiscard]] const std::string &getName() const;
-
-    [[nodiscard]] virtual bool isMouseHovering(double xPos, double yPos) const;
-
-    [[nodiscard]] bool isMouseHovering() const;
-
 };
 
 }

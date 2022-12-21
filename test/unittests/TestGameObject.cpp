@@ -12,7 +12,6 @@ TEST_F(TestGameObject, createEmptyGameObject) {
     EXPECT_TRUE(gameObject->getName().empty());
     EXPECT_EQ(gameObject->getPosition(), glm::vec2{});
     EXPECT_EQ(gameObject->getSize(), glm::vec2{});
-    EXPECT_FALSE(gameObject->isMouseHovering());
 }
 
 TEST_F(TestGameObject, createGameObject_PosSizeAreCorrect) {
@@ -30,44 +29,6 @@ TEST_F(TestGameObject, createGameObject_PosSizeAreCorrect) {
     EXPECT_EQ(gameObject->getName(), testName2);
     EXPECT_EQ(gameObject->getPosition(), testPos2);
     EXPECT_EQ(gameObject->getSize(), testSize2);
-
-}
-
-TEST_F(TestGameObject, sizeZero_MouseHoveringAlwaysFalse) {
-    ASSERT_EQ(gameObject->getPosition(), glm::vec2(0, 0));
-    ASSERT_EQ(gameObject->getSize(), glm::vec2(0, 0));
-
-    for (int x = -2; x < 3; x++) {
-        for (int y = -2; y < 3; y++) {
-            EXPECT_FALSE(gameObject->isMouseHovering(x, y));
-        }
-    }
-}
-
-TEST_F(TestGameObject, sizeNonZero_MouseHoveringExcludesBorders) {
-    ASSERT_EQ(gameObject->getPosition(), glm::vec2(0, 0));
-    ASSERT_EQ(gameObject->getSize(), glm::vec2(0, 0));
-
-
-    int xSize = 3;
-    int ySize = 4;
-    int xPos = 5;
-    int yPos = 6;
-
-    gameObject->setPosition(xPos, yPos);
-    gameObject->setSize(xSize, ySize);
-
-    for (int x = xPos - 1; x < xPos + xSize + 2; x++) {
-        for (int y = yPos - 1; y < yPos + ySize + 2; y++) {
-            if (x > xPos && x < xPos + xSize && y > yPos && y < yPos + ySize) {
-                EXPECT_TRUE(gameObject->isMouseHovering(x, y));
-            }
-            else {
-                EXPECT_FALSE(gameObject->isMouseHovering(x, y));
-            }
-        }
-    }
-
 }
 
 }

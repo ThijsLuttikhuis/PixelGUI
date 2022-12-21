@@ -10,12 +10,40 @@ namespace testing {
 using namespace PG;
 
 TEST_F(TestWindow, createWindow) {
-
     int xp = window->getXPixels();
     int yp = window->getYPixels();
     EXPECT_EQ(xp, xPixels);
     EXPECT_EQ(yp, yPixels);
 }
+
+TEST_F(TestWindow, closeWindow_CallCloseWindow) {
+    EXPECT_FALSE(window->shouldClose());
+    window->closeWindow();
+    EXPECT_TRUE(window->shouldClose());
+}
+
+TEST_F(TestWindow, closeWindow_PressAltF4) {
+    EXPECT_FALSE(window->shouldClose());
+
+    window->handleKeyboard(GLFW_KEY_LEFT_ALT, GLFW_PRESS, 0);
+    EXPECT_FALSE(window->shouldClose());
+
+    window->handleKeyboard(GLFW_KEY_LEFT_ALT, GLFW_RELEASE, 0);
+    EXPECT_FALSE(window->shouldClose());
+
+    window->handleKeyboard(GLFW_KEY_F4, GLFW_PRESS, 0);
+    EXPECT_FALSE(window->shouldClose());
+
+    window->handleKeyboard(GLFW_KEY_F4, GLFW_RELEASE, 0);
+    EXPECT_FALSE(window->shouldClose());
+
+    window->handleKeyboard(GLFW_KEY_LEFT_ALT, GLFW_PRESS, 0);
+    EXPECT_FALSE(window->shouldClose());
+
+    window->handleKeyboard(GLFW_KEY_F4, GLFW_PRESS, 0);
+    EXPECT_TRUE(window->shouldClose());
+}
+
 
 TEST_F(TestWindow, resizeWindow5xPixelSize) {
     for (int i = 1; i < 5; i++) {

@@ -20,7 +20,6 @@ protected:
     }
 
     void TearDown() override {
-
     }
 
 public:
