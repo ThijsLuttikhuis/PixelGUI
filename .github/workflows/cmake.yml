@@ -21,6 +21,9 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update; sudo apt-get upgrade; sudo apt-get install -y xorg-dev libglu1-mesa-dev
     
+    - name: Add Google Test
+      run: cd src/lib; git clone git@github.com:google/googletest.git; cd ../../
+    
     - uses: actions/checkout@v3
 
     - name: Configure CMake
