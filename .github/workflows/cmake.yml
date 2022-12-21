@@ -19,7 +19,7 @@ jobs:
 
     steps:
     - name: Install dependencies
-      run: sudo apt-get install -y xorg-dev libglu1-mesa-dev
+      run: sudo apt-get update; sudo apt-get upgrade; sudo apt-get install -y xorg-dev libglu1-mesa-dev
     
     - uses: actions/checkout@v3
 
