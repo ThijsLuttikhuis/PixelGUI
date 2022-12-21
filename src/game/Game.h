@@ -19,7 +19,7 @@ private:
 public:
     Game() = default;
 
-    ~Game() = default;
+    virtual ~Game() = default;
 
     virtual void render() {}
 

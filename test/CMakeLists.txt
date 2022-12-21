@@ -3,13 +3,16 @@
 
 project(tests)
 
+set(CMAKE_CXX_FLAGS "-O0 -g -Wall -Wextra --coverage")
+
+
 add_subdirectory(lib/googletest)
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 set(INCLUDE_TESTS
         unittests/TestWindow.cpp
-        unittests/TestWindow.h)
+        unittests/TestWindow.h unittests/TestUIElement.cpp unittests/TestUIElement.h unittests/TestGameObject.cpp unittests/TestGameObject.h)
 
 add_executable(run_tests
         ${INCLUDE_TESTS}

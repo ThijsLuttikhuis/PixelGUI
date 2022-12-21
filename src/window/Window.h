@@ -11,7 +11,15 @@
 
 namespace PG {
 
+class Window;
 class Game;
+
+extern std::weak_ptr<Window> callback_window_ptr;
+
+void mouse_position_callback(GLFWwindow* window, double xPos, double yPos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 class Window : public std::enable_shared_from_this<Window> {
 private:

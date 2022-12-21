@@ -18,7 +18,7 @@ namespace PG {
 class UIElement;
 
 struct SpriteArgs {
-    enum Anchor {
+    enum Anchor : int {
         TOP_LEFT = 1,
         TOP = 2,
         TOP_RIGHT = 3,
@@ -29,12 +29,31 @@ struct SpriteArgs {
         BOTTOM = 8,
         BOTTOM_RIGHT = 9
     };
-    glm::mat4 model = glm::mat4(1.0f);
+    enum NamedZIndex : int {
+
+    };
+
+    static float namedZIndexToFloat(NamedZIndex name) {
+        return static_cast<float>((int) name) / 100;
+    }
+
+    explicit SpriteArgs(float zIndex, glm::vec3 color = glm::vec3(),
+                        float alpha = 1.0f, Anchor anchor = TOP_LEFT,
+                        glm::mat4 model = glm::mat4(1.0))
+          : zIndex(zIndex), color(color), alpha(alpha), anchor(anchor), model(model) {}
+
+    explicit SpriteArgs(NamedZIndex namedZIndex, glm::vec3 color = glm::vec3(),
+                        float alpha = 1.0f, Anchor anchor = TOP_LEFT,
+                        glm::mat4 model = glm::mat4(1.0))
+          : SpriteArgs(namedZIndexToFloat(namedZIndex), color, alpha, anchor, model) {}
+
+
+    float zIndex = 0.0f;
     glm::vec3 color = glm::vec3(1.0f);
     float alpha = 1.0f;
-    float zIndex = 0.0f;
-    float rotation = 0.0f;
     Anchor anchor = BOTTOM_LEFT;
+    glm::mat4 model = glm::mat4(1.0f);
+
 };
 
 class SpriteRenderer {
@@ -60,7 +79,7 @@ public:
 
     void setBaseUI(std::shared_ptr<UIElement> baseUI_);
 
-    void drawSprite(const std::string &textureName, float zIndex, const glm::vec2 &position,
+    void drawSprite(const std::string &textureName, const glm::vec2 &position,
                     const glm::vec2 &size, const SpriteArgs &args) const;
 };
 

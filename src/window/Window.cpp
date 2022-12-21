@@ -2,55 +2,12 @@
 // Created by thijs on 13-12-22.
 //
 
-
 #include <iostream>
 #include <memory>
 #include "Window.h"
 #include "game/Game.h"
 
 namespace PG {
-
-std::weak_ptr<Window> callback_window_ptr;
-
-void mouse_position_callback(GLFWwindow* window, double xPos, double yPos) {
-    (void) window;
-
-    auto windowPtr = std::shared_ptr<Window>(callback_window_ptr);
-    windowPtr->handleMousePosition(xPos, yPos);
-}
-
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-    (void) mods;
-
-    if (button == GLFW_MOUSE_BUTTON_LEFT) {
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
-        if (action == GLFW_RELEASE) {
-            auto windowPtr = std::shared_ptr<Window>(callback_window_ptr);
-            windowPtr->handleMouseButton(xpos, ypos);
-        }
-    }
-}
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
-    (void) window, (void) mode;
-
-#if PG_DEBUG
-    std::cout << "key callback" << std::endl;
-#endif
-    auto windowPtr = std::shared_ptr<Window>(callback_window_ptr);
-    windowPtr->handleKeyboard(key, action, scancode);
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    (void) window;
-
-#if PG_DEBUG
-    std::cout << "framebuffer size callback" << std::endl;
-#endif
-
-    glViewport(0,0, width, height);
-}
 
 std::shared_ptr<Window> Window::getSharedFromThis() {
     return shared_from_this();
@@ -60,7 +17,7 @@ Window::Window(int xPixels, int yPixels, double scale, const std::string &window
       xPixels(xPixels), yPixels(yPixels) {
 
     int displayWidth = (int) (scale * xPixels);
-    int displayHeight = (int) (yPixels * scale);
+    int displayHeight = (int) (scale * yPixels);
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -77,7 +34,7 @@ Window::Window(int xPixels, int yPixels, double scale, const std::string &window
         exit(-1);
     }
 
-    glfwSetWindowAspectRatio(glfwWindow, 16, 9);
+    glfwSetWindowAspectRatio(glfwWindow, xPixels, yPixels);
     glfwSetWindowSizeLimits(glfwWindow, xPixels, yPixels, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
     glfwMakeContextCurrent(glfwWindow);
@@ -158,7 +115,6 @@ void Window::handleMousePosition(double xPos, double yPos) {
 
     gamePtr->handleMousePosition(xPos, yPos);
 }
-
 
 void Window::handleKeyboard(int key, int action, int scanCode) {
     (void) scanCode;

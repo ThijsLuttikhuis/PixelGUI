@@ -26,9 +26,22 @@ set(LIBS
         ${GLFW_LIBRARIES}
         )
 
+set(INCLUDE_UI
+        src/ui/UIElement.h
+        src/ui/UIElement.cpp
+        )
+
+set(INCLUDE_GAME_OBJECT
+        src/game/GameObject.h
+        src/game/GameObject.cpp
+        src/game/Game.h
+        src/game/Game.cpp
+        )
+
 set(INCLUDE_WINDOW
         src/window/Window.h
         src/window/Window.cpp
+        src/window_callback.cpp
 
         src/window/render/Shader.h
         src/window/render/Shader.cpp
@@ -41,15 +54,15 @@ set(INCLUDE_WINDOW
 set(INCLUDE_SOURCE_FILES
         src/glad.c
         src/stb_image.h
-        src/game/Game.cpp
-        src/game/Game.h
+        ${INCLUDE_GAME_OBJECT}
         ${INCLUDE_WINDOW}
+        ${INCLUDE_UI}
         )
 
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        )
+        src/window_callback.cpp)
 
 target_link_libraries(PixelGUI ${LIBS})
 

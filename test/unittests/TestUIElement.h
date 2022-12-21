@@ -1,25 +1,27 @@
 //
-// Created by thijs on 14-12-22.
+// Created by thijs on 19-12-22.
 //
 
-#ifndef PIXELGUI_TESTWINDOW_H
-#define PIXELGUI_TESTWINDOW_H
+#ifndef PIXELGUI_TESTUIELEMENT_H
+#define PIXELGUI_TESTUIELEMENT_H
 
 #include <gtest/gtest.h>
 #include "game/Game.h"
-#include "../src/window/Window.h"
+#include "window/Window.h"
+#include "ui/UIElement.h"
 
 namespace testing {
 
 using namespace PG;
 
-class TestWindow : public Test {
+
+class TestUIElement : public Test {
 
 protected:
 
     void SetUp() override {
-        xPixels = 200;
-        yPixels = 110;
+        xPixels = 1024;
+        yPixels = 576;
 
         window = std::make_shared<Window>(xPixels, yPixels);
         game = std::make_shared<Game>();
@@ -41,4 +43,4 @@ public:
 
 }
 
-#endif //PIXELGUI_TESTWINDOW_H
+#endif //PIXELGUI_TESTUIELEMENT_H

@@ -13,11 +13,9 @@ void UIElement::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
     float edgeAlpha = 1.0f;
     auto color_ = color;
     auto alpha_ = alpha;
-    spriteArgs args = {{"color",     &color_},
-                       {"alpha",     &alpha_},
-                       {"edgeAlpha", &edgeAlpha}};
+    SpriteArgs args = SpriteArgs(1.0f);
 
-    spriteRenderer->drawSprite("box", 1.0f, position, size, args);
+    spriteRenderer->drawSprite("box", position, size, args);
 }
 
 void UIElement::setColor(const glm::vec3 &color_) {

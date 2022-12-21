@@ -62,6 +62,8 @@ public:
 
     void setSize(glm::vec2 size);
 
+    void setSize(int width, int height);
+
     void setIsMouseHovering(bool hover);
 
     /// getters

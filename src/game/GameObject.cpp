@@ -2,9 +2,7 @@
 // Created by thijs on 30-05-22.
 //
 
-#include "utilities/Utilities.h"
 #include "GameObject.h"
-#include "shaders/SpriteRenderer.h"
 
 namespace PG {
 
@@ -54,10 +52,16 @@ void GameObject::setPosition(int left, int up) {
     setPosition(glm::vec2(left, up));
 }
 
+void GameObject::setSize(int width, int height) {
+    setSize(glm::vec2(width, height));
+}
+
 void GameObject::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                       const std::unique_ptr<TextRenderer> &textRenderer) const {
     (void) textRenderer;
-    spriteRenderer->drawSprite(name, 1.0f, position, size);
+    SpriteArgs spriteArgs(1.0f);
+
+    spriteRenderer->drawSprite(name, position, size, spriteArgs);
 }
 
 bool GameObject::isPositionInBox(double x, double y, glm::vec2 position, glm::vec2 size) {
@@ -69,4 +73,6 @@ bool GameObject::isPositionInBox(double x, double y, glm::vec2 position, glm::ve
 bool GameObject::isPositionInBox(double x, double y) {
     return GameObject::isPositionInBox(x, y, position, size);
 }
+
+
 }

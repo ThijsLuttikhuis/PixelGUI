@@ -20,7 +20,6 @@ Texture2D::Texture2D(const std::string &fileName)
 
     unsigned char* data = stbi_load(fileName.c_str(), &width, &height, &channels, 0);
     if (width == 0) {
-
         std::cerr << "texture " << fileName << " cannot be loaded!" << std::endl;
     }
 

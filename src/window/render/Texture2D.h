@@ -19,7 +19,6 @@ private:
     int height{};
     int channels{};
 
-    // gl stuff
     unsigned int internalFormat;
     unsigned int imageFormat;
     unsigned int wrapS{};
