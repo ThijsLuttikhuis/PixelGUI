@@ -19,7 +19,7 @@ jobs:
 
     steps:
     - name: Install dependencies
-      run: sudo apt-get update; sudo apt-get upgrade; sudo apt-get install -y xorg-dev libglu1-mesa-dev
+      run: sudo apt-get update; sudo apt-get upgrade; sudo apt-get install -y xorg-dev libglu1-mesa-dev xvfb
     
     
     - uses: actions/checkout@v3
@@ -37,9 +37,19 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
+
+    - name: Setup xvfb for UI tests
+      run: Xvfb :1 -screen 0 1600x1200x24 &
+
     - name: Test
+      env: 
+        DISPLAY: :1
       working-directory: ${{github.workspace}}/build/test
       # Execute tests defined by the CMake configuration.
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ./run_tests
+      
+    - name: Kill xvfb
+      run: killall Xvfb
+
 
