@@ -44,7 +44,6 @@ TEST_F(TestWindow, closeWindow_PressAltF4) {
     EXPECT_TRUE(window->shouldClose());
 }
 
-
 TEST_F(TestWindow, resizeWindow5xPixelSize) {
     for (int i = 1; i < 5; i++) {
         int width = xPixels * i;

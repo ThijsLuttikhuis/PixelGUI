@@ -2,8 +2,8 @@
 // Created by thijs on 30-05-22.
 //
 
-#ifndef DICEGONEROGUE_SPRITERENDERER_H
-#define DICEGONEROGUE_SPRITERENDERER_H
+#ifndef PIXELGUI_SPRITERENDERER_H
+#define PIXELGUI_SPRITERENDERER_H
 
 
 #include <map>
@@ -14,6 +14,8 @@
 #include "Texture2D.h"
 
 namespace PG {
+
+class Sprite;
 
 class UIElement;
 
@@ -37,20 +39,15 @@ struct SpriteArgs {
         return static_cast<float>((int) name) / 100;
     }
 
-    explicit SpriteArgs(float zIndex, glm::vec3 color = glm::vec3(),
-                        float alpha = 1.0f, Anchor anchor = TOP_LEFT,
+    explicit SpriteArgs(float zIndex, Anchor anchor = TOP_LEFT,
                         glm::mat4 model = glm::mat4(1.0))
-          : zIndex(zIndex), color(color), alpha(alpha), anchor(anchor), model(model) {}
+          : zIndex(zIndex), anchor(anchor), model(model) {}
 
-    explicit SpriteArgs(NamedZIndex namedZIndex, glm::vec3 color = glm::vec3(),
-                        float alpha = 1.0f, Anchor anchor = TOP_LEFT,
+    explicit SpriteArgs(NamedZIndex namedZIndex, Anchor anchor = TOP_LEFT,
                         glm::mat4 model = glm::mat4(1.0))
-          : SpriteArgs(namedZIndexToFloat(namedZIndex), color, alpha, anchor, model) {}
-
+          : SpriteArgs(namedZIndexToFloat(namedZIndex), anchor, model) {}
 
     float zIndex = 0.0f;
-    glm::vec3 color = glm::vec3(1.0f);
-    float alpha = 1.0f;
     Anchor anchor = BOTTOM_LEFT;
     glm::mat4 model = glm::mat4(1.0f);
 
@@ -79,11 +76,11 @@ public:
 
     void setBaseUI(std::shared_ptr<UIElement> baseUI_);
 
-    void drawSprite(const std::string &textureName, const glm::vec2 &position,
+    void drawSprite(const std::unique_ptr<Sprite> &sprite, const glm::vec2 &position,
                     const glm::vec2 &size, const SpriteArgs &args) const;
 };
 
 }
 
 
-#endif //DICEGONEROGUE_SPRITERENDERER_H
+#endif //PIXELGUI_SPRITERENDERER_H

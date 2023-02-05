@@ -6,6 +6,7 @@
 #include "src/window/Window.h"
 #include "game/Game.h"
 
+
 int main() {
     std::shared_ptr<PG::Window> window = std::make_shared<PG::Window>(512, 288);
     std::shared_ptr<PG::Game> game = std::make_shared<PG::Game>();

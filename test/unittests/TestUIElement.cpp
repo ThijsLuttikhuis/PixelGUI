@@ -12,7 +12,7 @@ TEST_F(TestUIElement, createEmptyUIElement) {
     EXPECT_EQ(uiElement->getName(), "uiElement");
     EXPECT_EQ(uiElement->getPosition(), glm::vec2{});
     EXPECT_EQ(uiElement->getSize(), glm::vec2{});
-    EXPECT_FALSE(uiElement->isMouseHovering());
+    EXPECT_FALSE(uiElement->isMouseHovering(0, 0));
 }
 
 TEST_F(TestUIElement, sizeZero_MouseHoveringAlwaysFalse) {

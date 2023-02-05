@@ -2,8 +2,8 @@
 // Created by thijs on 30-05-22.
 //
 
-#ifndef DICEGONEROGUE_TEXTURE2D_H
-#define DICEGONEROGUE_TEXTURE2D_H
+#ifndef PIXELGUI_TEXTURE2D_H
+#define PIXELGUI_TEXTURE2D_H
 
 #include <string>
 
@@ -33,4 +33,4 @@ public:
 
 }
 
-#endif //DICEGONEROGUE_TEXTURE2D_H
+#endif //PIXELGUI_TEXTURE2D_H

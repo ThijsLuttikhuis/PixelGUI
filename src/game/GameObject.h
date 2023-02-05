@@ -2,8 +2,8 @@
 // Created by thijs on 30-05-22.
 //
 
-#ifndef DICEGONEROGUE_GAMEOBJECT_H
-#define DICEGONEROGUE_GAMEOBJECT_H
+#ifndef PIXELGUI_GAMEOBJECT_H
+#define PIXELGUI_GAMEOBJECT_H
 
 #include <utility>
 #include <glm/vec3.hpp>
@@ -66,4 +66,4 @@ public:
 
 }
 
-#endif //DICEGONEROGUE_GAMEOBJECT_H
+#endif //PIXELGUI_GAMEOBJECT_H

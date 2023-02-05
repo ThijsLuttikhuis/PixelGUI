@@ -12,7 +12,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 set(INCLUDE_TESTS
         unittests/TestWindow.cpp
-        unittests/TestWindow.h unittests/TestUIElement.cpp unittests/TestUIElement.h unittests/TestGameObject.cpp unittests/TestGameObject.h)
+        unittests/TestWindow.h unittests/TestUIElement.cpp unittests/TestUIElement.h unittests/TestGameObject.cpp unittests/TestGameObject.h unittests/TestButton.cpp unittests/TestButton.h)
 
 add_executable(run_tests
         ${INCLUDE_TESTS}

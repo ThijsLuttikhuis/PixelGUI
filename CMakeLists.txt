@@ -27,8 +27,12 @@ set(LIBS
         )
 
 set(INCLUDE_UI
+        src/ui/Button.h
+        src/ui/Button.cpp
         src/ui/UIElement.h
         src/ui/UIElement.cpp
+        src/ui/Sprite.h
+        src/ui/Sprite.cpp
         )
 
 set(INCLUDE_GAME_OBJECT
@@ -54,6 +58,7 @@ set(INCLUDE_WINDOW
 set(INCLUDE_SOURCE_FILES
         src/glad.c
         src/stb_image.h
+        src/window_callback.cpp
         ${INCLUDE_GAME_OBJECT}
         ${INCLUDE_WINDOW}
         ${INCLUDE_UI}
@@ -62,7 +67,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        src/window_callback.cpp)
+        )
 
 target_link_libraries(PixelGUI ${LIBS})
 

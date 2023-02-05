@@ -3,6 +3,7 @@
 //
 
 #include "UIElement.h"
+#include "Sprite.h"
 
 namespace PG {
 
@@ -10,13 +11,13 @@ void UIElement::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                      const std::unique_ptr<TextRenderer> &textRenderer) const {
     (void) textRenderer;
 
-    SpriteArgs args = SpriteArgs(1.0f, color, alpha);
+    SpriteArgs args = SpriteArgs(1.0f);
 
-    spriteRenderer->drawSprite("box", position, size, args);
+    spriteRenderer->drawSprite(sprite, position, size, args);
 }
 
 void UIElement::setColor(const glm::vec3 &color_) {
-    color = color_;
+    sprite->setColor(color_);
 }
 
 bool UIElement::isPositionInBox(double x, double y, glm::vec2 position, glm::vec2 size) {
@@ -25,21 +26,20 @@ bool UIElement::isPositionInBox(double x, double y, glm::vec2 position, glm::vec
     return xInBox && yInBox;
 }
 
-bool UIElement::isPositionInBox(double x, double y) {
+bool UIElement::isPositionInBox(double x, double y) const {
     return isPositionInBox(x, y, position, size);
 }
 
 bool UIElement::isMouseHovering(double xPos, double yPos) const {
-    return isPositionInBox(xPos, yPos, position, size);
+    return isPositionInBox(xPos, yPos);
 }
 
-bool UIElement::isMouseHovering() const {
-    return mouseIsHovering;
+void UIElement::setAlpha(float alpha_) {
+    sprite->setAlpha(alpha_);
 }
 
-void UIElement::setIsMouseHovering(bool hover_) {
-    mouseIsHovering = hover_;
+const std::unique_ptr<Sprite> &UIElement::getSprite() const {
+    return sprite;
 }
-
 
 }

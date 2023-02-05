@@ -13,6 +13,7 @@
 #include <utility>
 
 #include "SpriteRenderer.h"
+#include "ui/Sprite.h"
 #include "ui/UIElement.h"
 
 namespace PG {
@@ -86,7 +87,7 @@ void SpriteRenderer::setBaseUI(std::shared_ptr<UIElement> baseUI_) {
     baseUI = std::move(baseUI_);
 }
 
-void SpriteRenderer::drawSprite(const std::string &textureName, const glm::vec2 &position,
+void SpriteRenderer::drawSprite(const std::unique_ptr<Sprite> &sprite, const glm::vec2 &position,
                                 const glm::vec2 &size, const SpriteArgs &args) const {
 
     // move position from screen space to scene space
@@ -107,24 +108,17 @@ void SpriteRenderer::drawSprite(const std::string &textureName, const glm::vec2 
     auto model = glm::translate(args.model, glm::vec3(screenPos, 0.0f));
     model = glm::scale(model, glm::vec3(size, 1.0f));
 
-
     // apply shader variables
     shader->use();
     shader->setMatrix4("model", model);
-    shader->setVector3f("spriteColor", args.color);
-    shader->setFloat("spriteAlpha", args.alpha);
+    shader->setVector3f("spriteColor", sprite->getColor());
+    shader->setFloat("spriteAlpha", sprite->getAlpha());
     shader->setFloat("zIndex", args.zIndex);
 
     // set texture
     glActiveTexture(GL_TEXTURE0);
-    if (textures.find(textureName) != textures.end()) {
-        textures.at(textureName)->bind();
-    } else {
-#if DGR_PRINT_NO_TEXTURE
-        std::cerr << "SpriteRenderer::drawSprite: error, no texture exist with name " << textureName << std::endl;
-#endif
-        textures.at("no_texture")->bind();
-    }
+    const std::unique_ptr<Texture2D> &texture = sprite->getTexture();
+    texture->bind();
 
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);

@@ -2,8 +2,8 @@
 // Created by thijs on 06-06-22.
 //
 
-#ifndef DICEGONEROGUE_TEXTRENDERER_H
-#define DICEGONEROGUE_TEXTRENDERER_H
+#ifndef PIXELGUI_TEXTRENDERER_H
+#define PIXELGUI_TEXTRENDERER_H
 
 #include <vector>
 
@@ -44,4 +44,4 @@ public:
 
 }
 
-#endif //DICEGONEROGUE_TEXTRENDERER_H
+#endif //PIXELGUI_TEXTRENDERER_H

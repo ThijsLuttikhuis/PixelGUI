@@ -2,8 +2,8 @@
 // Created by thijs on 30-05-22.
 //
 
-#ifndef DICEGONEROGUE_SHADER_H
-#define DICEGONEROGUE_SHADER_H
+#ifndef PIXELGUI_SHADER_H
+#define PIXELGUI_SHADER_H
 
 #include <memory>
 #include <string>
@@ -50,4 +50,4 @@ private:
 
 }
 
-#endif //DICEGONEROGUE_SHADER_H
+#endif //PIXELGUI_SHADER_H
