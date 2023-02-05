@@ -18,6 +18,8 @@ class TestWindow : public Test {
 protected:
 
     void SetUp() override {
+
+
         xPixels = 200;
         yPixels = 110;
 
@@ -26,6 +28,11 @@ protected:
 
         window->setGame(game);
         window->initialize();
+
+        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+        std::cout << "Monitor resolution: " << mode->width << "x"
+                  << mode->height << std::endl;
     }
 
     void TearDown() override {
