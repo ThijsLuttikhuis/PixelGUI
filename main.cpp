@@ -18,6 +18,8 @@ int main() {
 
     while (!window->shouldClose()) {
         window->render();
+
+//        window->setWindowSize(1000, 1200);
     }
 
     return 0;

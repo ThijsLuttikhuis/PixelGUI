@@ -25,7 +25,6 @@ class Window : public std::enable_shared_from_this<Window> {
 private:
     int xPixels;
     int yPixels;
-
     GLFWwindow* glfwWindow;
 
     std::unique_ptr<std::vector<bool>> keysPressed = std::make_unique<std::vector<bool>>(512, false);

@@ -23,6 +23,8 @@ Window::Window(int xPixels, int yPixels, double scale, const std::string &window
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
@@ -52,6 +54,8 @@ Window::Window(int xPixels, int yPixels, double scale, const std::string &window
     }
 
     glfwSetWindowSize(glfwWindow, displayWidth, displayHeight);
+
+
 
     glViewport(0, 0, displayWidth, displayHeight);
 
@@ -138,6 +142,17 @@ void Window::handleKeyboard(int key, int action, int scanCode) {
 }
 
 void Window::setWindowSize(int displayWidth_, int displayHeight_) {
+    double aspectRatio = (double)xPixels / yPixels;
+
+    double newAspectRatio = (double)displayWidth_ / displayHeight_;
+
+    if (newAspectRatio > aspectRatio) {
+        displayWidth_ = static_cast<int>(aspectRatio * displayHeight_);
+    }
+    else {
+        displayHeight_ = static_cast<int>(1.0 / aspectRatio * displayWidth_);
+    }
+
     glfwSetWindowSize(glfwWindow, displayWidth_, displayHeight_);
 }
 
