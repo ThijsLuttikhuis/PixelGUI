@@ -28,20 +28,8 @@ const std::vector<int> TextRenderer::letterWidths = {
 };
 
 
-TextRenderer::TextRenderer(std::shared_ptr<Shader> shader, glm::mat4 projection)
+TextRenderer::TextRenderer(const std::shared_ptr<Shader> &shader, glm::mat4 projection)
       : shader(shader) {
-
-
-    std::string dir = "../src/textures/textrenderer/";
-    auto dirIt = std::filesystem::directory_iterator(dir);
-    for (const auto &entry : dirIt) {
-#if DGR_DEBUG
-        std::cout << entry.path() << std::endl;
-#endif
-        if (entry.path().extension() == ".png" || entry.path().extension() == ".jpg") {
-            texture = std::make_shared<Texture2D>(entry.path());
-        }
-    }
 
     shader->use();
     shader->setInteger("sprite", 0);
@@ -74,7 +62,6 @@ TextRenderer::TextRenderer(std::shared_ptr<Shader> shader, glm::mat4 projection)
           0.0f, 0.0f, uvWidth, 0.0f,
           0.0f, 0.0f, uvWidth, 0.0f
     };
-
 
     for (int i = 0; i < nLetters; i++) {
         int letterStart = i * 24;
@@ -118,7 +105,6 @@ void TextRenderer::drawText(const std::string &text, float zIndex, glm::vec2 tex
 
         return;
     }
-
 
     glm::vec3 white = glm::vec3(1.0f);
     glm::vec3 textColor = white;
@@ -209,7 +195,19 @@ glm::vec2 TextRenderer::displayWord(const glm::vec2 &initialTextPos, const glm::
 }
 
 void TextRenderer::setBaseUI(std::shared_ptr<UIElement> baseUI_) {
-    baseUI = baseUI_;
+    baseUI = std::move(baseUI_);
+}
+
+void TextRenderer::setTexture(const std::string &dirFolder) {
+    auto dirIt = std::filesystem::directory_iterator(dirFolder);
+    for (const auto &entry : dirIt) {
+#if DGR_DEBUG
+        std::cout << entry.path() << std::endl;
+#endif
+        if (entry.path().extension() == ".png" || entry.path().extension() == ".jpg") {
+            texture = std::make_shared<Texture2D>(entry.path().string());
+        }
+    }
 }
 
 }

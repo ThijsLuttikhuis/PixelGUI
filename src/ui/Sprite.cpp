@@ -28,4 +28,8 @@ const std::unique_ptr<Texture2D> &Sprite::getTexture() const {
     return texture;
 }
 
+const std::string &Sprite::getTextureName() const {
+    return textureName;
+}
+
 }

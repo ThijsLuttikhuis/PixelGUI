@@ -19,13 +19,21 @@ private:
     float alpha;
 
 public:
+    explicit Sprite(std::string textureName)
+          : textureName(std::move(textureName)), color(glm::vec3(1.0f)), alpha(1.0f) {
+    }
+
     Sprite(std::string textureName, glm::vec3 color, float alpha)
           : textureName(std::move(textureName)), color(color), alpha(alpha) {
-    };
+    }
 
+    /// setters
     void setColor(const glm::vec3 &color_);
 
     void setAlpha(float alpha_);
+
+    /// getters
+    [[nodiscard]] const std::string &getTextureName() const;
 
     [[nodiscard]] const std::unique_ptr<Texture2D> &getTexture() const;
 

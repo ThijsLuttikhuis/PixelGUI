@@ -33,19 +33,12 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
     (void) window, (void) mode;
 
-#if PG_DEBUG
-    std::cout << "key callback" << std::endl;
-#endif
     auto windowPtr = std::shared_ptr<Window>(callback_window_ptr);
     windowPtr->handleKeyboard(key, action, scancode);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     (void) window;
-
-#if PG_DEBUG
-    std::cout << "framebuffer size callback" << std::endl;
-#endif
 
     glViewport(0, 0, width, height);
 }

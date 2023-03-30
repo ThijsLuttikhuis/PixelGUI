@@ -5,21 +5,24 @@
 #include <memory>
 #include "src/window/Window.h"
 #include "game/Game.h"
-
+#include "ui/Button.h"
 
 int main() {
-    std::shared_ptr<PG::Window> window = std::make_shared<PG::Window>(512, 288);
-    std::shared_ptr<PG::Game> game = std::make_shared<PG::Game>();
 
-    window->setGame(game);
-    game->setWindow(window);
-
+    auto window = std::make_shared<PG::Window>(512, 288);
     window->initialize();
+
+    auto name = "Button1";
+    auto pos = glm::vec2(100, 100);
+    auto size = glm::vec2(16, 16);
+    auto sprite = std::make_unique<PG::Sprite>("arrow");
+    auto key = GLFW_KEY_A;
+    auto button = std::make_shared<PG::Button>(name, pos, size, std::move(sprite), key);
+
+    window->addUIElement(button);
 
     while (!window->shouldClose()) {
         window->render();
-
-//        window->setWindowSize(1000, 1200);
     }
 
     return 0;

@@ -22,4 +22,9 @@ void Button::setEnabled(bool enabled_) {
     enabled = enabled_;
 }
 
+void Button::onClick(glm::vec2 relativePos) {
+    UIElement::onClick(relativePos);
+    callbackFunc();
+}
+
 }

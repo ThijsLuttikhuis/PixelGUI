@@ -18,7 +18,7 @@ include_directories(include
         include/glfw-3.3.7/include/
         include/glm-0.9.7.1/)
 
-add_library(GLAD "src/glad.c")
+add_library(GLAD "src/glad.c" src/utilities/DebugPrinter.h)
 set(LIBS
         ${LIBS}
         GLAD
@@ -54,6 +54,8 @@ set(INCLUDE_WINDOW
         src/window/render/Texture2D.cpp
         src/window/render/SpriteRenderer.h
         src/window/render/SpriteRenderer.cpp
+        src/window/render/TextRenderer.h
+        src/window/render/TextRenderer.cpp
         )
 
 set(INCLUDE_SOURCE_FILES

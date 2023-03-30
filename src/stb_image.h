@@ -7833,7 +7833,7 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
       0.96    fix detection of invalid v value - particleman@mollyrocket forum
       0.95    during header scan, seek to markers in case of padding
       0.94    STBI_NO_STDIO to disable stdio usage; rename all #defines the same
-      0.93    handle jpegtran output; verbose errors
+      0.93    handle jpegtran output; verboseLevel errors
       0.92    read 4,8,16,24,32-bit BMP files of several formats
       0.91    output 24-bit Windows 3.0 BMP files
       0.90    fix a few more warnings; bump version number to approach 1.0

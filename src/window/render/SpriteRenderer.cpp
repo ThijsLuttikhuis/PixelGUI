@@ -15,6 +15,7 @@
 #include "SpriteRenderer.h"
 #include "ui/Sprite.h"
 #include "ui/UIElement.h"
+#include "utilities/DebugPrinter.h"
 
 namespace PG {
 
@@ -65,13 +66,13 @@ void SpriteRenderer::addTexture(const std::string &fileDir, const std::string &n
     textures[name] = texture;
 }
 
-void SpriteRenderer::addAllTexturesInDir(const std::string &dirName) {
-    std::string dir = "../src/" + dirName + "/";
-    auto dirIt = std::filesystem::directory_iterator(dir);
+void SpriteRenderer::addAllTexturesInDir(const std::string &dirFolder) {
+
+    auto dirIt = std::filesystem::directory_iterator(dirFolder);
     for (const auto &entry : dirIt) {
-#if PG_DEBUG
-        std::cout << entry.path() << std::endl;
-#endif
+
+        DebugPrinter::print(DebugPrinter::ALL, "Object does not fit in scene space!");
+
         if (entry.path().extension() == ".png" || entry.path().extension() == ".jpg") {
 
             addTexture(entry.path().string(), entry.path().stem().string());
@@ -98,12 +99,10 @@ void SpriteRenderer::drawSprite(const std::unique_ptr<Sprite> &sprite, const glm
     // check if object fits in scene space window
     if (screenPos.x + size.x < basePos.x || screenPos.y + size.y < basePos.y ||
         position.x > baseSize.x + 1 || position.y > baseSize.y + 1) {
-#if DGR_PRINT_RENDER_OUTSIDE_SCENE
-        std::cout << "Object does not fit in scene space!" << std::endl;
-#endif
+
+        DebugPrinter::print(DebugPrinter::ALL, "Object does not fit in scene space!");
         return;
     }
-
 
     auto model = glm::translate(args.model, glm::vec3(screenPos, 0.0f));
     model = glm::scale(model, glm::vec3(size, 1.0f));
@@ -117,7 +116,8 @@ void SpriteRenderer::drawSprite(const std::unique_ptr<Sprite> &sprite, const glm
 
     // set texture
     glActiveTexture(GL_TEXTURE0);
-    const std::unique_ptr<Texture2D> &texture = sprite->getTexture();
+//    const std::unique_ptr<Texture2D> &texture = sprite->getTexture();
+    auto texture = textures.at(sprite->getTextureName());
     texture->bind();
 
     glBindVertexArray(quadVAO);

@@ -4,8 +4,12 @@
 
 #include <iostream>
 #include <memory>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "window/render/TextRenderer.h"
+#include "window/render/SpriteRenderer.h"
+
 #include "Window.h"
-#include "game/Game.h"
 
 namespace PG {
 
@@ -13,11 +17,12 @@ std::shared_ptr<Window> Window::getSharedFromThis() {
     return shared_from_this();
 }
 
-Window::Window(int xPixels, int yPixels, double scale, const std::string &windowTitle) :
-      xPixels(xPixels), yPixels(yPixels) {
+Window::Window(int xPixels, int yPixels, const std::string &windowTitle)
+      : xPixels(xPixels), yPixels(yPixels),
+        baseUI(std::make_shared<UIElement>(windowTitle,
+                                           glm::vec2(0.0f),
+                                           glm::vec2(xPixels, yPixels))) {
 
-    int displayWidth = (int) (scale * xPixels);
-    int displayHeight = (int) (scale * yPixels);
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -29,7 +34,7 @@ Window::Window(int xPixels, int yPixels, double scale, const std::string &window
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    glfwWindow = glfwCreateWindow(displayWidth, displayHeight, windowTitle.c_str(), nullptr, nullptr);
+    glfwWindow = glfwCreateWindow(xPixels, yPixels, windowTitle.c_str(), nullptr, nullptr);
     if (glfwWindow == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -53,11 +58,7 @@ Window::Window(int xPixels, int yPixels, double scale, const std::string &window
         exit(-1);
     }
 
-    glfwSetWindowSize(glfwWindow, displayWidth, displayHeight);
-
-
-
-    glViewport(0, 0, displayWidth, displayHeight);
+    glViewport(0, 0, xPixels, yPixels);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -67,7 +68,6 @@ Window::Window(int xPixels, int yPixels, double scale, const std::string &window
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     glClearDepth(1.0);
-
 }
 
 Window::~Window() {
@@ -76,17 +76,41 @@ Window::~Window() {
 
 void Window::initialize() {
     callback_window_ptr = getSharedFromThis();
+
+    auto shader = std::make_shared<Shader>();
+    std::string vertexFile = "../assets/shaders/sprite.vs";
+    std::string fragmentFile = "../assets/shaders/sprite.fs";
+    std::string spriteFolder = "../assets/sprites/";
+    std::string textFolder = "../assets/sprites/textsprites";
+
+    shader->compile(vertexFile, fragmentFile);
+
+    glm::mat4 projection = glm::ortho(0.0f, (float) getDisplayWidth(), (float) getDisplayHeight(),
+                                      0.0f, -1.0f, 1.0f);
+
+    spriteRenderer = std::make_unique<SpriteRenderer>(shader, projection);
+    spriteRenderer->addAllTexturesInDir(spriteFolder);
+
+    textRenderer = std::make_unique<TextRenderer>(shader, projection);
+    textRenderer->setTexture(textFolder);
 }
 
 void Window::render() {
     glClearColor(0.25f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    auto gamePtr = std::shared_ptr<Game>(game);
-    gamePtr->render();
+    glfwPollEvents();
+
+    for (auto &uiElement: uiElements) {
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        spriteRenderer->setBaseUI(baseUI);
+        textRenderer->setBaseUI(baseUI);
+
+        uiElement->draw(spriteRenderer, textRenderer);
+    }
 
     swapBuffers();
-    glfwPollEvents();
 }
 
 void Window::swapBuffers() {
@@ -102,22 +126,30 @@ void Window::closeWindow() {
     glfwSetWindowShouldClose(glfwWindow, true);
 }
 
-void Window::handleMouseButton(double xPos, double yPos) {
+void Window::handleMouseButton(double xPos, double yPos) const {
     xPos *= (double) xPixels / getDisplayWidth();
     yPos *= (double) yPixels / getDisplayHeight();
 
-    auto gamePtr = std::shared_ptr<Game>(game);
+    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_ALWAYS, "mouse click:    ", xPos, ", ", yPos);
 
-    gamePtr->handleMouseButton(xPos, yPos);
+    for (auto &uiElement : uiElements) {
+        if (uiElement->isMouseHovering(xPos, yPos)) {
+            uiElement->onClick({xPos, yPos});
+        }
+    }
 }
 
-void Window::handleMousePosition(double xPos, double yPos) {
+void Window::handleMousePosition(double xPos, double yPos) const {
     xPos *= (double) xPixels / getDisplayWidth();
     yPos *= (double) yPixels / getDisplayHeight();
 
-    auto gamePtr = std::shared_ptr<Game>(game);
+    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_ALWAYS, "mouse position: ", xPos, ", ", yPos);
 
-    gamePtr->handleMousePosition(xPos, yPos);
+    for (auto &uiElement : uiElements) {
+        if (uiElement->isMouseHovering(xPos, yPos)) {
+            uiElement->onHover({xPos, yPos});
+        }
+    }
 }
 
 void Window::handleKeyboard(int key, int action, int scanCode) {
@@ -127,37 +159,32 @@ void Window::handleKeyboard(int key, int action, int scanCode) {
         glfwSetWindowShouldClose(glfwWindow, true);
     }
 
-    std::cout << key << std::endl;
-
     if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS) {
             keysPressed->at(key) = true;
+
+            auto keyName = glfwGetKeyName(key, scanCode);
+            DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS, "press key:     ", (keyName ? keyName : "UNKNOWN"));
         } else if (action == GLFW_RELEASE) {
             keysPressed->at(key) = false;
+
+            auto keyName = glfwGetKeyName(key, scanCode);
+            DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS, "release key:   ", (keyName ? keyName : "UNKNOWN"));
         }
     }
-
-    auto gamePtr = std::shared_ptr<Game>(game);
-    gamePtr->handleKeyboard(key, action, keysPressed);
 }
 
 void Window::setWindowSize(int displayWidth_, int displayHeight_) {
-    double aspectRatio = (double)xPixels / yPixels;
-
-    double newAspectRatio = (double)displayWidth_ / displayHeight_;
+    double aspectRatio = (double) xPixels / yPixels;
+    double newAspectRatio = (double) displayWidth_ / displayHeight_;
 
     if (newAspectRatio > aspectRatio) {
         displayWidth_ = static_cast<int>(aspectRatio * displayHeight_);
-    }
-    else {
+    } else if (newAspectRatio < aspectRatio) {
         displayHeight_ = static_cast<int>(1.0 / aspectRatio * displayWidth_);
     }
 
     glfwSetWindowSize(glfwWindow, displayWidth_, displayHeight_);
-}
-
-void Window::setGame(const std::weak_ptr<Game> &game_) {
-    game = game_;
 }
 
 int Window::getDisplayWidth() const {
@@ -180,6 +207,10 @@ int Window::getXPixels() const {
 
 int Window::getYPixels() const {
     return yPixels;
+}
+
+void Window::addUIElement(const std::shared_ptr<UIElement> &uiElement) {
+    uiElements.push_back(uiElement);
 }
 
 }
