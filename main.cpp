@@ -3,8 +3,8 @@
 //
 
 #include <memory>
+
 #include "src/window/Window.h"
-#include "game/Game.h"
 #include "ui/Button.h"
 
 int main() {

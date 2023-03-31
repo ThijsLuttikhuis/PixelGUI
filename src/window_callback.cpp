@@ -3,8 +3,8 @@
 //
 
 #include <memory>
+
 #include "window/Window.h"
-#include "game/Game.h"
 
 namespace PG {
 

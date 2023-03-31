@@ -93,4 +93,19 @@ void UIElement::onClick(glm::vec2 relativePos) {
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Pressed on:     UIElement ", name);\
 }
 
+bool UIElement::isPressed(double xPos, double yPos) const {
+    return enabled && isMouseHovering(xPos, yPos);
+}
+
+bool UIElement::isKeyPressed(int key) const {
+    return enabled && (key == keyboardKey);
+}
+
+bool UIElement::isEnabled() const {
+    return enabled;
+}
+
+void UIElement::setEnabled(bool enabled_) {
+    enabled = enabled_;
+}
 }

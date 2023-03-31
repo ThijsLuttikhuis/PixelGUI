@@ -18,13 +18,17 @@ include_directories(include
         include/glfw-3.3.7/include/
         include/glm-0.9.7.1/)
 
-add_library(GLAD "src/glad.c" src/utilities/DebugPrinter.h)
+add_library(GLAD "src/glad.c")
 set(LIBS
         ${LIBS}
         GLAD
         ${OPENGL_LIBRARY}
         glfw
         ${GLFW_LIBRARIES}
+        )
+
+set(INCLUDE_UTILITIES
+        src/utilities/DebugPrinter.h
         )
 
 set(INCLUDE_UI
@@ -36,11 +40,8 @@ set(INCLUDE_UI
         src/ui/Sprite.cpp
         )
 
-set(INCLUDE_GAME_OBJECT
-        src/game/GameObject.h
-        src/game/GameObject.cpp
-        src/game/Game.h
-        src/game/Game.cpp
+set(INCLUDE_UI_EDITOR
+
         )
 
 set(INCLUDE_WINDOW
@@ -62,7 +63,7 @@ set(INCLUDE_SOURCE_FILES
         src/glad.c
         src/stb_image.h
         src/window_callback.cpp
-        ${INCLUDE_GAME_OBJECT}
+        ${INCLUDE_UI_EDITOR}
         ${INCLUDE_WINDOW}
         ${INCLUDE_UI}
         )

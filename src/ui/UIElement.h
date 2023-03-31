@@ -9,10 +9,10 @@
 #include <string>
 #include <glm/vec3.hpp>
 
-#include "game/GameObject.h"
 #include "Sprite.h"
 #include "window/render/TextRenderer.h"
 #include "window/render/SpriteRenderer.h"
+#include "GLFW/glfw3.h"
 
 namespace PG {
 
@@ -26,6 +26,8 @@ protected:
     glm::vec2 position{};
     glm::vec2 size{};
     std::unique_ptr<Sprite> sprite{};
+
+    int keyboardKey = GLFW_KEY_UNKNOWN;
 
     bool enabled = true;
     bool visible = true;
@@ -43,13 +45,13 @@ public:
         uniqueID = uniqueIDCounter++;
     }
 
-    UIElement(std::string name, const glm::vec2 &position, const glm::vec2 &size)
-          : name(std::move(name)), position(position), size(size) {
+    UIElement(std::string name, const glm::vec2 &position, const glm::vec2 &size, int keyboardKey = GLFW_KEY_UNKNOWN)
+          : name(std::move(name)), position(position), size(size), keyboardKey(keyboardKey) {
         uniqueID = uniqueIDCounter++;
     }
 
-    UIElement(std::string name, const glm::vec2 &position, const glm::vec2 &size, std::unique_ptr<Sprite> sprite)
-          : name(std::move(name)), position(position), size(size), sprite(std::move(sprite)) {
+    UIElement(std::string name, const glm::vec2 &position, const glm::vec2 &size, std::unique_ptr<Sprite> sprite, int keyboardKey = GLFW_KEY_UNKNOWN)
+          : name(std::move(name)), position(position), size(size), sprite(std::move(sprite)), keyboardKey(keyboardKey) {
         uniqueID = uniqueIDCounter++;
     }
 
@@ -96,6 +98,13 @@ public:
 
     [[nodiscard]] const std::unique_ptr<Sprite> &getSprite() const;
 
+    [[nodiscard]] bool isPressed(double xPos, double yPos) const;
+
+    [[nodiscard]] bool isKeyPressed(int key) const;
+
+    [[nodiscard]] bool isEnabled() const;
+
+    void setEnabled(bool enabled_);
 };
 
 }
