@@ -27,7 +27,6 @@ const std::vector<int> TextRenderer::letterWidths = {
       3, 4, 3, 0, 0, 0, 0, 0
 };
 
-
 TextRenderer::TextRenderer(const std::shared_ptr<Shader> &shader, glm::mat4 projection)
       : shader(shader) {
 
@@ -148,7 +147,7 @@ void TextRenderer::drawText(const std::string &text, float zIndex, glm::vec2 tex
     }
 
     /// display final word
-    currentTextPos = displayWord(currentTextPos, screenPos, size, wordVAO, textColor, alpha, zIndex);
+    displayWord(currentTextPos, screenPos, size, wordVAO, textColor, alpha, zIndex);
 }
 
 glm::vec2 TextRenderer::displayWord(const glm::vec2 &initialTextPos, const glm::vec2 &textStart, const glm::vec2 &size,
@@ -159,13 +158,13 @@ glm::vec2 TextRenderer::displayWord(const glm::vec2 &initialTextPos, const glm::
     glm::vec2 letterSize(5, 7);
 
     /// check word width
-    float wordWidth = 0.0f;
+    int wordWidth = 0.0f;
     for (auto &letterVAO : wordVAO) {
-        wordWidth += letterWidths[letterVAO] + 1.0f;
+        wordWidth += letterWidths[letterVAO] + 1;
     }
 
     /// check if the word should be put on a new line
-    if (currentTextPos.x != textStart.x + 1 && currentTextPos.x + wordWidth > textStart.x + size.x) {
+    if (currentTextPos.x != textStart.x + 1 && currentTextPos.x + (float)wordWidth > textStart.x + size.x) {
         currentTextPos = glm::vec2(textStart.x + 1, currentTextPos.y + letterSize.y + 1);
     }
 
@@ -194,8 +193,8 @@ glm::vec2 TextRenderer::displayWord(const glm::vec2 &initialTextPos, const glm::
     return currentTextPos;
 }
 
-void TextRenderer::setBaseUI(std::shared_ptr<UIElement> baseUI_) {
-    baseUI = std::move(baseUI_);
+void TextRenderer::setBaseUI(const std::shared_ptr<UIElement> &baseUI_) {
+    baseUI = baseUI_;
 }
 
 void TextRenderer::setTexture(const std::string &dirFolder) {

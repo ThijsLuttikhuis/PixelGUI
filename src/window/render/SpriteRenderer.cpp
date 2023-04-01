@@ -84,7 +84,7 @@ bool SpriteRenderer::hasTexture(const std::string &textureName) {
     return textures.find(textureName) != textures.end();
 }
 
-void SpriteRenderer::setBaseUI(std::shared_ptr<UIElement> baseUI_) {
+void SpriteRenderer::setBaseUI(const std::shared_ptr<UIElement> &baseUI_) {
     baseUI = std::move(baseUI_);
 }
 

@@ -47,11 +47,14 @@ void UIElement::setSize(int width, int height) {
 }
 
 void UIElement::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
-                     const std::unique_ptr<TextRenderer> &textRenderer) const {
+                     const std::unique_ptr<TextRenderer> &textRenderer) {
     (void) textRenderer;
 
-    SpriteArgs args = SpriteArgs(1.0f);
+    if (!visible || !sprite) {
+        return;
+    }
 
+    SpriteArgs args = SpriteArgs(1.0f);
     spriteRenderer->drawSprite(sprite, position, size, args);
 }
 
@@ -71,6 +74,10 @@ bool UIElement::isPositionInBox(double x, double y) const {
 
 bool UIElement::isMouseHovering(double xPos, double yPos) const {
     return isPositionInBox(xPos, yPos);
+}
+
+bool UIElement::isMouseHovering(const glm::vec2 &pos) const {
+    return isMouseHovering(pos.x, pos.y);
 }
 
 void UIElement::setAlpha(float alpha_) {
@@ -105,7 +112,36 @@ bool UIElement::isEnabled() const {
     return enabled;
 }
 
+bool UIElement::isVisible() const {
+    return visible;
+}
+
+bool UIElement::isHidden() const {
+    return !visible;
+}
+
 void UIElement::setEnabled(bool enabled_) {
     enabled = enabled_;
 }
+
+void UIElement::enable() {
+    enabled = true;
+}
+
+void UIElement::disable() {
+    enabled = false;
+}
+
+void UIElement::setVisibility(bool visible_) {
+    visible = visible_;
+}
+
+void UIElement::hide() {
+    visible = false;
+}
+
+void UIElement::show() {
+    visible = true;
+}
+
 }

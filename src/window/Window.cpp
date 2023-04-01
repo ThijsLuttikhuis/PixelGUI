@@ -65,6 +65,8 @@ Window::Window(int xPixels, int yPixels, const std::string &windowTitle)
 
     //glEnable(GL_ALPHA_TEST);
 
+    glfwSwapInterval(1);
+
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     glClearDepth(1.0);
@@ -96,7 +98,7 @@ void Window::initialize() {
 }
 
 void Window::render() {
-    glClearColor(0.25f, 0.2f, 0.2f, 1.0f);
+    glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glfwPollEvents();
@@ -133,6 +135,10 @@ void Window::handleMouseButton(double xPos, double yPos) const {
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_ALWAYS, "mouse click:    ", xPos, ", ", yPos);
 
     for (auto &uiElement : uiElements) {
+        if (!uiElement->isEnabled() || uiElement->isHidden()) {
+            continue;
+        }
+
         if (uiElement->isMouseHovering(xPos, yPos)) {
             uiElement->onClick({xPos, yPos});
         }
@@ -146,6 +152,10 @@ void Window::handleMousePosition(double xPos, double yPos) const {
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_ALWAYS, "mouse position: ", xPos, ", ", yPos);
 
     for (auto &uiElement : uiElements) {
+        if (uiElement->isHidden()) {
+            continue;
+        }
+
         if (uiElement->isMouseHovering(xPos, yPos)) {
             uiElement->onHover({xPos, yPos});
         }

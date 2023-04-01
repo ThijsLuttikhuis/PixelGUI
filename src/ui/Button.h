@@ -29,6 +29,8 @@ public:
     Button(std::string name, const glm::vec2 &pos, const glm::vec2 &size, std::unique_ptr<Sprite> sprite, int keyboardKey = -1)
           : UIElement(std::move(name), pos, size, std::move(sprite), keyboardKey) {}
 
+    void setCallbackFunction(void (*func)());
+
     void onClick(glm::vec2 relativePos) override;
 };
 

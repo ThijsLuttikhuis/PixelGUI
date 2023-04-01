@@ -18,7 +18,7 @@ include_directories(include
         include/glfw-3.3.7/include/
         include/glm-0.9.7.1/)
 
-add_library(GLAD "src/glad.c")
+add_library(GLAD "src/glad.c" src/uieditor/UIEditor.cpp src/uieditor/UIEditor.h)
 set(LIBS
         ${LIBS}
         GLAD
@@ -42,7 +42,7 @@ set(INCLUDE_UI
 
 set(INCLUDE_UI_EDITOR
 
-        )
+        src/uieditor/UIEditor.cpp src/uieditor/UIEditor.h)
 
 set(INCLUDE_WINDOW
         src/window/Window.h
@@ -71,7 +71,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        )
+        src/ui/Scene.cpp src/ui/Scene.h)
 
 target_link_libraries(PixelGUI ${LIBS})
 

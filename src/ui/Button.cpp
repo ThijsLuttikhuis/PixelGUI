@@ -16,4 +16,8 @@ void Button::onClick(glm::vec2 relativePos) {
     }
 }
 
+void Button::setCallbackFunction(void (*func)()) {
+    callbackFunc = func;
+}
+
 }

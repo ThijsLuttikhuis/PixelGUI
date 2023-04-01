@@ -16,7 +16,7 @@
 
 namespace PG {
 
-class UIElement {
+class UIElement : public std::enable_shared_from_this<UIElement> {
 private:
     static int uniqueIDCounter;
     int uniqueID;
@@ -68,7 +68,7 @@ public:
 
     /// render
     virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
-                      const std::unique_ptr<TextRenderer> &textRenderer) const;
+                      const std::unique_ptr<TextRenderer> &textRenderer);
 
     /// setters
     void forceSetUniqueID(int uniqueID_);
@@ -85,7 +85,21 @@ public:
 
     void setAlpha(float alpha_);
 
+    void setEnabled(bool enabled_);
+
+    void enable();
+
+    void disable();
+
+    void setVisibility(bool visible_);
+
+    void hide();
+
+    void show();
+
     /// getters
+    [[nodiscard]] std::shared_ptr<UIElement> getSharedFromThis();
+
     [[nodiscard]] int getUniqueID() const;
 
     [[nodiscard]] const glm::vec2 &getPosition() const;
@@ -96,6 +110,8 @@ public:
 
     [[nodiscard]] virtual bool isMouseHovering(double xPos, double yPos) const;
 
+    [[nodiscard]] virtual bool isMouseHovering(const glm::vec2 &pos) const;
+
     [[nodiscard]] const std::unique_ptr<Sprite> &getSprite() const;
 
     [[nodiscard]] bool isPressed(double xPos, double yPos) const;
@@ -104,7 +120,10 @@ public:
 
     [[nodiscard]] bool isEnabled() const;
 
-    void setEnabled(bool enabled_);
+    [[nodiscard]] bool isVisible() const;
+
+    [[nodiscard]] bool isHidden() const;
+
 };
 
 }

@@ -26,16 +26,16 @@ private:
 
     std::shared_ptr<Texture2D> texture;
 
-    [[nodiscard]] glm::vec2 displayWord(const glm::vec2 &initialTextPos, const glm::vec2 &textStart,
-                                        const glm::vec2 &size, const std::vector<int> &wordVAO,
-                                        const glm::vec3 &color, float alpha, float zIndex) const;
+    glm::vec2 displayWord(const glm::vec2 &initialTextPos, const glm::vec2 &textStart,
+                          const glm::vec2 &size, const std::vector<int> &wordVAO,
+                          const glm::vec3 &color, float alpha, float zIndex) const;
 
 public:
     TextRenderer(const std::shared_ptr<Shader> &shader, glm::mat4 projection);
 
     ~TextRenderer();
 
-    void setBaseUI(std::shared_ptr<UIElement> baseUI_);
+    void setBaseUI(const std::shared_ptr<UIElement> &baseUI_);
 
     void setTexture(const std::string &dirFolder);
 
