@@ -9,12 +9,20 @@
 namespace PG {
 
 std::weak_ptr<Window> callback_window_ptr;
+std::unique_ptr<glm::vec2> callback_drag_start_position;
+std::unique_ptr<bool> callback_left_mouse_button_pressed;
 
 void mouse_position_callback(GLFWwindow* window, double xPos, double yPos) {
     (void) window;
 
     auto windowPtr = std::shared_ptr<Window>(callback_window_ptr);
-    windowPtr->handleMousePosition(xPos, yPos);
+
+    if (*callback_left_mouse_button_pressed) {
+        windowPtr->handleMouseDrag(glm::vec2(xPos, yPos), *callback_drag_start_position);
+    }
+    else {
+        windowPtr->handleMousePosition(glm::vec2(xPos, yPos));
+    }
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
@@ -23,9 +31,16 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     if (button == GLFW_MOUSE_BUTTON_LEFT) {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
+        if (action == GLFW_PRESS) {
+            *callback_left_mouse_button_pressed = true;
+            *callback_drag_start_position = glm::vec2(xpos, ypos);
+        }
         if (action == GLFW_RELEASE) {
+            *callback_left_mouse_button_pressed = false;
+            *callback_drag_start_position = glm::vec2(0, 0);
+
             auto windowPtr = std::shared_ptr<Window>(callback_window_ptr);
-            windowPtr->handleMouseButton(xpos, ypos);
+            windowPtr->handleMouseButton(glm::vec2(xpos, ypos));
         }
     }
 }

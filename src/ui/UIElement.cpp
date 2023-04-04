@@ -3,6 +3,8 @@
 //
 
 #include "UIElement.h"
+
+#include <utility>
 #include "Sprite.h"
 #include "utilities/DebugPrinter.h"
 
@@ -80,6 +82,10 @@ bool UIElement::isMouseHovering(const glm::vec2 &pos) const {
     return isMouseHovering(pos.x, pos.y);
 }
 
+void UIElement::setParent(std::weak_ptr<UIElement> parent_) {
+    parent = std::move(parent_);
+}
+
 void UIElement::setAlpha(float alpha_) {
     sprite->setAlpha(alpha_);
 }
@@ -91,13 +97,19 @@ const std::unique_ptr<Sprite> &UIElement::getSprite() const {
 void UIElement::onHover(glm::vec2 relativePos) {
     (void) relativePos;
 
-    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_UIELEMENT, "hovering on:  UIElement ", name);
+    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_UIELEMENT, "Hovering on:  UIElement ", name);
 }
 
 void UIElement::onClick(glm::vec2 relativePos) {
     (void) relativePos;
 
-    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Pressed on:     UIElement ", name);\
+    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Pressed on:     UIElement ", name);
+}
+
+void UIElement::onDrag(glm::vec2 relativePos, glm::vec2 dragStartPos) {
+    (void) relativePos, (void) dragStartPos;
+
+    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Dragging on:    UIElement ", name);
 }
 
 bool UIElement::isPressed(double xPos, double yPos) const {
@@ -143,5 +155,6 @@ void UIElement::hide() {
 void UIElement::show() {
     visible = true;
 }
+
 
 }

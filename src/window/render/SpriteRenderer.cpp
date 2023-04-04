@@ -85,7 +85,7 @@ bool SpriteRenderer::hasTexture(const std::string &textureName) {
 }
 
 void SpriteRenderer::setBaseUI(const std::shared_ptr<UIElement> &baseUI_) {
-    baseUI = std::move(baseUI_);
+    baseUI = baseUI_;
 }
 
 void SpriteRenderer::drawSprite(const std::unique_ptr<Sprite> &sprite, const glm::vec2 &position,

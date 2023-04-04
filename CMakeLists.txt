@@ -71,7 +71,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        src/ui/Scene.cpp src/ui/Scene.h)
+        src/ui/Scene.cpp src/ui/Scene.h src/ui/Draggable.cpp src/ui/Draggable.h src/ui/DraggableButton.cpp src/ui/DraggableButton.h)
 
 target_link_libraries(PixelGUI ${LIBS})
 

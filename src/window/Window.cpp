@@ -19,10 +19,9 @@ std::shared_ptr<Window> Window::getSharedFromThis() {
 
 Window::Window(int xPixels, int yPixels, const std::string &windowTitle)
       : xPixels(xPixels), yPixels(yPixels),
-        baseUI(std::make_shared<UIElement>(windowTitle,
-                                           glm::vec2(0.0f),
-                                           glm::vec2(xPixels, yPixels))) {
-
+        baseUI(std::make_shared<Scene>(windowTitle,
+                                       glm::vec2(0.0f),
+                                       glm::vec2(xPixels, yPixels))) {
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -78,6 +77,8 @@ Window::~Window() {
 
 void Window::initialize() {
     callback_window_ptr = getSharedFromThis();
+    callback_left_mouse_button_pressed = std::make_unique<bool>(false);
+    callback_drag_start_position = std::make_unique<glm::vec2>(0, 0);
 
     auto shader = std::make_shared<Shader>();
     std::string vertexFile = "../assets/shaders/sprite.vs";
@@ -98,19 +99,17 @@ void Window::initialize() {
 }
 
 void Window::render() {
-    glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
 
     glfwPollEvents();
 
-    for (auto &uiElement: uiElements) {
-        glClear(GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
 
-        spriteRenderer->setBaseUI(baseUI);
-        textRenderer->setBaseUI(baseUI);
+    spriteRenderer->setBaseUI(baseUI);
+    textRenderer->setBaseUI(baseUI);
 
-        uiElement->draw(spriteRenderer, textRenderer);
-    }
+    baseUI->draw(spriteRenderer, textRenderer);
 
     swapBuffers();
 }
@@ -128,38 +127,30 @@ void Window::closeWindow() {
     glfwSetWindowShouldClose(glfwWindow, true);
 }
 
-void Window::handleMouseButton(double xPos, double yPos) const {
-    xPos *= (double) xPixels / getDisplayWidth();
-    yPos *= (double) yPixels / getDisplayHeight();
+void Window::handleMouseButton(glm::vec2 pos) const {
+    pos *= glm::vec2((double)xPixels / getDisplayWidth(), (double)yPixels / getDisplayHeight());
 
-    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_ALWAYS, "mouse click:    ", xPos, ", ", yPos);
+    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_ALWAYS, "mouse click:    ", pos.x, ", ", pos.y);
 
-    for (auto &uiElement : uiElements) {
-        if (!uiElement->isEnabled() || uiElement->isHidden()) {
-            continue;
-        }
-
-        if (uiElement->isMouseHovering(xPos, yPos)) {
-            uiElement->onClick({xPos, yPos});
-        }
-    }
+    baseUI->onClick(pos);
 }
 
-void Window::handleMousePosition(double xPos, double yPos) const {
-    xPos *= (double) xPixels / getDisplayWidth();
-    yPos *= (double) yPixels / getDisplayHeight();
+void Window::handleMousePosition(glm::vec2 pos) const {
+    pos *= glm::vec2((double)xPixels / getDisplayWidth(), (double)yPixels / getDisplayHeight());
 
-    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_ALWAYS, "mouse position: ", xPos, ", ", yPos);
+    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_ALWAYS, "mouse position: ", pos.x, ", ", pos.y);
 
-    for (auto &uiElement : uiElements) {
-        if (uiElement->isHidden()) {
-            continue;
-        }
+    baseUI->onHover(pos);
+}
 
-        if (uiElement->isMouseHovering(xPos, yPos)) {
-            uiElement->onHover({xPos, yPos});
-        }
-    }
+void Window::handleMouseDrag(glm::vec2 pos, glm::vec2 dragStartPos) const {
+    pos *= glm::vec2((double)xPixels / getDisplayWidth(), (double)yPixels / getDisplayHeight());
+    dragStartPos *= glm::vec2((double)xPixels / getDisplayWidth(), (double)yPixels / getDisplayHeight());
+
+    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_ALWAYS,
+                        "mouse drag:     ", dragStartPos.x, " ", pos.x, ", ", dragStartPos.y, " ", pos.y);
+
+    baseUI->onDrag(pos, dragStartPos);
 }
 
 void Window::handleKeyboard(int key, int action, int scanCode) {
@@ -220,7 +211,7 @@ int Window::getYPixels() const {
 }
 
 void Window::addUIElement(const std::shared_ptr<UIElement> &uiElement) {
-    uiElements.push_back(uiElement);
+    baseUI->addUIElement(uiElement);
 }
 
 }

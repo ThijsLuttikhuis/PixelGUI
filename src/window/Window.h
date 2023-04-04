@@ -11,6 +11,7 @@
 #include "utilities/DebugPrinter.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "ui/Scene.h"
 
 namespace PG {
 
@@ -23,6 +24,8 @@ class SpriteRenderer;
 class TextRenderer;
 
 extern std::weak_ptr<Window> callback_window_ptr;
+extern std::unique_ptr<glm::vec2> callback_drag_start_position;
+extern std::unique_ptr<bool> callback_left_mouse_button_pressed;
 
 void mouse_position_callback(GLFWwindow* window, double xPos, double yPos);
 
@@ -45,8 +48,7 @@ private:
 
     std::unique_ptr<std::vector<bool>> keysPressed = std::make_unique<std::vector<bool>>(512, false);
 
-    std::shared_ptr<UIElement> baseUI;
-    std::vector<std::shared_ptr<UIElement>> uiElements = {};
+    std::shared_ptr<Scene> baseUI;
 
     void swapBuffers();
 
@@ -61,9 +63,11 @@ public:
     static void closeWindow();
 
     /// IO
-    void handleMouseButton(double xPos, double yPos) const;
+    void handleMouseButton(glm::vec2 pos) const;
 
-    void handleMousePosition(double xPos, double yPos) const;
+    void handleMouseDrag(glm::vec2 pos, glm::vec2 dPos) const;
+
+    void handleMousePosition(glm::vec2 pos) const;
 
     void handleKeyboard(int key, int action, int scanCode);
 

@@ -32,7 +32,7 @@ public:
 private:
     static const verboseLevel verbosity = ALL;
 
-    static const unsigned long verboseSpecifics = DEBUG_MOUSE_POSITION_ALWAYS * false
+    static const unsigned long verboseSpecifics = DEBUG_MOUSE_POSITION_ALWAYS * true
                                                   + DEBUG_MOUSE_BUTTON_ALWAYS * true
                                                   + DEBUG_MOUSE_POSITION_UIELEMENT * false
                                                   + DEBUG_MOUSE_BUTTON_UIELEMENT * true

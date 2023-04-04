@@ -23,6 +23,8 @@ private:
 
     std::string name{};
 protected:
+    std::weak_ptr<UIElement> parent;
+
     glm::vec2 position{};
     glm::vec2 size{};
     std::unique_ptr<Sprite> sprite{};
@@ -66,12 +68,16 @@ public:
 
     virtual void onClick(glm::vec2 relativePos);
 
+    virtual void onDrag(glm::vec2 relativePos, glm::vec2 dragStartPos);
+
     /// render
     virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                       const std::unique_ptr<TextRenderer> &textRenderer);
 
     /// setters
     void forceSetUniqueID(int uniqueID_);
+
+    void setParent(std::weak_ptr<UIElement> parent_);
 
     void setPosition(glm::vec2 position_);
 
@@ -85,13 +91,13 @@ public:
 
     void setAlpha(float alpha_);
 
+    void setVisibility(bool visible_);
+
     void setEnabled(bool enabled_);
 
     void enable();
 
     void disable();
-
-    void setVisibility(bool visible_);
 
     void hide();
 
