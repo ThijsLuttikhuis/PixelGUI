@@ -81,5 +81,6 @@ add_library(PIXELGUI_lib STATIC ${INCLUDE_SOURCE_FILES})
 
 target_link_libraries(PIXELGUI_lib ${LIBS})
 
-add_subdirectory(test)
-
+if(EXISTS src/test/lib/googletest/CMakelists.txt)
+    add_subdirectory(test)
+endif()
