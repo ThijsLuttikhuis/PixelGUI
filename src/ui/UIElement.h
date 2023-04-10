@@ -64,11 +64,11 @@ public:
     }
 
     /// functions
-    virtual void onHover(glm::vec2 relativePos);
+    virtual void onHover(glm::vec2 mousePos);
 
-    virtual void onClick(glm::vec2 relativePos);
+    virtual void onClick(glm::vec2 mousePos);
 
-    virtual void onDrag(glm::vec2 relativePos, glm::vec2 dragStartPos);
+    virtual void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos);
 
     /// render
     virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
@@ -133,6 +133,5 @@ public:
 };
 
 }
-
 
 #endif //PIXELGUI_UIELEMENT_H

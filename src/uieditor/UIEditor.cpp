@@ -21,15 +21,6 @@ UIEditor::UIEditor() {
     std::unique_ptr<PG::Sprite> sprite;
     int key;
 
-    name = "Scene1";
-    pos = glm::vec2(200, 100);
-    size = glm::vec2(400, 400);
-    sprite = std::make_unique<PG::Sprite>("square", glm::vec3(1), 0.3f);
-
-    auto scene = std::make_shared<PG::Scene>(name, pos, size, std::move(sprite));
-
-    window->addUIElement(scene);
-
     name = "Button1";
     pos = glm::vec2(100, 100);
     size = glm::vec2(64, 64);
@@ -38,6 +29,15 @@ UIEditor::UIEditor() {
     auto button = std::make_shared<PG::DraggableButton>(name, pos, size, std::move(sprite), key);
 
     window->addUIElement(button);
+
+    name = "Scene1";
+    pos = glm::vec2(200, 100);
+    size = glm::vec2(400, 400);
+    sprite = std::make_unique<PG::Sprite>("square", glm::vec3(1), 0.3f);
+
+    auto scene = std::make_shared<PG::Scene>(name, pos, size, std::move(sprite));
+
+    window->addUIElement(scene);
 
     name = "Button2";
     pos = glm::vec2(0, 0);

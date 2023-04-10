@@ -11,8 +11,8 @@ std::shared_ptr<UIElement> UIElement::getSharedFromThis() {
     return shared_from_this();
 }
 
-void Scene::onClick(glm::vec2 relativePos) {
-    glm::vec2 relativeToScene = relativePos - position;
+void Scene::onClick(glm::vec2 mousePos) {
+    glm::vec2 relativeToScene = mousePos - position;
 
     for (auto &uiElement: children) {
         if (!uiElement->isEnabled() || uiElement->isHidden()) {
@@ -22,11 +22,12 @@ void Scene::onClick(glm::vec2 relativePos) {
             uiElement->onClick(relativeToScene);
         }
     }
-    selectedChild = nullptr;
+
+    draggingChildPtr = std::weak_ptr<UIElement>();
 }
 
-void Scene::onHover(glm::vec2 relativePos) {
-    glm::vec2 relativeToScene = relativePos - position;
+void Scene::onHover(glm::vec2 mousePos) {
+    glm::vec2 relativeToScene = mousePos - position;
     for (auto &uiElement: children) {
         if (uiElement->isHidden()) {
             continue;
@@ -37,24 +38,25 @@ void Scene::onHover(glm::vec2 relativePos) {
     }
 }
 
-void Scene::onDrag(glm::vec2 relativePos, glm::vec2 dragStartPos) {
-    glm::vec2 relativeToScenePos = relativePos - position;
+void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
+    glm::vec2 relativeToScenePos = mousePos - position;
     glm::vec2 relativeToSceneDragStartPos = dragStartPos - position;
 
-    if (relativeToSceneDragStartPos != relativeToScenePos) {
-        for (auto &uiElement: children) {
-            if (uiElement->isHidden()) {
-                continue;
-            }
-            if (uiElement->isMouseHovering(relativeToScenePos)) {
-                uiElement->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
-                selectedChild = uiElement;
-            }
-        }
+    if (!draggingChildPtr.expired()) {
+        auto draggingChild = std::shared_ptr<UIElement>(draggingChildPtr);
+
+        draggingChild->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
+        return;
     }
-    if (selectedChild) {
-        std::cout << "TEST" << std::endl;
-        selectedChild->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
+
+    for (auto &uiElement: children) {
+        if (uiElement->isHidden()) {
+            continue;
+        }
+        if (uiElement->isMouseHovering(relativeToScenePos)) {
+            uiElement->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
+            draggingChildPtr = uiElement;
+        }
     }
 }
 

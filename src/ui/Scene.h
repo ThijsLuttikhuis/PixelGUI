@@ -13,7 +13,7 @@ class Scene : public UIElement {
 private:
     std::vector<std::shared_ptr<UIElement>> children;
 
-    std::shared_ptr<UIElement> selectedChild = nullptr;
+    std::weak_ptr<UIElement> draggingChildPtr = std::weak_ptr<UIElement>();
 
 public:
     Scene(std::string name, const glm::vec2 &position, const glm::vec2 &size)
@@ -25,9 +25,9 @@ public:
 
     void onClick(glm::vec2 relativePos) override;
 
-    void onHover(glm::vec2 relativePos) override;
+    void onHover(glm::vec2 mousePos) override;
 
-    void onDrag(glm::vec2 relativePos, glm::vec2 dragStartPos) override;
+    void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
     void addUIElement(const std::shared_ptr<UIElement> &uiElement);
 

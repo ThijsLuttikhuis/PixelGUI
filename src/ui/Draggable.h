@@ -13,7 +13,8 @@ class Draggable : virtual public UIElement {
 private:
 
 public:
-    void onDrag(glm::vec2 relativePos, glm::vec2 dragStartPos) override;
+    void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
+
 };
 
 }
