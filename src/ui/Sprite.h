@@ -14,7 +14,6 @@ namespace PG {
 class Sprite {
 private:
     std::string textureName;
-    std::unique_ptr<Texture2D> texture;
     glm::vec3 color;
     float alpha;
 
