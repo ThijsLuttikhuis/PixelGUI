@@ -5,7 +5,7 @@
 #include "UIElement.h"
 
 #include <utility>
-#include "Sprite.h"
+#include "ui/sprite/Sprite.h"
 #include "utilities/DebugPrinter.h"
 
 namespace PG {
@@ -57,7 +57,7 @@ void UIElement::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
     }
 
     SpriteArgs args = SpriteArgs(1.0f);
-    spriteRenderer->drawSprite(sprite, position, size, args);
+    sprite->draw(spriteRenderer, position, size, args);
 }
 
 void UIElement::setColor(const glm::vec3 &color_) {
@@ -90,7 +90,7 @@ void UIElement::setAlpha(float alpha_) {
     sprite->setAlpha(alpha_);
 }
 
-const std::unique_ptr<Sprite> &UIElement::getSprite() const {
+const std::shared_ptr<Sprite> &UIElement::getSprite() const {
     return sprite;
 }
 

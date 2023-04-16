@@ -8,6 +8,10 @@
 
 namespace PG {
 
+std::shared_ptr<Sprite> Sprite::getSharedFromThis() {
+    return shared_from_this();
+}
+
 void Sprite::setColor(const glm::vec3 &color_) {
     color = color_;
 }
@@ -24,12 +28,14 @@ float Sprite::getAlpha() const {
     return alpha;
 }
 
-const std::unique_ptr<Texture2D> &Sprite::getTexture() const {
-    return texture;
-}
-
 const std::string &Sprite::getTextureName() const {
     return textureName;
+}
+
+void Sprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+                  const glm::vec2 &position, const glm::vec2 &size, const SpriteArgs &args) {
+
+    spriteRenderer->drawSprite(getSharedFromThis(), position, size, args);
 }
 
 }

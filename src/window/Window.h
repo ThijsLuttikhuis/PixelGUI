@@ -6,12 +6,12 @@
 #define PIXELGUI_WINDOW_H
 
 #include <vector>
-#include <ui/UIElement.h>
+#include "ui/uielement/UIElement.h"
 
 #include "utilities/DebugPrinter.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "ui/Scene.h"
+#include "ui/uielement/Scene.h"
 
 namespace PG {
 

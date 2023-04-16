@@ -76,7 +76,7 @@ public:
 
     void setBaseUI(const std::shared_ptr<UIElement> &baseUI_);
 
-    void drawSprite(const std::unique_ptr<Sprite> &sprite, const glm::vec2 &position,
+    void drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position,
                     const glm::vec2 &size, const SpriteArgs &args) const;
 };
 

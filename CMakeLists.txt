@@ -18,7 +18,7 @@ include_directories(include
         include/glfw-3.3.7/include/
         include/glm-0.9.7.1/)
 
-add_library(GLAD "src/glad.c" src/uieditor/UIEditor.cpp src/uieditor/UIEditor.h)
+add_library(GLAD "src/glad.c")
 set(LIBS
         ${LIBS}
         GLAD
@@ -32,17 +32,24 @@ set(INCLUDE_UTILITIES
         )
 
 set(INCLUDE_UI
-        src/ui/Button.h
-        src/ui/Button.cpp
-        src/ui/UIElement.h
-        src/ui/UIElement.cpp
-        src/ui/Sprite.h
-        src/ui/Sprite.cpp
+        src/ui/uielement/Button.h
+        src/ui/uielement/Button.cpp
+        src/ui/uielement/UIElement.h
+        src/ui/uielement/UIElement.cpp
+        src/ui/uielement/Scene.cpp
+        src/ui/uielement/Scene.h
+        src/ui/uielement/Draggable.cpp
+        src/ui/uielement/Draggable.h
+        src/ui/uielement/DraggableButton.cpp
+        src/ui/uielement/DraggableButton.h
+
+        src/ui/sprite/Sprite.h
+        src/ui/sprite/Sprite.cpp
         )
 
 set(INCLUDE_UI_EDITOR
-
-        src/uieditor/UIEditor.cpp src/uieditor/UIEditor.h)
+        src/uieditor/UIEditor.cpp src/uieditor/UIEditor.h
+        )
 
 set(INCLUDE_WINDOW
         src/window/Window.h
@@ -71,7 +78,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        src/ui/Scene.cpp src/ui/Scene.h src/ui/Draggable.cpp src/ui/Draggable.h src/ui/DraggableButton.cpp src/ui/DraggableButton.h)
+        src/ui/sprite/MultiSprite.cpp src/ui/sprite/MultiSprite.h src/ui/sprite/SpriteComposite.cpp src/ui/sprite/SpriteComposite.h src/ui/uielement/UIGrid.cpp src/ui/uielement/UIGrid.h)
 
 target_link_libraries(PixelGUI ${LIBS})
 

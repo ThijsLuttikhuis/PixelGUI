@@ -8,7 +8,7 @@
 #include <gtest/gtest.h>
 #include "game/Game.h"
 #include "window/Window.h"
-#include "ui/UIElement.h"
+#include "ui/uielement/UIElement.h"
 
 namespace testing {
 

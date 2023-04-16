@@ -6,15 +6,16 @@
 #define PIXELGUI_SPRITE_H
 
 #include <utility>
-#include <glm/vec3.hpp>
+#include "glm-0.9.7.1/glm/vec3.hpp"
 #include "window/render/Texture2D.h"
+#include "window/render/SpriteRenderer.h"
+#include "window/render/TextRenderer.h"
 
 namespace PG {
 
-class Sprite {
+class Sprite : virtual public std::enable_shared_from_this<Sprite> {
 private:
     std::string textureName;
-    std::unique_ptr<Texture2D> texture;
     glm::vec3 color;
     float alpha;
 
@@ -27,15 +28,21 @@ public:
           : textureName(std::move(textureName)), color(color), alpha(alpha) {
     }
 
+    virtual ~Sprite() = default;
+
+    /// render
+    virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+                      const glm::vec2 &position, const glm::vec2 &size, const SpriteArgs &args);
+
     /// setters
     void setColor(const glm::vec3 &color_);
 
     void setAlpha(float alpha_);
 
     /// getters
-    [[nodiscard]] const std::string &getTextureName() const;
+    [[nodiscard]] std::shared_ptr<Sprite> getSharedFromThis();
 
-    [[nodiscard]] const std::unique_ptr<Texture2D> &getTexture() const;
+    [[nodiscard]] const std::string &getTextureName() const;
 
     [[nodiscard]] const glm::vec3 &getColor() const;
 

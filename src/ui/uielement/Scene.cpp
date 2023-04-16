@@ -49,6 +49,8 @@ void Scene::onDrag(glm::vec2 relativePos, glm::vec2 dragStartPos) {
             if (uiElement->isMouseHovering(relativeToScenePos)) {
                 uiElement->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
                 selectedChild = uiElement;
+                selectedChild->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
+                return;
             }
         }
     }
@@ -72,12 +74,13 @@ void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
     if (sprite) {
         SpriteArgs args = SpriteArgs(1.0f);
 
-        spriteRenderer->drawSprite(sprite, position, size, args);
+        sprite->draw(spriteRenderer, position, size, args);
     }
 
-    spriteRenderer->setBaseUI(getSharedFromThis());
-    textRenderer->setBaseUI(getSharedFromThis());
     for (auto &uiElement: children) {
+        spriteRenderer->setBaseUI(getSharedFromThis());
+        textRenderer->setBaseUI(getSharedFromThis());
+
         uiElement->draw(spriteRenderer, textRenderer);
     }
 }

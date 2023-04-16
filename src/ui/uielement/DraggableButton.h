@@ -18,7 +18,7 @@ public:
                     int keyboardKey = GLFW_KEY_UNKNOWN)
           : UIElement(std::move(name), pos, size, keyboardKey) {}
 
-    DraggableButton(std::string name, const glm::vec2 &pos, const glm::vec2 &size, std::unique_ptr<Sprite> sprite, int keyboardKey = -1)
+    DraggableButton(std::string name, const glm::vec2 &pos, const glm::vec2 &size, std::shared_ptr<Sprite> sprite, int keyboardKey = -1)
           : UIElement(std::move(name), pos, size, std::move(sprite), keyboardKey) {}
 
 };

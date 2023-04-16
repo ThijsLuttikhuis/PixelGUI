@@ -10,18 +10,18 @@
 namespace PG {
 
 class Scene : public UIElement {
-private:
+protected:
     std::vector<std::shared_ptr<UIElement>> children;
 
     std::shared_ptr<UIElement> selectedChild = nullptr;
 
 public:
     Scene(std::string name, const glm::vec2 &position, const glm::vec2 &size)
-          : UIElement(std::move(name), position, size, -1) {}
+          : UIElement(std::move(name), position, size) {}
 
     Scene(std::string name, const glm::vec2 &position, const glm::vec2 &size,
-          std::unique_ptr<Sprite> sprite)
-          : UIElement(std::move(name), position, size, std::move(sprite), -1) {}
+          std::shared_ptr<Sprite> sprite)
+          : UIElement(std::move(name), position, size, std::move(sprite)) {}
 
     void onClick(glm::vec2 relativePos) override;
 
@@ -29,7 +29,7 @@ public:
 
     void onDrag(glm::vec2 relativePos, glm::vec2 dragStartPos) override;
 
-    void addUIElement(const std::shared_ptr<UIElement> &uiElement);
+    virtual void addUIElement(const std::shared_ptr<UIElement> &uiElement);
 
     void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                       const std::unique_ptr<TextRenderer> &textRenderer) override;

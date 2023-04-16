@@ -7,9 +7,9 @@
 
 #include <utility>
 #include <string>
-#include <glm/vec3.hpp>
+#include "glm-0.9.7.1/glm/vec3.hpp"
 
-#include "Sprite.h"
+#include "ui/sprite/Sprite.h"
 #include "window/render/TextRenderer.h"
 #include "window/render/SpriteRenderer.h"
 #include "GLFW/glfw3.h"
@@ -27,7 +27,7 @@ protected:
 
     glm::vec2 position{};
     glm::vec2 size{};
-    std::unique_ptr<Sprite> sprite{};
+    std::shared_ptr<Sprite> sprite{};
 
     int keyboardKey = GLFW_KEY_UNKNOWN;
 
@@ -52,7 +52,8 @@ public:
         uniqueID = uniqueIDCounter++;
     }
 
-    UIElement(std::string name, const glm::vec2 &position, const glm::vec2 &size, std::unique_ptr<Sprite> sprite, int keyboardKey = GLFW_KEY_UNKNOWN)
+    UIElement(std::string name, const glm::vec2 &position, const glm::vec2 &size,
+              std::shared_ptr<Sprite> sprite, int keyboardKey = GLFW_KEY_UNKNOWN)
           : name(std::move(name)), position(position), size(size), sprite(std::move(sprite)), keyboardKey(keyboardKey) {
         uniqueID = uniqueIDCounter++;
     }
@@ -118,7 +119,7 @@ public:
 
     [[nodiscard]] virtual bool isMouseHovering(const glm::vec2 &pos) const;
 
-    [[nodiscard]] const std::unique_ptr<Sprite> &getSprite() const;
+    [[nodiscard]] const std::shared_ptr<Sprite> &getSprite() const;
 
     [[nodiscard]] bool isPressed(double xPos, double yPos) const;
 

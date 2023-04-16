@@ -5,12 +5,10 @@ PixelGUI provides a user interface for any application written in C++.
 The main goal is to make PixelGUI function as a basis for creating games with a pixelated/8-bit style, but general purpose features are added too.
 
 
-
-
 ## What can you do with PixelGUI
-- Draw sprites to a screen
-- Handle mouse and keyboard inputs
-- Provide interactive elements like buttons
++ Draw sprites to a screen
++ Handle mouse and keyboard inputs
++ Provide interactive elements like buttons
 
 ## What PixelGUI can not do (yet)
 - Draw lines, simple shapes (TODO)

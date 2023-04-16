@@ -13,8 +13,8 @@
 #include <utility>
 
 #include "SpriteRenderer.h"
-#include "ui/Sprite.h"
-#include "ui/UIElement.h"
+#include "ui/sprite/Sprite.h"
+#include "ui/uielement/UIElement.h"
 #include "utilities/DebugPrinter.h"
 
 namespace PG {
@@ -88,7 +88,7 @@ void SpriteRenderer::setBaseUI(const std::shared_ptr<UIElement> &baseUI_) {
     baseUI = baseUI_;
 }
 
-void SpriteRenderer::drawSprite(const std::unique_ptr<Sprite> &sprite, const glm::vec2 &position,
+void SpriteRenderer::drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position,
                                 const glm::vec2 &size, const SpriteArgs &args) const {
 
     // move position from screen space to scene space
