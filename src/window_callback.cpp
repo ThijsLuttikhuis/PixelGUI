@@ -6,9 +6,10 @@
 
 #include "window/Window.h"
 
+
 namespace PG {
 
-std::weak_ptr<Window> callback_window_ptr;
+std::weak_ptr<PG::Window> callback_window_ptr;
 std::unique_ptr<glm::vec2> callback_drag_start_position;
 std::unique_ptr<bool> callback_left_mouse_button_pressed;
 

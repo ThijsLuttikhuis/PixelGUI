@@ -16,10 +16,11 @@ private:
 public:
     DraggableButton(std::string name, const glm::vec2 &pos, const glm::vec2 &size,
                     int keyboardKey = GLFW_KEY_UNKNOWN)
-          : UIElement(std::move(name), pos, size, keyboardKey) {}
+          : Button(std::move(name), pos, size, keyboardKey) {}
 
-    DraggableButton(std::string name, const glm::vec2 &pos, const glm::vec2 &size, std::shared_ptr<Sprite> sprite, int keyboardKey = -1)
-          : UIElement(std::move(name), pos, size, std::move(sprite), keyboardKey) {}
+    DraggableButton(std::string name, const glm::vec2 &pos, const glm::vec2 &size, std::shared_ptr<Sprite> sprite,
+                    int keyboardKey = GLFW_KEY_UNKNOWN)
+          : Button(std::move(name), pos, size, std::move(sprite), keyboardKey) {}
 
 };
 

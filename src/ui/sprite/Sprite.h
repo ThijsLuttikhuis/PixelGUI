@@ -6,6 +6,7 @@
 #define PIXELGUI_SPRITE_H
 
 #include <utility>
+
 #include "glm-0.9.7.1/glm/vec3.hpp"
 #include "window/render/Texture2D.h"
 #include "window/render/SpriteRenderer.h"

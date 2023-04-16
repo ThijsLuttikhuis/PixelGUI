@@ -20,6 +20,7 @@ void Scene::onClick(glm::vec2 mousePos) {
         }
         if (uiElement->isMouseHovering(relativeToScene)) {
             uiElement->onClick(relativeToScene);
+            return;
         }
     }
 
@@ -83,6 +84,10 @@ void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
 
         uiElement->draw(spriteRenderer, textRenderer);
     }
+}
+
+void Scene::setDraggingChildPtr(const std::shared_ptr<UIElement> &uiElement) {
+    draggingChildPtr = uiElement;
 }
 
 }

@@ -156,5 +156,8 @@ void UIElement::show() {
     visible = true;
 }
 
+std::weak_ptr<UIElement> UIElement::getParent() const {
+    return parent;
+}
 
 }

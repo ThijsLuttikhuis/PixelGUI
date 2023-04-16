@@ -6,8 +6,9 @@
 
 int main() {
 
-    auto UIEditor = PG::UIEditor();
-    UIEditor.run();
+    auto UIEditor = std::make_shared<PG::UIEditor>();
+    UIEditor->initialize();
+    UIEditor->run();
 
     return 0;
 }

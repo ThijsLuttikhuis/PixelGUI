@@ -29,10 +29,12 @@ public:
 
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
+    void setDraggingChildPtr(const std::shared_ptr<UIElement> &uiElement);
+
     virtual void addUIElement(const std::shared_ptr<UIElement> &uiElement);
 
     void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
-                      const std::unique_ptr<TextRenderer> &textRenderer) override;
+              const std::unique_ptr<TextRenderer> &textRenderer) override;
 
 };
 

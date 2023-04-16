@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <memory>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "window/render/TextRenderer.h"
@@ -128,7 +129,7 @@ void Window::closeWindow() {
 }
 
 void Window::handleMouseButton(glm::vec2 pos) const {
-    pos *= glm::vec2((double)xPixels / getDisplayWidth(), (double)yPixels / getDisplayHeight());
+    pos *= glm::vec2((double) xPixels / getDisplayWidth(), (double) yPixels / getDisplayHeight());
 
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_ALWAYS, "mouse click:    ", pos.x, ", ", pos.y);
 
@@ -136,7 +137,7 @@ void Window::handleMouseButton(glm::vec2 pos) const {
 }
 
 void Window::handleMousePosition(glm::vec2 pos) const {
-    pos *= glm::vec2((double)xPixels / getDisplayWidth(), (double)yPixels / getDisplayHeight());
+    pos *= glm::vec2((double) xPixels / getDisplayWidth(), (double) yPixels / getDisplayHeight());
 
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_ALWAYS, "mouse position: ", pos.x, ", ", pos.y);
 
@@ -144,8 +145,8 @@ void Window::handleMousePosition(glm::vec2 pos) const {
 }
 
 void Window::handleMouseDrag(glm::vec2 pos, glm::vec2 dragStartPos) const {
-    pos *= glm::vec2((double)xPixels / getDisplayWidth(), (double)yPixels / getDisplayHeight());
-    dragStartPos *= glm::vec2((double)xPixels / getDisplayWidth(), (double)yPixels / getDisplayHeight());
+    pos *= glm::vec2((double) xPixels / getDisplayWidth(), (double) yPixels / getDisplayHeight());
+    dragStartPos *= glm::vec2((double) xPixels / getDisplayWidth(), (double) yPixels / getDisplayHeight());
 
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_ALWAYS,
                         "mouse drag:     ", dragStartPos.x, " ", pos.x, ", ", dragStartPos.y, " ", pos.y);

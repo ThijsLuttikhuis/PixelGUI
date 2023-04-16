@@ -13,6 +13,7 @@
 #include "window/render/TextRenderer.h"
 #include "window/render/SpriteRenderer.h"
 #include "GLFW/glfw3.h"
+#include "utilities/DebugPrinter.h"
 
 namespace PG {
 
@@ -22,6 +23,7 @@ private:
     int uniqueID;
 
     std::string name{};
+
 protected:
     std::weak_ptr<UIElement> parent;
 
@@ -108,6 +110,8 @@ public:
     [[nodiscard]] std::shared_ptr<UIElement> getSharedFromThis();
 
     [[nodiscard]] int getUniqueID() const;
+
+    [[nodiscard]] std::weak_ptr<UIElement> getParent() const;
 
     [[nodiscard]] const glm::vec2 &getPosition() const;
 

@@ -6,18 +6,17 @@
 #define PIXELGUI_WINDOW_H
 
 #include <vector>
-#include "ui/uielement/UIElement.h"
 
-#include "utilities/DebugPrinter.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+
+#include "ui/uielement/UIElement.h"
 #include "ui/uielement/Scene.h"
+#include "utilities/DebugPrinter.h"
 
 namespace PG {
 
 class Window;
-
-class Game;
 
 class SpriteRenderer;
 
