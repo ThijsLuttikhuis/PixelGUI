@@ -94,20 +94,20 @@ const std::shared_ptr<Sprite> &UIElement::getSprite() const {
     return sprite;
 }
 
-void UIElement::onHover(glm::vec2 relativePos) {
-    (void) relativePos;
+void UIElement::onHover(glm::vec2 mousePos) {
+    (void) mousePos;
 
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_UIELEMENT, "Hovering on:  UIElement ", name);
 }
 
-void UIElement::onClick(glm::vec2 relativePos) {
-    (void) relativePos;
+void UIElement::onClick(glm::vec2 mousePos) {
+    (void) mousePos;
 
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Pressed on:     UIElement ", name);
 }
 
-void UIElement::onDrag(glm::vec2 relativePos, glm::vec2 dragStartPos) {
-    (void) relativePos, (void) dragStartPos;
+void UIElement::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
+    (void) mousePos, (void) dragStartPos;
 
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Dragging on:    UIElement ", name);
 }
