@@ -35,13 +35,17 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         if (action == GLFW_PRESS) {
             *callback_left_mouse_button_pressed = true;
             *callback_drag_start_position = glm::vec2(xpos, ypos);
+
+            auto windowPtr = std::shared_ptr<Window>(callback_window_ptr);
+            windowPtr->handleMouseButton(glm::vec2(xpos, ypos), GLFW_MOUSE_BUTTON_LEFT, false);
         }
         if (action == GLFW_RELEASE) {
             *callback_left_mouse_button_pressed = false;
             *callback_drag_start_position = glm::vec2(0, 0);
 
             auto windowPtr = std::shared_ptr<Window>(callback_window_ptr);
-            windowPtr->handleMouseButton(glm::vec2(xpos, ypos));
+            windowPtr->handleMouseButton(glm::vec2(xpos, ypos), GLFW_MOUSE_BUTTON_LEFT, true);
+
         }
     }
 }

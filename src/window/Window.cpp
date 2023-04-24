@@ -128,12 +128,17 @@ void Window::closeWindow() {
     glfwSetWindowShouldClose(glfwWindow, true);
 }
 
-void Window::handleMouseButton(glm::vec2 pos) const {
+void Window::handleMouseButton(glm::vec2 pos, int buttonID, bool isRelease) const {
     pos *= glm::vec2((double) xPixels / getDisplayWidth(), (double) yPixels / getDisplayHeight());
 
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_ALWAYS, "mouse click:    ", pos.x, ", ", pos.y);
 
-    baseUI->onClick(pos);
+    if (isRelease) {
+        baseUI->onRelease(pos);
+    }
+    else {
+        baseUI->onClick(pos);
+    }
 }
 
 void Window::handleMousePosition(glm::vec2 pos) const {

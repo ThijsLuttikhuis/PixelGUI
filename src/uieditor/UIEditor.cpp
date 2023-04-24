@@ -77,12 +77,13 @@ void UIEditor::makeDraggableButtonCopyOnClick(const std::shared_ptr<UIElement> &
                                                                  button->getPosition(), button->getSize(),
                                                                  button->getSprite());
     //TODO: draggableButtonCopy has default parameters here??
-    
-    auto parent = std::shared_ptr<UIElement>(uiElement->getParent());
-    auto scene = std::dynamic_pointer_cast<Scene>(parent);
 
-    scene->addUIElement(draggableButtonCopy);
-    scene->setDraggingChildPtr(draggableButtonCopy);
+    if (uiElement->hasParent()) {
+        auto parent = std::shared_ptr<Scene>(uiElement->getParent());
+
+        parent->addUIElement(draggableButtonCopy);
+        parent->setDraggingChildPtr(draggableButtonCopy);
+    }
 }
 
 }

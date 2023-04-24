@@ -62,7 +62,7 @@ public:
     static void closeWindow();
 
     /// IO
-    void handleMouseButton(glm::vec2 pos) const;
+    void handleMouseButton(glm::vec2 pos, int buttonID, bool isRelease) const;
 
     void handleMouseDrag(glm::vec2 pos, glm::vec2 dPos) const;
 

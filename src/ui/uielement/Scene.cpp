@@ -14,6 +14,8 @@ std::shared_ptr<UIElement> UIElement::getSharedFromThis() {
 void Scene::onClick(glm::vec2 mousePos) {
     glm::vec2 relativeToScene = mousePos - position;
 
+    draggingChildPtr = std::weak_ptr<UIElement>();
+
     for (auto &uiElement: children) {
         if (!uiElement->isEnabled() || uiElement->isHidden()) {
             continue;
@@ -23,8 +25,6 @@ void Scene::onClick(glm::vec2 mousePos) {
             return;
         }
     }
-
-    draggingChildPtr = std::weak_ptr<UIElement>();
 }
 
 void Scene::onHover(glm::vec2 mousePos) {
@@ -46,6 +46,11 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     if (!draggingChildPtr.expired()) {
         auto draggingChild = std::shared_ptr<UIElement>(draggingChildPtr);
 
+        relativeToScenePos.x = relativeToScenePos.x < 0 ? 0 : relativeToScenePos.x;
+        relativeToScenePos.x = relativeToScenePos.x > size.x ? size.x : relativeToScenePos.x;
+        relativeToScenePos.y = relativeToScenePos.y < 0 ? 0 : relativeToScenePos.y;
+        relativeToScenePos.y = relativeToScenePos.y > size.y ? size.y : relativeToScenePos.y;
+
         draggingChild->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
         return;
     }
@@ -63,7 +68,7 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
 
 void Scene::addUIElement(const std::shared_ptr<UIElement> &uiElement) {
     children.push_back(uiElement);
-    uiElement->setParent(getSharedFromThis());
+    uiElement->setParent(std::dynamic_pointer_cast<Scene>(getSharedFromThis()));
 }
 
 void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
@@ -88,6 +93,11 @@ void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
 
 void Scene::setDraggingChildPtr(const std::shared_ptr<UIElement> &uiElement) {
     draggingChildPtr = uiElement;
+
+    if (hasParent()) {
+        auto parent = std::shared_ptr<Scene>(parentPtr);
+        parent->setDraggingChildPtr(getSharedFromThis());
+    }
 }
 
 }

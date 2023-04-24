@@ -82,8 +82,8 @@ bool UIElement::isMouseHovering(const glm::vec2 &pos) const {
     return isMouseHovering(pos.x, pos.y);
 }
 
-void UIElement::setParent(std::weak_ptr<UIElement> parent_) {
-    parent = std::move(parent_);
+void UIElement::setParent(std::weak_ptr<Scene> parent_) {
+    parentPtr = std::move(parent_);
 }
 
 void UIElement::setAlpha(float alpha_) {
@@ -104,6 +104,13 @@ void UIElement::onClick(glm::vec2 mousePos) {
     (void) mousePos;
 
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Pressed on:     UIElement ", name);
+}
+
+void UIElement::onRelease(glm::vec2 mousePos) {
+    (void) mousePos;
+
+    DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Released on:    UIElement ", name);
+
 }
 
 void UIElement::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
@@ -156,8 +163,14 @@ void UIElement::show() {
     visible = true;
 }
 
-std::weak_ptr<UIElement> UIElement::getParent() const {
-    return parent;
+std::weak_ptr<Scene> UIElement::getParent() const {
+    return parentPtr;
 }
+
+bool UIElement::hasParent() const {
+    return !parentPtr.expired();
+}
+
+
 
 }

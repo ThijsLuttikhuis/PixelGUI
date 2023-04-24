@@ -24,6 +24,8 @@ private:
     };
 
 public:
+    Button() : UIElement() {};
+
     Button(std::string name, const glm::vec2 &position, const glm::vec2 &size, int keyboardKey = GLFW_KEY_UNKNOWN)
           : UIElement(std::move(name), position, size, keyboardKey) {}
 

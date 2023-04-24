@@ -17,6 +17,8 @@
 
 namespace PG {
 
+class Scene;
+
 class UIElement : public std::enable_shared_from_this<UIElement> {
 private:
     static int uniqueIDCounter;
@@ -25,7 +27,7 @@ private:
     std::string name{};
 
 protected:
-    std::weak_ptr<UIElement> parent;
+    std::weak_ptr<Scene> parentPtr;
 
     glm::vec2 position{};
     glm::vec2 size{};
@@ -71,6 +73,8 @@ public:
 
     virtual void onClick(glm::vec2 mousePos);
 
+    virtual void onRelease(glm::vec2 mousePos);
+
     virtual void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos);
 
     /// render
@@ -80,7 +84,7 @@ public:
     /// setters
     void forceSetUniqueID(int uniqueID_);
 
-    void setParent(std::weak_ptr<UIElement> parent_);
+    void setParent(std::weak_ptr<Scene> parent_);
 
     void setPosition(glm::vec2 position_);
 
@@ -111,7 +115,9 @@ public:
 
     [[nodiscard]] int getUniqueID() const;
 
-    [[nodiscard]] std::weak_ptr<UIElement> getParent() const;
+    [[nodiscard]] std::weak_ptr<Scene> getParent() const;
+
+    [[nodiscard]] bool hasParent() const;
 
     [[nodiscard]] const glm::vec2 &getPosition() const;
 
