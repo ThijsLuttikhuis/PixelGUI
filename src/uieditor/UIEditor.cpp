@@ -5,6 +5,7 @@
 #include "ui/uielement/Scene.h"
 
 #include "UIEditor.h"
+#include "ui/uielement/Slider.h"
 
 namespace PG {
 
@@ -52,16 +53,43 @@ void UIEditor::initialize() {
 
     // left panel has a button that can be copied
 
-    name = "Button1";
+    name = "ButtonF";
     pos = glm::vec2(100, 100);
     size = glm::vec2(64, 64);
     sprite = std::make_shared<Sprite>("arrow");
     key = GLFW_KEY_A;
 
-    auto button = std::make_shared<Button>(name, pos, size, std::move(sprite), key);
-    button->setCallbackFunction(makeDraggableButtonCopyOnClick);
+    auto buttonFactory = std::make_shared<Button>(name, pos, size,
+                                                  std::move(sprite), key,
+                                                  Button::pressMode::pressOnClick);
+    buttonFactory->setCallbackFunction(makeDraggableButtonCopyOnClick);
 
-    leftPanel->addUIElement(button);
+    name = "ButtonM";
+    pos = glm::vec2(100, 100);
+    size = glm::vec2(64, 64);
+    sprite = std::make_shared<Sprite>("arrow");
+    key = GLFW_KEY_A;
+
+    auto buttonM = std::make_shared<Button>(name, pos, size,
+                                            std::move(sprite), key,
+                                            Button::pressMode::pressOnReleaseAfterDrag);
+    buttonM->setCallbackFunction(sayHi);
+
+    name = "SliderM";
+    pos = glm::vec2(200, 100);
+    size = glm::vec2(64, 64);
+    sprite = std::make_shared<Sprite>("arrow");
+    key = GLFW_KEY_A;
+
+    auto sliderM = std::make_shared<Slider>(name, pos, size,
+                                            std::move(sprite), key,
+                                            Slider::slideMode::horizontalOnDrag);
+    sliderM->setCallbackFunction(sliderChangeColor);
+
+    leftPanel->addUIElement(buttonFactory);
+    middlePanel->addUIElement(buttonM);
+    middlePanel->addUIElement(sliderM);
+
 }
 
 void UIEditor::run() {
@@ -84,6 +112,33 @@ void UIEditor::makeDraggableButtonCopyOnClick(const std::shared_ptr<UIElement> &
         parent->addUIElement(draggableButtonCopy);
         parent->setDraggingChildPtr(draggableButtonCopy);
     }
+}
+
+void UIEditor::sayHi(const std::shared_ptr<UIElement> &uiElement) {
+    DebugPrinter::print(DebugPrinter::ALL, "Hi! I'm ", uiElement->getName());
+}
+
+void UIEditor::sliderChangeColor(const std::shared_ptr<UIElement> &uiElement) {
+    auto slider = std::dynamic_pointer_cast<Slider>(uiElement);
+
+    double slideSpeed = 0.001;
+
+    auto sliderColor = slider->getSprite()->getColor();
+    auto dPos = slider->getDragDeltaPos();
+
+    switch (slider->getSlideMode()) {
+        case Slider::horizontalOnDrag:
+            sliderColor -= dPos.x * slideSpeed;
+            break;
+        case Slider::verticalOnDrag:
+            sliderColor -= dPos.y * slideSpeed;
+            //TODO: fix slider dPos, clamp color
+            break;
+        default:
+            throw std::exception(); //TODO: switch not handled exception
+    }
+    slider->getSprite()->setColor(sliderColor);
+
 }
 
 }

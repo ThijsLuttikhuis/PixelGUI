@@ -36,6 +36,7 @@ public:
     void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
               const std::unique_ptr<TextRenderer> &textRenderer) override;
 
+    void onRelease(glm::vec2 mousePos);
 };
 
 }

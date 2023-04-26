@@ -24,6 +24,9 @@ public:
 
     [[nodiscard]] std::shared_ptr<UIEditor> getSharedFromThis();
 
+    static void sayHi(const std::shared_ptr<UIElement> &uiElement);
+
+    static void sliderChangeColor(const std::shared_ptr<UIElement> &uiElement);
 };
 
 }

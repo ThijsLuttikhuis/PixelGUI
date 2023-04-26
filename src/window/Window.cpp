@@ -129,6 +129,9 @@ void Window::closeWindow() {
 }
 
 void Window::handleMouseButton(glm::vec2 pos, int buttonID, bool isRelease) const {
+    (void) buttonID;
+    //TODO: buttonID = left/right/3rd/nth mouse button
+
     pos *= glm::vec2((double) xPixels / getDisplayWidth(), (double) yPixels / getDisplayHeight());
 
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_ALWAYS, "mouse click:    ", pos.x, ", ", pos.y);

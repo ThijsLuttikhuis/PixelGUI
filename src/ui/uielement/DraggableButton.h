@@ -22,6 +22,9 @@ public:
                     int keyboardKey = GLFW_KEY_UNKNOWN)
           : UIElement(std::move(name), pos, size, std::move(sprite), keyboardKey) {}
 
+    void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override {
+        Draggable::onDrag(mousePos, dragStartPos);
+    }
 };
 
 }

@@ -44,14 +44,14 @@ private:
 public:
     template<typename T>
     static void print(enum verboseLevel verboseLevel, T t) {
-        if (verbosity > verboseLevel) {
+        if (verbosity >= verboseLevel) {
             std::cout << t << std::endl;
         }
     }
 
     template<typename T, typename... Args>
     static void print(enum verboseLevel verboseLevel, T t, Args... args) {
-        if (verbosity > verboseLevel) {
+        if (verbosity >= verboseLevel) {
             std::cout << t;
 
             print(verboseLevel, args...);

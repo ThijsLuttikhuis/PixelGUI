@@ -27,6 +27,22 @@ void Scene::onClick(glm::vec2 mousePos) {
     }
 }
 
+void Scene::onRelease(glm::vec2 mousePos) {
+    glm::vec2 relativeToScene = mousePos - position;
+
+    draggingChildPtr = std::weak_ptr<UIElement>();
+
+    for (auto &uiElement: children) {
+        if (!uiElement->isEnabled() || uiElement->isHidden()) {
+            continue;
+        }
+        if (uiElement->isMouseHovering(relativeToScene)) {
+            uiElement->onRelease(relativeToScene);
+            return;
+        }
+    }
+}
+
 void Scene::onHover(glm::vec2 mousePos) {
     glm::vec2 relativeToScene = mousePos - position;
     for (auto &uiElement: children) {

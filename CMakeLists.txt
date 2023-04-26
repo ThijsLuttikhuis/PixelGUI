@@ -78,7 +78,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        src/ui/sprite/MultiSprite.cpp src/ui/sprite/MultiSprite.h src/ui/sprite/SpriteComposite.cpp src/ui/sprite/SpriteComposite.h src/ui/uielement/UIGrid.cpp src/ui/uielement/UIGrid.h)
+        src/ui/sprite/MultiSprite.cpp src/ui/sprite/MultiSprite.h src/ui/sprite/SpriteComposite.cpp src/ui/sprite/SpriteComposite.h src/ui/uielement/UIGrid.cpp src/ui/uielement/UIGrid.h src/ui/uielement/Slider.cpp src/ui/uielement/Slider.h)
 
 target_link_libraries(PixelGUI ${LIBS})
 
