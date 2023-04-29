@@ -7,7 +7,26 @@
 namespace PG {
 
 void Slider::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
-    dragDeltaPos = mousePos - dragStartPos;
+    if (oldDragStartPos != dragStartPos) {
+        oldDragStartPos = dragStartPos;
+        dragStartValue = value;
+    }
+    glm::vec2 dragDeltaPos = mousePos - dragStartPos;
+
+
+    switch (slideMode) {
+        case Slider::horizontalOnDrag:
+            value = dragStartValue + static_cast<int>(dragDeltaPos.x * slideSpeed);
+            break;
+        case Slider::verticalOnDrag:
+            value = dragStartValue + static_cast<int>(dragDeltaPos.y * slideSpeed);
+            break;
+        default:
+            throw std::exception(); //TODO: switch not handled exception
+    }
+    value = std::clamp(value, minValue, maxValue);
+    DebugPrinter::print(DebugPrinter::ALL, "slider value: ", value, "  ", dragDeltaPos.x);
+
     try {
         callbackFunc(getSharedFromThis());
     }
@@ -24,8 +43,8 @@ void Slider::setSlideMode(enum Slider::slideMode slideMode_) {
     slideMode = slideMode_;
 }
 
-glm::vec2 Slider::getDragDeltaPos() {
-    return dragDeltaPos;
+int Slider::getValue() {
+    return value;
 }
 
 enum Slider::slideMode Slider::getSlideMode() {
