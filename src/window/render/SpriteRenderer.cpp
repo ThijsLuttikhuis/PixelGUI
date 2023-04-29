@@ -116,7 +116,6 @@ void SpriteRenderer::drawSprite(const std::shared_ptr<Sprite> &sprite, const glm
 
     // set texture
     glActiveTexture(GL_TEXTURE0);
-//    const std::unique_ptr<Texture2D> &texture = sprite->getTexture();
     auto texture = textures.at(sprite->getTextureName());
     texture->bind();
 

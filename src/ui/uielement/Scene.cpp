@@ -58,20 +58,52 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     glm::vec2 relativeToScenePos = mousePos - position;
     glm::vec2 relativeToSceneDragStartPos = dragStartPos - position;
 
-    if (!draggingChildPtr.expired()) {
-        auto draggingChild = std::shared_ptr<UIElement>(draggingChildPtr);
-
-        if (boundObjectsInBox) {
-            relativeToScenePos.x = relativeToScenePos.x < 0 ? 0 : relativeToScenePos.x;
-            relativeToScenePos.x = relativeToScenePos.x > size.x ? size.x : relativeToScenePos.x;
-            relativeToScenePos.y = relativeToScenePos.y < 0 ? 0 : relativeToScenePos.y;
-            relativeToScenePos.y = relativeToScenePos.y > size.y ? size.y : relativeToScenePos.y;
+    if (draggingChildPtr.expired()) {
+        updateDraggingChild(relativeToScenePos, relativeToSceneDragStartPos);
+        if (draggingChildPtr.expired()) {
+            return;
         }
-
-        draggingChild->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
-        return;
     }
 
+    if (boundObjectsInBox) {
+        relativeToScenePos = pgu::clampVec(relativeToScenePos, glm::vec2(0), size);
+    }
+
+    auto draggingChild = std::shared_ptr<UIElement>(draggingChildPtr);
+    draggingChild->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
+
+    if (changeOwnerWhenDraggingOutsideScene) {
+        glm::vec2 draggingChildPos = draggingChild->getPosition();
+        if (isPositionInBox(draggingChildPos.x, draggingChildPos.y, glm::vec2(0.0f), size)) {
+            return;
+        }
+
+        updateOwnerChange(draggingChild, draggingChildPos);
+    }
+}
+
+void Scene::updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild, const glm::vec2 &draggingChildPos) {
+    auto siblings = getSiblings();
+    for (auto &sibling: siblings) {
+        auto siblingScene = std::dynamic_pointer_cast<Scene>(sibling);
+        if (!siblingScene) {
+            continue;
+        }
+        glm::vec2 relativeSiblingPos = siblingScene->getPosition() - position;
+        glm::vec2 siblingSize = siblingScene->getSize();
+        if (isPositionInBox(draggingChildPos.x, draggingChildPos.y,
+                            relativeSiblingPos, siblingSize)) {
+
+            bool ownerChanged = changeOwner(draggingChild, siblingScene);
+            if (!ownerChanged) {
+                throw std::exception();
+            }
+            return;
+        }
+    }
+}
+
+void Scene::updateDraggingChild(glm::vec2 &relativeToScenePos, glm::vec2 &relativeToSceneDragStartPos) {
     for (auto &uiElement: children) {
         if (uiElement->isHidden()) {
             continue;
@@ -144,24 +176,36 @@ std::vector<std::shared_ptr<UIElement>> Scene::getChildren() {
 }
 
 bool Scene::changeOwner(const std::shared_ptr<UIElement> &uiElementToChange, const std::shared_ptr<Scene> &newOwner) {
-    for (unsigned long i = 0; i < children.size(); i++) {
-        if (uiElementToChange == children[i]) {
-            children.erase(children.begin() + i);
-            newOwner->addUIElement(uiElementToChange);
-            uiElementToChange->setPosition(uiElementToChange->getPosition() + position - newOwner->getPosition());
 
-            if (!draggingChildPtr.expired()) {
-                auto draggingChild = std::shared_ptr<UIElement>(draggingChildPtr);
-                if (draggingChild == uiElementToChange) {
-                    newOwner->setDraggingChildPtr(draggingChild);
-                    draggingChildPtr = std::weak_ptr<UIElement>();
-                }
-            }
-            return true;
+    int index = getChildIndex(uiElementToChange);
+    if (index < 0) {
+        return false;
+    }
 
+    DebugPrinter::print(DebugPrinter::ALL, "Changing owner from ", getName(), " to ", newOwner->getName());
+    children.erase(children.begin() + index);
+    newOwner->addUIElement(uiElementToChange);
+
+    uiElementToChange->setPosition(uiElementToChange->getPosition() + position - newOwner->getPosition());
+
+    if (!draggingChildPtr.expired()) {
+        auto draggingChild = std::shared_ptr<UIElement>(draggingChildPtr);
+        if (draggingChild == uiElementToChange) {
+            newOwner->setDraggingChildPtr(draggingChild);
+            draggingChildPtr = std::weak_ptr<UIElement>();
         }
     }
-    return false;
+    return true;
+}
+
+int Scene::getChildIndex(const std::shared_ptr<UIElement> &uiElement) {
+    for (int i = 0; i < (int)children.size(); i++) {
+        if (uiElement == children[i]) {
+            return i;
+        }
+    }
+
+    return -1; //TODO: what to return? -1? children.size()? throw error?
 }
 
 }

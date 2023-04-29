@@ -65,8 +65,8 @@ void UIElement::setColor(const glm::vec3 &color_) {
 }
 
 bool UIElement::isPositionInBox(double x, double y, glm::vec2 position, glm::vec2 size) {
-    bool xInBox = x > position.x && x < position.x + size.x;
-    bool yInBox = y > position.y && y < position.y + size.y;
+    bool xInBox = (x >= position.x && x < position.x + size.x);
+    bool yInBox = (y >= position.y && y < position.y + size.y);
     return xInBox && yInBox;
 }
 
@@ -170,6 +170,7 @@ std::weak_ptr<Scene> UIElement::getParent() const {
 bool UIElement::hasParent() const {
     return !parentPtr.expired();
 }
+
 
 
 
