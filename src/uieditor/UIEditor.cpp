@@ -33,6 +33,9 @@ void UIEditor::initialize() {
     sprite = std::make_shared<Sprite>("square", glm::vec3(1), 0.3f);
 
     auto leftPanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
+    leftPanel->setBoundObjectsInBox(false);
+    leftPanel->setChangeOwnerWhenDraggingOutsideScene(true);
+
     window->addUIElement(leftPanel);
 
     name = "MiddlePanel";
@@ -41,6 +44,9 @@ void UIEditor::initialize() {
     sprite = std::make_shared<Sprite>("square", glm::vec3(1), 0.3f);
 
     auto middlePanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
+    middlePanel->setBoundObjectsInBox(false);
+    middlePanel->setChangeOwnerWhenDraggingOutsideScene(true);
+
     window->addUIElement(middlePanel);
 
     name = "RightPanel";
@@ -49,6 +55,7 @@ void UIEditor::initialize() {
     sprite = std::make_shared<Sprite>("square", glm::vec3(1), 0.3f);
 
     auto rightPanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
+
     window->addUIElement(rightPanel);
 
     // left panel has a button that can be copied
@@ -89,7 +96,6 @@ void UIEditor::initialize() {
     leftPanel->addUIElement(buttonFactory);
     middlePanel->addUIElement(buttonM);
     middlePanel->addUIElement(sliderM);
-
 }
 
 void UIEditor::run() {
@@ -104,7 +110,6 @@ void UIEditor::makeDraggableButtonCopyOnClick(const std::shared_ptr<UIElement> &
     auto draggableButtonCopy = std::make_shared<DraggableButton>(button->getName(),
                                                                  button->getPosition(), button->getSize(),
                                                                  button->getSprite());
-    //TODO: draggableButtonCopy has default parameters here??
 
     if (uiElement->hasParent()) {
         auto parent = std::shared_ptr<Scene>(uiElement->getParent());
@@ -121,24 +126,7 @@ void UIEditor::sayHi(const std::shared_ptr<UIElement> &uiElement) {
 void UIEditor::sliderChangeColor(const std::shared_ptr<UIElement> &uiElement) {
     auto slider = std::dynamic_pointer_cast<Slider>(uiElement);
 
-    double slideSpeed = 0.001;
-
-    auto sliderColor = slider->getSprite()->getColor();
-    auto dPos = slider->getDragDeltaPos();
-
-    switch (slider->getSlideMode()) {
-        case Slider::horizontalOnDrag:
-            sliderColor -= dPos.x * slideSpeed;
-            break;
-        case Slider::verticalOnDrag:
-            sliderColor -= dPos.y * slideSpeed;
-            //TODO: fix slider dPos, clamp color
-            break;
-        default:
-            throw std::exception(); //TODO: switch not handled exception
-    }
-    slider->getSprite()->setColor(sliderColor);
-
+    slider->getSprite()->setColor(glm::vec3((float)slider->getValue() / 100.0f));
 }
 
 }

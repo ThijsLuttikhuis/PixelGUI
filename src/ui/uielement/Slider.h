@@ -19,8 +19,13 @@ public:
 private:
 
     slideMode slideMode = horizontalOnDrag;
+    glm::vec2 oldDragStartPos = glm::vec2{};
+    int dragStartValue = 50;
 
-    glm::vec2 dragDeltaPos;
+    int value = 50;
+    int minValue = 0;
+    int maxValue = 100;
+    double slideSpeed = 0.4;
 
     void (* callbackFunc)(const std::shared_ptr<UIElement> &button) = emptyCallback;
 
@@ -48,7 +53,7 @@ public:
 
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
-    [[nodiscard]] glm::vec2 getDragDeltaPos();
+    [[nodiscard]] int getValue();
 
     [[nodiscard]] enum slideMode getSlideMode();
 

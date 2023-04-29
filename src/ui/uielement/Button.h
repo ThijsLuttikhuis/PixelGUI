@@ -26,7 +26,6 @@ private:
 
     void (* callbackFunc)(const std::shared_ptr<UIElement> &button) = emptyCallback;
 
-
     static void emptyCallback(const std::shared_ptr<UIElement> &uiElement) {
         (void) uiElement;
         DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Callback:       ", uiElement, " (Empty)");
