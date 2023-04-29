@@ -12,6 +12,7 @@ namespace PG {
 class Scene : public UIElement {
 protected:
     bool boundObjectsInBox = true;
+
     bool changeOwnerWhenDraggingOutsideScene = false;
 
     std::vector<std::shared_ptr<UIElement>> children;
@@ -34,6 +35,9 @@ public:
 
     void setDraggingChildPtr(const std::shared_ptr<UIElement> &uiElement);
 
+    /// Find child the mouse is dragging over and set draggingChildPtr to that child.
+    void updateDraggingChild(glm::vec2 &relativeToScenePos, glm::vec2 &relativeToSceneDragStartPos);
+
     void setBoundObjectsInBox(bool boundObjects);
 
     void setChangeOwnerWhenDraggingOutsideScene(bool changeOwner);
@@ -45,13 +49,26 @@ public:
 
     void onRelease(glm::vec2 mousePos) override;
 
+    /**
+     * Change owner of UIElement from (this) to a different Scene.
+     *
+     * @param[in] uiElementToChange UIElement (shared_ptr) to change the owner of.
+     * @param[in] newOwner Scene (shared_ptr) the new owner for <B>UIElementToChange</B>.
+     * @return[out] <B>true</B> if owner was changed successfully, else <B>false</B>.
+     */
     bool changeOwner(const std::shared_ptr<UIElement>& uiElementToChange, const std::shared_ptr<Scene>& newOwner);
 
-    [[nodiscard]] bool getChangeOwnerWhenDraggingOutsideScene() const;
 
+    /// Get children of parent.
     [[nodiscard]] std::vector<std::shared_ptr<UIElement>> getSiblings();
 
     [[nodiscard]] std::vector<std::shared_ptr<UIElement>> getChildren();
+
+    [[nodiscard]] int getChildIndex(const std::shared_ptr<UIElement> &uiElement);
+
+    [[nodiscard]] bool getChangeOwnerWhenDraggingOutsideScene() const;
+
+    void updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild, const glm::vec2 &draggingChildPos);
 };
 
 }

@@ -14,6 +14,7 @@
 #include "window/render/SpriteRenderer.h"
 #include "GLFW/glfw3.h"
 #include "utilities/DebugPrinter.h"
+#include "utilities/pgu.h"
 
 namespace PG {
 

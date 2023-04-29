@@ -18,7 +18,7 @@ include_directories(include
         include/glfw-3.3.7/include/
         include/glm-0.9.7.1/)
 
-add_library(GLAD "src/glad.c")
+add_library(GLAD "src/glad.c" src/utilities/pgu.cpp src/utilities/pgu.h)
 set(LIBS
         ${LIBS}
         GLAD
