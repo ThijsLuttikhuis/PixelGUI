@@ -13,6 +13,10 @@ std::shared_ptr<UIElement> UIElement::getSharedFromThis() {
 void Scene::onClick(glm::vec2 mousePos) {
     glm::vec2 relativeToScene = mousePos - position;
 
+    if (boundObjectsInBox) {
+        relativeToScene = pgu::clampVec(relativeToScene, glm::vec2(0), size - 1.0f);
+    }
+
     draggingChildPtr = std::weak_ptr<UIElement>();
 
     for (auto &uiElement: children) {
@@ -29,6 +33,10 @@ void Scene::onClick(glm::vec2 mousePos) {
 void Scene::onRelease(glm::vec2 mousePos) {
     glm::vec2 relativeToScene = mousePos - position;
 
+    if (boundObjectsInBox) {
+        relativeToScene = pgu::clampVec(relativeToScene, glm::vec2(0), size - 1.0f);
+    }
+
     draggingChildPtr = std::weak_ptr<UIElement>();
 
     for (auto &uiElement: children) {
@@ -44,6 +52,11 @@ void Scene::onRelease(glm::vec2 mousePos) {
 
 void Scene::onHover(glm::vec2 mousePos) {
     glm::vec2 relativeToScene = mousePos - position;
+
+    if (boundObjectsInBox) {
+        relativeToScene = pgu::clampVec(relativeToScene, glm::vec2(0), size - 1.0f);
+    }
+
     for (auto &uiElement: children) {
         if (uiElement->isHidden()) {
             continue;
@@ -58,6 +71,8 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     glm::vec2 relativeToScenePos = mousePos - position;
     glm::vec2 relativeToSceneDragStartPos = dragStartPos - position;
 
+
+
     if (draggingChildPtr.expired()) {
         updateDraggingChild(relativeToScenePos, relativeToSceneDragStartPos);
         if (draggingChildPtr.expired()) {
@@ -65,30 +80,42 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
         }
     }
 
-    if (boundObjectsInBox) {
-        relativeToScenePos = pgu::clampVec(relativeToScenePos, glm::vec2(0), size);
-    }
-
     auto draggingChild = std::shared_ptr<UIElement>(draggingChildPtr);
     draggingChild->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
 
-    if (changeOwnerWhenDraggingOutsideScene) {
-        glm::vec2 draggingChildPos = draggingChild->getPosition();
-        if (isPositionInBox(draggingChildPos.x, draggingChildPos.y, glm::vec2(0.0f), size)) {
-            return;
-        }
-
-        updateOwnerChange(draggingChild, draggingChildPos);
+    glm::vec2 draggingChildPos = draggingChild->getPosition();
+    if (!boundObjectsInBox && isPositionInBox(draggingChildPos.x, draggingChildPos.y, glm::vec2(0.0f), size - 1.0f)) {
+        return;
     }
+    if (changeOwnerMode != alwaysAllowOwnerChange && changeOwnerMode != onlyGiveUIElements) {
+        return;
+    }
+
+    updateOwnerChange(draggingChild, draggingChildPos);
+
+    if (boundObjectsInBox) {
+        glm::vec2 oldPos = relativeToScenePos;
+        relativeToScenePos = pgu::clampVec(relativeToScenePos, glm::vec2(0), size - 1.0f);
+        draggingChild->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
+    }
+
+
 }
 
-void Scene::updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild, const glm::vec2 &draggingChildPos) {
+bool Scene::updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild, const glm::vec2 &draggingChildPos) {
     auto siblings = getSiblings();
     for (auto &sibling: siblings) {
         auto siblingScene = std::dynamic_pointer_cast<Scene>(sibling);
         if (!siblingScene) {
             continue;
         }
+        if (siblingScene->getChangeOwnerMode() != alwaysAllowOwnerChange && siblingScene->getChangeOwnerMode() != onlyReceiveUIElements) {
+            continue;
+        }
+        if (siblingScene->getUniqueID() == getUniqueID()) {
+            continue;
+        }
+
         glm::vec2 relativeSiblingPos = siblingScene->getPosition() - position;
         glm::vec2 siblingSize = siblingScene->getSize();
         if (isPositionInBox(draggingChildPos.x, draggingChildPos.y,
@@ -98,12 +125,13 @@ void Scene::updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild, c
             if (!ownerChanged) {
                 throw std::exception();
             }
-            return;
+            return ownerChanged;
         }
     }
+    return false;
 }
 
-void Scene::updateDraggingChild(glm::vec2 &relativeToScenePos, glm::vec2 &relativeToSceneDragStartPos) {
+bool Scene::updateDraggingChild(glm::vec2 &relativeToScenePos, glm::vec2 &relativeToSceneDragStartPos) {
     for (auto &uiElement: children) {
         if (uiElement->isHidden()) {
             continue;
@@ -111,13 +139,23 @@ void Scene::updateDraggingChild(glm::vec2 &relativeToScenePos, glm::vec2 &relati
         if (uiElement->isMouseHovering(relativeToScenePos)) {
             uiElement->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
             draggingChildPtr = uiElement;
+            return true;
         }
     }
+    return false;
 }
 
 void Scene::addUIElement(const std::shared_ptr<UIElement> &uiElement) {
     children.push_back(uiElement);
     uiElement->setParent(std::dynamic_pointer_cast<Scene>(getSharedFromThis()));
+}
+
+void Scene::removeUIElement(const std::shared_ptr<UIElement> &uiElement) {
+    int index = getChildIndex(uiElement);
+    if (index < 0) {
+        throw std::exception();
+    }
+    children.erase(children.begin() + index);
 }
 
 void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
@@ -153,12 +191,12 @@ void Scene::setBoundObjectsInBox(bool boundObjects) {
     boundObjectsInBox = boundObjects;
 }
 
-bool Scene::getChangeOwnerWhenDraggingOutsideScene() const {
-    return changeOwnerWhenDraggingOutsideScene;
+enum Scene::changeOwnerMode Scene::getChangeOwnerMode() const {
+    return changeOwnerMode;
 }
 
-void Scene::setChangeOwnerWhenDraggingOutsideScene(bool changeOwner) {
-    changeOwnerWhenDraggingOutsideScene = changeOwner;
+void Scene::setChangeOwnerMode(enum changeOwnerMode changeOwner_) {
+    changeOwnerMode = changeOwner_;
 }
 
 std::vector<std::shared_ptr<UIElement>> Scene::getSiblings() {
@@ -182,7 +220,12 @@ bool Scene::changeOwner(const std::shared_ptr<UIElement> &uiElementToChange, con
         return false;
     }
 
-    DebugPrinter::print(DebugPrinter::ALL, "Changing owner from ", getName(), " to ", newOwner->getName());
+    if ((changeOwnerMode != alwaysAllowOwnerChange && changeOwnerMode != onlyGiveUIElements) ||
+        (newOwner->changeOwnerMode != alwaysAllowOwnerChange && newOwner->changeOwnerMode != onlyReceiveUIElements)) {
+        return false;
+    }
+
+    DebugPrinter::print(DebugPrinter::ALL, "Changing owner of " , uiElementToChange->getName(), " from ", getName(), " to ", newOwner->getName());
     children.erase(children.begin() + index);
     newOwner->addUIElement(uiElementToChange);
 
@@ -205,7 +248,8 @@ int Scene::getChildIndex(const std::shared_ptr<UIElement> &uiElement) {
         }
     }
 
-    return -1; //TODO: what to return? -1? children.size()? throw error?
+    DebugPrinter::print(DebugPrinter::ALL, "Scene::getChildIndex: ", uiElement->getName(), " not found");
+    return -1;
 }
 
 }

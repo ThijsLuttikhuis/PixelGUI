@@ -27,6 +27,9 @@ public:
     static void sayHi(const std::shared_ptr<UIElement> &uiElement);
 
     static void sliderChangeColor(const std::shared_ptr<UIElement> &uiElement);
+
+    static void deleteOnReleaseIfLeftPanel(const std::shared_ptr<UIElement> &uiElement);
+
 };
 
 }

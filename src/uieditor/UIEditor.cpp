@@ -33,8 +33,8 @@ void UIEditor::initialize() {
     sprite = std::make_shared<Sprite>("square", glm::vec3(1), 0.3f);
 
     auto leftPanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
-    leftPanel->setBoundObjectsInBox(false);
-    leftPanel->setChangeOwnerWhenDraggingOutsideScene(true);
+    leftPanel->setBoundObjectsInBox(true);
+    leftPanel->setChangeOwnerMode(Scene::changeOwnerMode::alwaysAllowOwnerChange);
 
     window->addUIElement(leftPanel);
 
@@ -44,8 +44,8 @@ void UIEditor::initialize() {
     sprite = std::make_shared<Sprite>("square", glm::vec3(1), 0.3f);
 
     auto middlePanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
-    middlePanel->setBoundObjectsInBox(false);
-    middlePanel->setChangeOwnerWhenDraggingOutsideScene(true);
+    middlePanel->setBoundObjectsInBox(true);
+    middlePanel->setChangeOwnerMode(Scene::changeOwnerMode::alwaysAllowOwnerChange);
 
     window->addUIElement(middlePanel);
 
@@ -55,6 +55,7 @@ void UIEditor::initialize() {
     sprite = std::make_shared<Sprite>("square", glm::vec3(1), 0.3f);
 
     auto rightPanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
+    rightPanel->setChangeOwnerMode(Scene::changeOwnerMode::noOwnerChange);
 
     window->addUIElement(rightPanel);
 
@@ -111,12 +112,17 @@ void UIEditor::makeDraggableButtonCopyOnClick(const std::shared_ptr<UIElement> &
                                                                  button->getPosition(), button->getSize(),
                                                                  button->getSprite());
 
+    draggableButtonCopy->setCallbackFunction(deleteOnReleaseIfLeftPanel);
+    draggableButtonCopy->setPressMode(Button::pressMode::pressOnReleaseAfterDrag);
+
     if (uiElement->hasParent()) {
         auto parent = std::shared_ptr<Scene>(uiElement->getParent());
 
         parent->addUIElement(draggableButtonCopy);
         parent->setDraggingChildPtr(draggableButtonCopy);
     }
+
+    draggableButtonCopy->onClick(glm::vec2(draggableButtonCopy->getPosition()));
 }
 
 void UIEditor::sayHi(const std::shared_ptr<UIElement> &uiElement) {
@@ -127,6 +133,17 @@ void UIEditor::sliderChangeColor(const std::shared_ptr<UIElement> &uiElement) {
     auto slider = std::dynamic_pointer_cast<Slider>(uiElement);
 
     slider->getSprite()->setColor(glm::vec3((float)slider->getValue() / 100.0f));
+}
+
+void UIEditor::deleteOnReleaseIfLeftPanel(const std::shared_ptr<UIElement> &uiElement) {
+    auto parentPtr = uiElement->getParent();
+    if (parentPtr.expired()) {
+        return;
+    }
+    auto parent = std::shared_ptr<Scene>(parentPtr);
+    if (parent->getName() == "LeftPanel") {
+        parent->removeUIElement(uiElement);
+    }
 }
 
 }

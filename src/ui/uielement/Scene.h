@@ -10,10 +10,17 @@
 namespace PG {
 
 class Scene : public UIElement {
+public:
+    enum changeOwnerMode {
+        alwaysAllowOwnerChange,
+        noOwnerChange,
+        onlyReceiveUIElements,
+        onlyGiveUIElements
+    };
 protected:
     bool boundObjectsInBox = true;
 
-    bool changeOwnerWhenDraggingOutsideScene = false;
+    changeOwnerMode changeOwnerMode = noOwnerChange;
 
     std::vector<std::shared_ptr<UIElement>> children;
 
@@ -36,13 +43,15 @@ public:
     void setDraggingChildPtr(const std::shared_ptr<UIElement> &uiElement);
 
     /// Find child the mouse is dragging over and set draggingChildPtr to that child.
-    void updateDraggingChild(glm::vec2 &relativeToScenePos, glm::vec2 &relativeToSceneDragStartPos);
+    bool updateDraggingChild(glm::vec2 &relativeToScenePos, glm::vec2 &relativeToSceneDragStartPos);
 
     void setBoundObjectsInBox(bool boundObjects);
 
-    void setChangeOwnerWhenDraggingOutsideScene(bool changeOwner);
+    void setChangeOwnerMode(enum changeOwnerMode changeOwner_);
 
     virtual void addUIElement(const std::shared_ptr<UIElement> &uiElement);
+
+    virtual void removeUIElement(const std::shared_ptr<UIElement> &uiElement);
 
     void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
               const std::unique_ptr<TextRenderer> &textRenderer) override;
@@ -66,9 +75,9 @@ public:
 
     [[nodiscard]] int getChildIndex(const std::shared_ptr<UIElement> &uiElement);
 
-    [[nodiscard]] bool getChangeOwnerWhenDraggingOutsideScene() const;
+    [[nodiscard]] enum changeOwnerMode getChangeOwnerMode() const;
 
-    void updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild, const glm::vec2 &draggingChildPos);
+    bool updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild, const glm::vec2 &draggingChildPos);
 };
 
 }

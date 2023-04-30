@@ -18,7 +18,7 @@ public:
         pressOnClick,
         pressOnRelease,
         pressOnReleaseAfterDrag,
-        isDraggingForPressOnReleaseAfterDrag
+        isDraggingForPressOnReleaseAfterDrag, // used to check dragging for pressOnReleaseAfterDrag
     };
 private:
 
@@ -53,7 +53,11 @@ public:
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
     void onRelease(glm::vec2 mousePos) override;
+
+    [[nodiscard]] enum pressMode getPressMode();
+
 };
+
 
 }
 

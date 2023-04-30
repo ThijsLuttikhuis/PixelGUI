@@ -41,11 +41,14 @@ void Button::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     if (pressMode == isDraggingForPressOnReleaseAfterDrag && !isMouseHovering(mousePos)) {
         pressMode = pressOnReleaseAfterDrag;
     }
-    UIElement::onDrag(mousePos, dragStartPos);
 }
 
 void Button::setPressMode(enum Button::pressMode pressMode_) {
     pressMode = pressMode_;
+}
+
+enum Button::pressMode Button::getPressMode() {
+    return pressMode;
 }
 
 }
