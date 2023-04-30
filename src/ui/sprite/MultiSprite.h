@@ -14,17 +14,17 @@ namespace PG {
 
 class MultiSprite : public Sprite {
 private:
-    SpriteComposite spriteComposite;
+    std::shared_ptr<SpriteComposite> spriteComposite;
 
 public:
-    explicit MultiSprite(std::string textureName)
-          : Sprite(std::move(textureName), glm::vec3(1.0f), 1.0f) {}
+    explicit MultiSprite(std::shared_ptr<SpriteComposite> spriteComposite)
+          : Sprite("", glm::vec3(1.0f), 1.0f), spriteComposite(std::move(spriteComposite)) {}
 
-    MultiSprite(std::string textureName, glm::vec3 color, float alpha)
-          : Sprite(std::move(textureName), color, alpha) {}
+    MultiSprite(std::shared_ptr<SpriteComposite> spriteComposite, glm::vec3 color, float alpha)
+          : Sprite("", color, alpha), spriteComposite(std::move(spriteComposite)) {}
 
-    explicit MultiSprite(SpriteComposite spriteComposite)
-          : Sprite(""), spriteComposite(spriteComposite) {}
+    void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer, const std::unique_ptr<TextRenderer> &textRenderer,
+                      const glm::vec2 &position, const glm::vec2 &size, const SpriteArgs &args) override;
 
 };
 

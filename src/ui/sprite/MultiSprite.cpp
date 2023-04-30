@@ -6,4 +6,11 @@
 
 namespace PG {
 
+    void MultiSprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer, const std::unique_ptr<TextRenderer> &textRenderer,
+                           const glm::vec2 &position,
+                           const glm::vec2 &size, const SpriteArgs &args) {
+
+
+        spriteComposite->draw(spriteRenderer, textRenderer, position, size, args);
+    }
 }

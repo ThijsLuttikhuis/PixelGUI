@@ -50,14 +50,13 @@ void UIElement::setSize(int width, int height) {
 
 void UIElement::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                      const std::unique_ptr<TextRenderer> &textRenderer) {
-    (void) textRenderer;
 
     if (!visible || !sprite) {
         return;
     }
 
     SpriteArgs args = SpriteArgs(1.0f);
-    sprite->draw(spriteRenderer, position, size, args);
+    sprite->draw(spriteRenderer, textRenderer, position, size, args);
 }
 
 void UIElement::setColor(const glm::vec3 &color_) {
@@ -170,8 +169,5 @@ std::weak_ptr<Scene> UIElement::getParent() const {
 bool UIElement::hasParent() const {
     return !parentPtr.expired();
 }
-
-
-
 
 }

@@ -31,16 +31,13 @@ public:
 
     virtual ~Sprite() = default;
 
-    /// render
-    virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+    virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer, const std::unique_ptr<TextRenderer> &textRenderer,
                       const glm::vec2 &position, const glm::vec2 &size, const SpriteArgs &args);
 
-    /// setters
     void setColor(const glm::vec3 &color_);
 
     void setAlpha(float alpha_);
 
-    /// getters
     [[nodiscard]] std::shared_ptr<Sprite> getSharedFromThis();
 
     [[nodiscard]] const std::string &getTextureName() const;

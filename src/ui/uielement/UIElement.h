@@ -141,7 +141,6 @@ public:
     [[nodiscard]] bool isVisible() const;
 
     [[nodiscard]] bool isHidden() const;
-
 };
 
 }

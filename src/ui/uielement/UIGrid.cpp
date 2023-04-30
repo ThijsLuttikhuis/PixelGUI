@@ -18,6 +18,10 @@ void UIGrid::setUIElement(const std::shared_ptr<UIElement> &uiElement, int x, in
         DebugPrinter::print(DebugPrinter::ESSENTIAL_ONLY,
                             "UIGrid::setUIElement: trying to set element outside of the Grid");
     }
+    int childIndex = getChildIndex(uiElement);
+    if (childIndex >= 0) {
+        removeUIElement(childIndex);
+    }
 
     children[x + y * nHorizontal] = uiElement;
 }

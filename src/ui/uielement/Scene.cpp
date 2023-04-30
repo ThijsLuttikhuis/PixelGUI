@@ -94,11 +94,9 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     updateOwnerChange(draggingChild, draggingChildPos);
 
     if (boundObjectsInBox) {
-        glm::vec2 oldPos = relativeToScenePos;
         relativeToScenePos = pgu::clampVec(relativeToScenePos, glm::vec2(0), size - 1.0f);
         draggingChild->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
     }
-
 
 }
 
@@ -112,7 +110,7 @@ bool Scene::updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild, c
         if (siblingScene->getChangeOwnerMode() != alwaysAllowOwnerChange && siblingScene->getChangeOwnerMode() != onlyReceiveUIElements) {
             continue;
         }
-        if (siblingScene->getUniqueID() == getUniqueID()) {
+        if (siblingScene == getSharedFromThis()) {
             continue;
         }
 
@@ -150,12 +148,16 @@ void Scene::addUIElement(const std::shared_ptr<UIElement> &uiElement) {
     uiElement->setParent(std::dynamic_pointer_cast<Scene>(getSharedFromThis()));
 }
 
-void Scene::removeUIElement(const std::shared_ptr<UIElement> &uiElement) {
-    int index = getChildIndex(uiElement);
-    if (index < 0) {
+void Scene::removeUIElement(int index) {
+    if (index < 0 || index >= (int)children.size()) {
         throw std::exception();
     }
     children.erase(children.begin() + index);
+}
+
+void Scene::removeUIElement(const std::shared_ptr<UIElement> &uiElement) {
+    int index = getChildIndex(uiElement);
+    removeUIElement(index);
 }
 
 void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
@@ -166,8 +168,7 @@ void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
     }
     if (sprite) {
         SpriteArgs args = SpriteArgs(1.0f);
-
-        sprite->draw(spriteRenderer, position, size, args);
+        sprite->draw(spriteRenderer, textRenderer, position, size, args);
     }
 
     for (auto &uiElement: children) {
@@ -219,9 +220,10 @@ bool Scene::changeOwner(const std::shared_ptr<UIElement> &uiElementToChange, con
     if (index < 0) {
         return false;
     }
-
-    if ((changeOwnerMode != alwaysAllowOwnerChange && changeOwnerMode != onlyGiveUIElements) ||
-        (newOwner->changeOwnerMode != alwaysAllowOwnerChange && newOwner->changeOwnerMode != onlyReceiveUIElements)) {
+    if (changeOwnerMode != alwaysAllowOwnerChange && changeOwnerMode != onlyGiveUIElements) {
+        return false;
+    }
+    if (newOwner->changeOwnerMode != alwaysAllowOwnerChange && newOwner->changeOwnerMode != onlyReceiveUIElements) {
         return false;
     }
 
