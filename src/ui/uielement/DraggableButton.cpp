@@ -6,4 +6,10 @@
 
 namespace PG {
 
+void DraggableButton::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
+    // do both onDrags
+    Draggable::onDrag(mousePos, dragStartPos);
+    Button::onDrag(mousePos, dragStartPos);
+}
+
 }
