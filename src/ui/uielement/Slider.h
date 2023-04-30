@@ -17,7 +17,6 @@ public:
         verticalOnDrag
     };
 private:
-
     slideMode slideMode = horizontalOnDrag;
     glm::vec2 oldDragStartPos = glm::vec2{};
     int dragStartValue = 50;
@@ -47,11 +46,11 @@ public:
     : UIElement(std::move(name), position, size, std::move(sprite), keyboardKey),
       slideMode(slideMode) {}
 
+    void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
+
     void setCallbackFunction(void (* func)(const std::shared_ptr<UIElement> &slider));
 
     void setSlideMode(enum slideMode slideMode);
-
-    void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
     [[nodiscard]] int getValue();
 

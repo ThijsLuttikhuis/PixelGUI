@@ -32,8 +32,10 @@ const std::string &Sprite::getTextureName() const {
     return textureName;
 }
 
-void Sprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+void Sprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer, const std::unique_ptr<TextRenderer> &textRenderer,
                   const glm::vec2 &position, const glm::vec2 &size, const SpriteArgs &args) {
+
+    (void) textRenderer;
 
     spriteRenderer->drawSprite(getSharedFromThis(), position, size, args);
 }

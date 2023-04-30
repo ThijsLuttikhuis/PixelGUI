@@ -84,9 +84,9 @@ void UIEditor::initialize() {
     buttonM->setCallbackFunction(sayHi);
 
     name = "SliderM";
-    pos = glm::vec2(200, 100);
-    size = glm::vec2(64, 64);
-    sprite = std::make_shared<Sprite>("arrow");
+    pos = glm::vec2(50, 100);
+    size = glm::vec2(80, 16);
+    sprite = std::make_shared<Sprite>("rectangle1x5");
     key = GLFW_KEY_A;
 
     auto sliderM = std::make_shared<Slider>(name, pos, size,
@@ -96,7 +96,7 @@ void UIEditor::initialize() {
 
     leftPanel->addUIElement(buttonFactory);
     middlePanel->addUIElement(buttonM);
-    middlePanel->addUIElement(sliderM);
+    rightPanel->addUIElement(sliderM);
 }
 
 void UIEditor::run() {

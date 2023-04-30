@@ -26,6 +26,7 @@ protected:
 
     std::weak_ptr<UIElement> draggingChildPtr = std::weak_ptr<UIElement>();
 
+    void removeUIElement(int index);
 public:
     Scene(std::string name, const glm::vec2 &position, const glm::vec2 &size)
           : UIElement(std::move(name), position, size) {}
@@ -78,6 +79,7 @@ public:
     [[nodiscard]] enum changeOwnerMode getChangeOwnerMode() const;
 
     bool updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild, const glm::vec2 &draggingChildPos);
+
 };
 
 }

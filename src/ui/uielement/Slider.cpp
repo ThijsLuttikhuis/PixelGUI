@@ -13,7 +13,6 @@ void Slider::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     }
     glm::vec2 dragDeltaPos = mousePos - dragStartPos;
 
-
     switch (slideMode) {
         case Slider::horizontalOnDrag:
             value = dragStartValue + static_cast<int>(dragDeltaPos.x * slideSpeed);
@@ -22,7 +21,7 @@ void Slider::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
             value = dragStartValue + static_cast<int>(dragDeltaPos.y * slideSpeed);
             break;
         default:
-            throw std::exception(); //TODO: switch not handled exception
+            throw std::exception();
     }
     value = std::clamp(value, minValue, maxValue);
     DebugPrinter::print(DebugPrinter::ALL, "slider value: ", value, "  ", dragDeltaPos.x);

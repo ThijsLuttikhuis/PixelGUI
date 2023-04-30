@@ -20,7 +20,7 @@ class Sprite;
 class UIElement;
 
 struct SpriteArgs {
-    enum Anchor : int {
+    enum sceneAnchor : int {
         TOP_LEFT = 1,
         TOP = 2,
         TOP_RIGHT = 3,
@@ -36,21 +36,20 @@ struct SpriteArgs {
     };
 
     static float namedZIndexToFloat(NamedZIndex name) {
-        return static_cast<float>((int) name) / 100;
+        return static_cast<float>((int) name) / 100.0f;
     }
 
-    explicit SpriteArgs(float zIndex, Anchor anchor = TOP_LEFT,
+    explicit SpriteArgs(float zIndex, sceneAnchor anchor = TOP_LEFT,
                         glm::mat4 model = glm::mat4(1.0))
           : zIndex(zIndex), anchor(anchor), model(model) {}
 
-    explicit SpriteArgs(NamedZIndex namedZIndex, Anchor anchor = TOP_LEFT,
+    explicit SpriteArgs(NamedZIndex namedZIndex, sceneAnchor anchor = TOP_LEFT,
                         glm::mat4 model = glm::mat4(1.0))
           : SpriteArgs(namedZIndexToFloat(namedZIndex), anchor, model) {}
 
     float zIndex = 0.0f;
-    Anchor anchor = BOTTOM_LEFT;
+    sceneAnchor anchor = BOTTOM_LEFT;
     glm::mat4 model = glm::mat4(1.0f);
-
 };
 
 class SpriteRenderer {

@@ -38,6 +38,8 @@ void Button::setCallbackFunction(void (* func)(const std::shared_ptr<UIElement> 
 }
 
 void Button::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
+    (void) dragStartPos;
+
     if (pressMode == isDraggingForPressOnReleaseAfterDrag && !isMouseHovering(mousePos)) {
         pressMode = pressOnReleaseAfterDrag;
     }
