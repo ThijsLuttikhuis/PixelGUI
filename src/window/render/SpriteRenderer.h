@@ -19,7 +19,8 @@ class Sprite;
 
 class UIElement;
 
-struct SpriteArgs {
+class SpriteArgs {
+public:
     enum sceneAnchor : int {
         TOP_LEFT = 1,
         TOP = 2,
@@ -50,6 +51,7 @@ struct SpriteArgs {
     float zIndex = 0.0f;
     sceneAnchor anchor = BOTTOM_LEFT;
     glm::mat4 model = glm::mat4(1.0f);
+    glm::vec3 blendColor = glm::vec3(1.0f);
 };
 
 class SpriteRenderer {
@@ -76,7 +78,7 @@ public:
     void setBaseUI(const std::shared_ptr<UIElement> &baseUI_);
 
     void drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position,
-                    const glm::vec2 &size, const SpriteArgs &args) const;
+                    const glm::vec2 &size, const std::shared_ptr<SpriteArgs> &args) const;
 };
 
 }

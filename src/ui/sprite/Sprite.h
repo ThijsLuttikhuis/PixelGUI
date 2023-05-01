@@ -15,24 +15,20 @@
 namespace PG {
 
 class Sprite : virtual public std::enable_shared_from_this<Sprite> {
-private:
+protected:
     std::string textureName;
     glm::vec3 color;
     float alpha;
 
 public:
-    explicit Sprite(std::string textureName)
-          : textureName(std::move(textureName)), color(glm::vec3(1.0f)), alpha(1.0f) {
-    }
-
-    Sprite(std::string textureName, glm::vec3 color, float alpha)
+    explicit Sprite(std::string textureName, glm::vec3 color = glm::vec3(1.0f), float alpha = 1.0f)
           : textureName(std::move(textureName)), color(color), alpha(alpha) {
     }
 
     virtual ~Sprite() = default;
 
     virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer, const std::unique_ptr<TextRenderer> &textRenderer,
-                      const glm::vec2 &position, const glm::vec2 &size, const SpriteArgs &args);
+                      const glm::vec2 &position, const glm::vec2 &size, const std::shared_ptr<SpriteArgs> &args);
 
     void setColor(const glm::vec3 &color_);
 

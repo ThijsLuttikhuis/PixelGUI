@@ -6,6 +6,7 @@
 
 #include "UIEditor.h"
 #include "ui/uielement/Slider.h"
+#include "ui/sprite/MultiSprite.h"
 
 namespace PG {
 
@@ -87,6 +88,16 @@ void UIEditor::initialize() {
     pos = glm::vec2(50, 100);
     size = glm::vec2(80, 16);
     sprite = std::make_shared<Sprite>("rectangle1x5");
+    key = GLFW_KEY_A;
+
+    name = "SliderM";
+    pos = glm::vec2(50, 200);
+    size = glm::vec2(80, 16);
+
+    auto spriteComposite = std::make_shared<SpriteComposite>(
+          "rectangle; size: {80, 16}; edgeColor: {0.3, 1.0, 0.3}; fillColor: {1.0, 0.0, 0.0};");
+
+    sprite = std::make_shared<MultiSprite>(spriteComposite);
     key = GLFW_KEY_A;
 
     auto sliderM = std::make_shared<Slider>(name, pos, size,

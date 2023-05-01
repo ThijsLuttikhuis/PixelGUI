@@ -71,8 +71,6 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     glm::vec2 relativeToScenePos = mousePos - position;
     glm::vec2 relativeToSceneDragStartPos = dragStartPos - position;
 
-
-
     if (draggingChildPtr.expired()) {
         updateDraggingChild(relativeToScenePos, relativeToSceneDragStartPos);
         if (draggingChildPtr.expired()) {
@@ -167,7 +165,7 @@ void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
         return;
     }
     if (sprite) {
-        SpriteArgs args = SpriteArgs(1.0f);
+        auto args = std::make_shared<SpriteArgs>(1.0f);
         sprite->draw(spriteRenderer, textRenderer, position, size, args);
     }
 

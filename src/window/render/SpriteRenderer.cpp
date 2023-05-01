@@ -89,7 +89,7 @@ void SpriteRenderer::setBaseUI(const std::shared_ptr<UIElement> &baseUI_) {
 }
 
 void SpriteRenderer::drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position,
-                                const glm::vec2 &size, const SpriteArgs &args) const {
+                                const glm::vec2 &size, const std::shared_ptr<SpriteArgs> &args) const {
 
     // move position from screen space to scene space
     glm::vec2 basePos = baseUI ? baseUI->getPosition() : glm::vec2(0, 0);
@@ -104,15 +104,15 @@ void SpriteRenderer::drawSprite(const std::shared_ptr<Sprite> &sprite, const glm
         return;
     }
 
-    auto model = glm::translate(args.model, glm::vec3(screenPos, 0.0f));
+    auto model = glm::translate(args->model, glm::vec3(screenPos, 0.0f));
     model = glm::scale(model, glm::vec3(size, 1.0f));
 
     // apply shader variables
     shader->use();
     shader->setMatrix4("model", model);
-    shader->setVector3f("spriteColor", sprite->getColor());
+    shader->setVector3f("spriteColor", sprite->getColor() * args->blendColor);
     shader->setFloat("spriteAlpha", sprite->getAlpha());
-    shader->setFloat("zIndex", args.zIndex);
+    shader->setFloat("zIndex", args->zIndex);
 
     // set texture
     glActiveTexture(GL_TEXTURE0);
