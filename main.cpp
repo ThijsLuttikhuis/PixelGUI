@@ -3,9 +3,9 @@
 //
 
 #include "src/uieditor/UIEditor.h"
+#include "utilities/messageException.h"
 
 int main() {
-
     auto UIEditor = std::make_shared<PG::UIEditor>();
     UIEditor->initialize();
     UIEditor->run();

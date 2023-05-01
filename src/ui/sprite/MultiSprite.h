@@ -17,14 +17,12 @@ private:
     std::shared_ptr<SpriteComposite> spriteComposite;
 
 public:
-    explicit MultiSprite(std::shared_ptr<SpriteComposite> spriteComposite)
-          : Sprite("", glm::vec3(1.0f), 1.0f), spriteComposite(std::move(spriteComposite)) {}
-
-    MultiSprite(std::shared_ptr<SpriteComposite> spriteComposite, glm::vec3 color, float alpha)
+    explicit MultiSprite(std::shared_ptr<SpriteComposite> spriteComposite,
+                         glm::vec3 color = glm::vec3(1.0f), float alpha = 1.0f)
           : Sprite("", color, alpha), spriteComposite(std::move(spriteComposite)) {}
 
     void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer, const std::unique_ptr<TextRenderer> &textRenderer,
-                      const glm::vec2 &position, const glm::vec2 &size, const SpriteArgs &args) override;
+                      const glm::vec2 &position, const glm::vec2 &size, const std::shared_ptr<SpriteArgs> &args) override;
 
 };
 

@@ -55,7 +55,7 @@ void UIElement::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
         return;
     }
 
-    SpriteArgs args = SpriteArgs(1.0f);
+    auto args = std::make_shared<SpriteArgs>(1.0f);
     sprite->draw(spriteRenderer, textRenderer, position, size, args);
 }
 
