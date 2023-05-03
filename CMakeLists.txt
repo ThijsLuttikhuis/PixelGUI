@@ -42,13 +42,22 @@ set(INCLUDE_UI
         src/ui/uielement/Draggable.h
         src/ui/uielement/DraggableButton.cpp
         src/ui/uielement/DraggableButton.h
+        src/ui/uielement/UIGrid.cpp
+        src/ui/uielement/UIGrid.h
+        src/ui/uielement/Slider.cpp
+        src/ui/uielement/Slider.h
 
         src/ui/sprite/Sprite.h
         src/ui/sprite/Sprite.cpp
+        src/ui/sprite/MultiSprite.cpp
+        src/ui/sprite/MultiSprite.h
+        src/ui/sprite/SpriteComposite.cpp
+        src/ui/sprite/SpriteComposite.h
         )
 
 set(INCLUDE_UI_EDITOR
-        src/uieditor/UIEditor.cpp src/uieditor/UIEditor.h
+        src/uieditor/UIEditor.cpp
+        src/uieditor/UIEditor.h
         )
 
 set(INCLUDE_WINDOW
@@ -78,7 +87,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        src/ui/sprite/MultiSprite.cpp src/ui/sprite/MultiSprite.h src/ui/sprite/SpriteComposite.cpp src/ui/sprite/SpriteComposite.h src/ui/uielement/UIGrid.cpp src/ui/uielement/UIGrid.h src/ui/uielement/Slider.cpp src/ui/uielement/Slider.h)
+        )
 
 target_link_libraries(PixelGUI ${LIBS})
 
@@ -88,6 +97,5 @@ add_library(PIXELGUI_lib STATIC ${INCLUDE_SOURCE_FILES})
 
 target_link_libraries(PIXELGUI_lib ${LIBS})
 
-if(EXISTS src/test/lib/googletest/CMakelists.txt)
-    add_subdirectory(test)
-endif()
+add_subdirectory(test)
+

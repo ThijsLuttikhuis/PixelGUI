@@ -2,10 +2,12 @@
 // Created by Thijs Luttikhuis on 29/04/2023.
 //
 
+#include <algorithm>
 #include <string>
 #include <map>
 #include <vector>
 #include "pgu.h"
+
 
 namespace PG {
 
