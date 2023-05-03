@@ -40,7 +40,7 @@ TEST_F(TestUIElement, sizeNonZero_MouseHoveringExcludesBorders) {
 
     for (int x = xPos - 1; x < xPos + xSize + 2; x++) {
         for (int y = yPos - 1; y < yPos + ySize + 2; y++) {
-            if (x > xPos && x < xPos + xSize && y > yPos && y < yPos + ySize) {
+            if (x >= xPos && x < xPos + xSize && y >= yPos && y < yPos + ySize) {
                 EXPECT_TRUE(uiElement->isMouseHovering(x, y));
             }
             else {

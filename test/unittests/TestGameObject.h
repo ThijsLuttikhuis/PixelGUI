@@ -6,7 +6,7 @@
 #define PIXELGUI_TESTGAMEOBJECT_H
 
 #include <gtest/gtest.h>
-#include "game/GameObject.h"
+#include "../src/ui/uielement/UIElement.h"
 
 namespace testing {
 
@@ -16,7 +16,7 @@ class TestGameObject : public Test {
 
 protected:
     void SetUp() override {
-        gameObject = std::make_shared<GameObject>();
+        uiElement = std::make_shared<UIElement>();
     }
 
     void TearDown() override {
@@ -24,7 +24,7 @@ protected:
 
 public:
 
-    std::shared_ptr<GameObject> gameObject;
+    std::shared_ptr<UIElement> uiElement;
 };
 
 }

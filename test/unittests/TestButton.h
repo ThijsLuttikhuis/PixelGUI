@@ -6,7 +6,6 @@
 #define PIXELGUI_TESTBUTTON_H
 
 #include <gtest/gtest.h>
-#include "game/Game.h"
 #include "window/Window.h"
 #include "ui/uielement/Button.h"
 

@@ -6,7 +6,6 @@
 #define PIXELGUI_TESTWINDOW_H
 
 #include <gtest/gtest.h>
-#include "game/Game.h"
 #include "../src/window/Window.h"
 
 namespace testing {
@@ -19,14 +18,10 @@ protected:
 
     void SetUp() override {
 
-
         xPixels = 200;
         yPixels = 110;
 
-        window = std::make_shared<Window>(xPixels, yPixels);
-        game = std::make_shared<Game>();
-
-        window->setGame(game);
+        window = std::make_shared<Window>(xPixels, yPixels, "TestWindow");
         window->initialize();
 
         GLFWmonitor* monitor = glfwGetPrimaryMonitor();
@@ -43,7 +38,6 @@ public:
     int xPixels;
     int yPixels;
     std::shared_ptr<Window> window;
-    std::shared_ptr<Game> game;
 };
 
 }

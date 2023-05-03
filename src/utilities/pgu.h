@@ -6,6 +6,7 @@
 #define PIXELGUI_PGU_H
 
 #include <variant>
+#include <list>
 #include "glm/glm.hpp"
 #include "messageException.h"
 
@@ -34,6 +35,11 @@ public:
 
     /// converts string to anytype - example: "{1,2,3}" returns a glm::vec3 containing 1, 2 and 3.
     static anyTypeGLM str2anyTypeGLM(const std::string &str);
+
+    static std::string fullFile(const std::string &root, const std::string &ext);
+
+    static std::string fullFile(const std::list<std::string>& fileParts);
+
 };
 
 }

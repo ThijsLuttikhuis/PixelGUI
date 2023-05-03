@@ -6,6 +6,7 @@
 #include <memory>
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <filesystem>
 
 #include "window/render/TextRenderer.h"
 #include "window/render/SpriteRenderer.h"
@@ -81,11 +82,18 @@ void Window::initialize() {
     callback_left_mouse_button_pressed = std::make_unique<bool>(false);
     callback_drag_start_position = std::make_unique<glm::vec2>(0, 0);
 
+    auto rootPath = std::filesystem::current_path();
+    while (rootPath.stem() != "PixelGUI") {
+        std::cout << "ext: " << rootPath.string() << std::endl;
+        rootPath = rootPath.parent_path();
+        std::cout << "ext: " << rootPath.string() << std::endl;
+    }
+
     auto shader = std::make_shared<Shader>();
-    std::string vertexFile = "../assets/shaders/sprite.vs";
-    std::string fragmentFile = "../assets/shaders/sprite.fs";
-    std::string spriteFolder = "../assets/sprites/";
-    std::string textFolder = "../assets/sprites/textsprites";
+    std::string vertexFile = (rootPath / "assets" / "shaders" / "sprite.vs").string();
+    std::string fragmentFile = (rootPath / "assets" / "shaders" / "sprite.fs").string();
+    std::string spriteFolder = (rootPath / "assets" / "sprites").string();
+    std::string textFolder = (rootPath / "assets" / "sprites" / "textsprites").string();
 
     shader->compile(vertexFile, fragmentFile);
 

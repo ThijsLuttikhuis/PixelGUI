@@ -62,18 +62,15 @@ pgu::anyTypeGLM pgu::str2anyTypeGLM(const std::string &str) {
             vec.y = std::stof(str.substr(commas[0] + 1, commas[1] - commas[0]));
             vec.z = std::stof(str.substr(commas[1] + 1, closeBracket - commas[1]));
             return vec;
-        }
-        else if (commas.size() == 1) {
+        } else if (commas.size() == 1) {
             glm::vec2 vec;
             vec.x = std::stof(str.substr(openBracket + 1, commas[0] - openBracket));
             vec.y = std::stof(str.substr(commas[0] + 1, closeBracket - commas[0]));
             return vec;
-        }
-        else {
+        } else {
             throw messageException("pgu::str2anyTypeGLM: vectors larger than glm::vec3 not supported: " + str);
         }
-    }
-    else {
+    } else {
         return std::stod(str);
     }
 }
@@ -94,7 +91,6 @@ std::map<std::string, pgu::anyTypeGLM> pgu::infoString2Map(const std::string &in
     }
 
 
-
     if (colons.size() + 1 != semicolons.size()) {
         throw messageException("pgu::infoString2Map: invalid string: " + infoString);
     }
@@ -113,6 +109,31 @@ std::map<std::string, pgu::anyTypeGLM> pgu::infoString2Map(const std::string &in
     }
 
     return strMap;
+}
+
+std::string pgu::fullFile(const std::string &root, const std::string &ext) {
+#ifdef __unix__
+    return root + "/" + ext; //TODO: check if this works on ubuntu
+#else
+    return root + "\\\\" + ext;
+#endif
+    }
+
+std::string pgu::fullFile(const std::list<std::string>& fileParts) {
+    std::string fullF;
+
+#ifdef __unix__
+    for (const auto &filePart: fileParts) {
+        fullF += filePart + "/";
+    }
+#else
+    for (const auto &filePart: fileParts) {
+        fullF += filePart + "\\";
+    }
+#endif
+
+    fullF.pop_back();
+    return fullF;
 }
 
 }

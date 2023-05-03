@@ -2,7 +2,6 @@
 # https://www.jetbrains.com/help/clion/unit-testing-tutorial.html#adding-framework
 
 project(tests)
-
 message("   Building tests folder")
 
 set(CMAKE_CXX_FLAGS "-O0 -g -Wall -Wextra --coverage")
@@ -10,6 +9,8 @@ set(CMAKE_CXX_FLAGS "-O0 -g -Wall -Wextra --coverage")
 add_subdirectory(lib/googletest)
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
+include_directories(../src)
 
 set(INCLUDE_TESTS
         unittests/TestWindow.cpp
@@ -22,12 +23,12 @@ set(INCLUDE_TESTS
         unittests/TestButton.h
         )
 
-add_executable(run_tests
+add_executable(PGTESTS
         ${INCLUDE_TESTS}
         )
 
-target_link_libraries(run_tests PIXELGUI_lib)
+target_link_libraries(PGTESTS PIXELGUI_lib)
 
-target_link_libraries(run_tests gtest_main)
+target_link_libraries(PGTESTS gtest_main)
 
-add_test(NAME TEST COMMAND run_tests)
+add_test(NAME TEST COMMAND PGTESTS)

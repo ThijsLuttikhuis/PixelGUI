@@ -10,13 +10,18 @@
 
 namespace PG {
 
-void Shader::use() {
+void Shader::use() const {
     glUseProgram(id);
 }
 
 void Shader::compile(const std::string &vertexFile, const std::string &fragmentFile, const std::string &geometryFile) {
-    std::string vertexString, fragmentString, geometryString;
-    unsigned int vertexShader{}, fragmentShader{}, geometryShader{};
+
+    std::string vertexString;
+    std::string fragmentString;
+    std::string geometryString;
+    unsigned int vertexShader;
+    unsigned int fragmentShader;
+    unsigned int geometryShader{};
 
     bool hasGeometry = !geometryFile.empty();
 
@@ -84,43 +89,43 @@ void Shader::compile(const std::string &vertexFile, const std::string &fragmentF
     }
 }
 
-void Shader::setFloat(const char* name, float value) {
+void Shader::setFloat(const char* name, float value) const {
     glUniform1f(glGetUniformLocation(id, name), value);
 }
 
-void Shader::setInteger(const char* name, int value) {
+void Shader::setInteger(const char* name, int value) const {
     glUniform1i(glGetUniformLocation(id, name), value);
 }
 
-void Shader::setVector2f(const char* name, float x, float y) {
+void Shader::setVector2f(const char* name, float x, float y) const {
     glUniform2f(glGetUniformLocation(id, name), x, y);
 }
 
-void Shader::setVector2f(const char* name, const glm::vec2 &value) {
+void Shader::setVector2f(const char* name, const glm::vec2 &value) const {
     glUniform2f(glGetUniformLocation(id, name), value.x, value.y);
 }
 
-void Shader::setVector3f(const char* name, float x, float y, float z) {
+void Shader::setVector3f(const char* name, float x, float y, float z) const {
     glUniform3f(glGetUniformLocation(id, name), x, y, z);
 }
 
-void Shader::setVector3f(const char* name, const glm::vec3 &value) {
+void Shader::setVector3f(const char* name, const glm::vec3 &value) const {
     glUniform3f(glGetUniformLocation(id, name), value.x, value.y, value.z);
 }
 
-void Shader::setVector4f(const char* name, float x, float y, float z, float w) {
+void Shader::setVector4f(const char* name, float x, float y, float z, float w) const {
     glUniform4f(glGetUniformLocation(id, name), x, y, z, w);
 }
 
-void Shader::setVector4f(const char* name, const glm::vec4 &value) {
+void Shader::setVector4f(const char* name, const glm::vec4 &value) const {
     glUniform4f(glGetUniformLocation(id, name), value.x, value.y, value.z, value.w);
 }
 
-void Shader::setMatrix4(const char* name, const glm::mat4 &matrix) {
+void Shader::setMatrix4(const char* name, const glm::mat4 &matrix) const {
     glUniformMatrix4fv(glGetUniformLocation(id, name), 1, false, glm::value_ptr(matrix));
 }
 
-void Shader::checkCompileErrors(unsigned int object, const std::string &type) {
+void Shader::checkCompileErrors(unsigned int object, const std::string &type) const {
     int success;
     char infoLog[1024];
 

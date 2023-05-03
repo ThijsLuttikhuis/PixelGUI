@@ -6,7 +6,6 @@
 #define PIXELGUI_TESTUIELEMENT_H
 
 #include <gtest/gtest.h>
-#include "game/Game.h"
 #include "window/Window.h"
 #include "ui/uielement/UIElement.h"
 
