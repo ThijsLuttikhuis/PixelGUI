@@ -11,25 +11,6 @@
 
 namespace PG {
 
-
-glm::vec2 &pgu::clampVec(glm::vec2 &vector, const glm::vec2 &low, const glm::vec2 &high) {
-    vector.x = vector.x < low.x ? low.x : vector.x;
-    vector.x = vector.x > high.x ? high.x : vector.x;
-    vector.y = vector.y < low.y ? low.y : vector.y;
-    vector.y = vector.y > high.y ? high.y : vector.y;
-    return vector;
-}
-
-glm::vec3 &pgu::clampVec(glm::vec3 &vector, const glm::vec3 &low, const glm::vec3 &high) {
-    vector.x = vector.x < low.x ? low.x : vector.x;
-    vector.x = vector.x > high.x ? high.x : vector.x;
-    vector.y = vector.y < low.y ? low.y : vector.y;
-    vector.y = vector.y > high.y ? high.y : vector.y;
-    vector.z = vector.z < low.z ? low.z : vector.z;
-    vector.z = vector.z > high.z ? high.z : vector.z;
-    return vector;
-}
-
 std::string pgu::removeChars(std::string &str, const std::string &charsToRemove) {
     str.erase(remove_if(str.begin(),
                         str.end(),
@@ -43,35 +24,46 @@ std::string pgu::removeChars(std::string &str, const std::string &charsToRemove)
 
 pgu::anyTypeGLM pgu::str2anyTypeGLM(const std::string &str) {
     if (str.find('{') != std::string::npos && str.find('}') != std::string::npos) {
-        auto openBracket = str.find('{');
-        auto closeBracket = str.find('}');
-
-        std::vector<unsigned long> commas;
-        auto comma = str.find(',');
-        while (comma != std::string::npos) {
-            if (comma < openBracket || comma > closeBracket) {
-                throw messageException("pgu::str2anyTypeGLM: invalid string: " + str);
-            }
-            commas.push_back(comma);
-            comma = str.find(',', comma + 1);
-        }
-
-        if (commas.size() == 2) {
-            glm::vec3 vec;
-            vec.x = std::stof(str.substr(openBracket + 1, commas[0] - openBracket));
-            vec.y = std::stof(str.substr(commas[0] + 1, commas[1] - commas[0]));
-            vec.z = std::stof(str.substr(commas[1] + 1, closeBracket - commas[1]));
-            return vec;
-        } else if (commas.size() == 1) {
-            glm::vec2 vec;
-            vec.x = std::stof(str.substr(openBracket + 1, commas[0] - openBracket));
-            vec.y = std::stof(str.substr(commas[0] + 1, closeBracket - commas[0]));
-            return vec;
-        } else {
-            throw messageException("pgu::str2anyTypeGLM: vectors larger than glm::vec3 not supported: " + str);
-        }
-    } else {
+        return str2vecGLM(str);
+    } else if (str.find(',') != std::string::npos) {
+        throw messageException("pgu::str2anyTypeGLM: please use curly braces to indicate a vector ('{a, b, c}'): " + str);
+    } else if (str.find('.') != std::string::npos) {
         return std::stod(str);
+    } else {
+        return std::stoi(str);
+    }
+}
+
+pgu::anyTypeGLM pgu::str2vecGLM(const std::string &str) {
+    auto openBracket = str.find('{');
+    auto closeBracket = str.find('}');
+
+    std::vector<unsigned long> commas;
+    auto comma = str.find(',');
+    while (comma != std::string::npos) {
+        if (comma < openBracket || comma > closeBracket) {
+            throw messageException("pgu::str2anyTypeGLM: invalid string: " + str);
+        }
+        commas.push_back(comma);
+        comma = str.find(',', comma + 1);
+    }
+
+    if (commas.size() == 2) {
+        glm::vec3 vec;
+        vec.x = std::stof(str.substr(openBracket + 1, commas[0] - openBracket));
+        vec.y = std::stof(str.substr(commas[0] + 1, commas[1] - commas[0]));
+        vec.z = std::stof(str.substr(commas[1] + 1, closeBracket - commas[1]));
+        return vec;
+    } else if (commas.size() == 1) {
+        glm::vec2 vec;
+        vec.x = std::stof(str.substr(openBracket + 1, commas[0] - openBracket));
+        vec.y = std::stof(str.substr(commas[0] + 1, closeBracket - commas[0]));
+        return vec;
+    } else if (commas.empty()) {
+        throw messageException("pgu::str2vecGLM: please use commas (,) to separate values: " + str);
+    }
+    else {
+        throw messageException("pgu::str2vecGLM: vectors larger than glm::vec3 not supported: " + str);
     }
 }
 

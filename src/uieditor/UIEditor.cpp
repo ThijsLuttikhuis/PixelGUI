@@ -23,15 +23,18 @@ void UIEditor::initialize() {
     std::string name;
     glm::vec2 pos;
     glm::vec2 size;
+    std::shared_ptr<SpriteComposite> spriteComposite;
     std::shared_ptr<Sprite> sprite;
     int key;
 
     // 3 Side by Side Panels
-
     name = "LeftPanel";
     pos = glm::vec2(0, 0);
     size = glm::vec2(200, 540);
-    sprite = std::make_shared<Sprite>("square", glm::vec3(1), 0.3f);
+    spriteComposite = std::make_shared<SpriteComposite>(
+          "rectangle; size: {200, 540}; edgeColor: {0.3, 0.5, 0.4}; fillColor: {0.3, 0.3, 0.3}; edgeWidth: 8;");
+
+    sprite = std::make_shared<MultiSprite>(spriteComposite);
 
     auto leftPanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
     leftPanel->setBoundObjectsInBox(true);
@@ -42,7 +45,10 @@ void UIEditor::initialize() {
     name = "MiddlePanel";
     pos = glm::vec2(200, 0);
     size = glm::vec2(560, 540);
-    sprite = std::make_shared<Sprite>("square", glm::vec3(1), 0.3f);
+    spriteComposite = std::make_shared<SpriteComposite>(
+          "rectangle; size: {560, 540}; edgeColor: {0.5, 0.4, 0.3}; fillColor: {0.3, 0.3, 0.3}; edgeWidth: 8;");
+
+    sprite = std::make_shared<MultiSprite>(spriteComposite);
 
     auto middlePanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
     middlePanel->setBoundObjectsInBox(true);
@@ -53,7 +59,10 @@ void UIEditor::initialize() {
     name = "RightPanel";
     pos = glm::vec2(760, 0);
     size = glm::vec2(200, 540);
-    sprite = std::make_shared<Sprite>("square", glm::vec3(1), 0.3f);
+    spriteComposite = std::make_shared<SpriteComposite>(
+          "rectangle; size: {200, 540}; edgeColor: {0.4, 0.3, 0.5}; fillColor: {0.3, 0.3, 0.3}; edgeWidth: 8;");
+
+    sprite = std::make_shared<MultiSprite>(spriteComposite);
 
     auto rightPanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
     rightPanel->setChangeOwnerMode(Scene::changeOwnerMode::noOwnerChange);
@@ -84,30 +93,40 @@ void UIEditor::initialize() {
                                             Button::pressMode::pressOnReleaseAfterDrag);
     buttonM->setCallbackFunction(sayHi);
 
-    name = "SliderM";
-    pos = glm::vec2(50, 100);
-    size = glm::vec2(80, 16);
-    sprite = std::make_shared<Sprite>("rectangle1x5");
-    key = GLFW_KEY_A;
-
-    name = "SliderM";
+    name = "SliderR";
     pos = glm::vec2(50, 200);
     size = glm::vec2(80, 16);
 
-    auto spriteComposite = std::make_shared<SpriteComposite>(
+    spriteComposite = std::make_shared<SpriteComposite>(
           "rectangle; size: {80, 16}; edgeColor: {0.3, 1.0, 0.3}; fillColor: {1.0, 0.0, 0.0};");
 
     sprite = std::make_shared<MultiSprite>(spriteComposite);
     key = GLFW_KEY_A;
 
-    auto sliderM = std::make_shared<Slider>(name, pos, size,
+    auto sliderR = std::make_shared<Slider>(name, pos, size,
                                             std::move(sprite), key,
                                             Slider::slideMode::horizontalOnDrag);
-    sliderM->setCallbackFunction(sliderChangeColor);
+    sliderR->setCallbackFunction(sliderChangeColor);
+
+
+    name = "SliderR2";
+    pos = glm::vec2(50, 300);
+    size = glm::vec2(50, 32);
+
+    auto spriteComposite2 = std::make_shared<SpriteComposite>("rectangle; size: {20, 20};");
+    sprite = std::make_shared<MultiSprite>(spriteComposite2);
+    sprite->setZIndex(1.0f);
+
+    auto sliderR2 = std::make_shared<Slider>(name, pos, size,
+                                            std::move(sprite), key,
+                                            Slider::slideMode::horizontalOnDrag);
+    sliderR2->setCallbackFunction(sliderChangeColor);
 
     leftPanel->addUIElement(buttonFactory);
     middlePanel->addUIElement(buttonM);
-    rightPanel->addUIElement(sliderM);
+    rightPanel->addUIElement(sliderR);
+    rightPanel->addUIElement(sliderR2);
+
 }
 
 void UIEditor::run() {
@@ -143,7 +162,7 @@ void UIEditor::sayHi(const std::shared_ptr<UIElement> &uiElement) {
 void UIEditor::sliderChangeColor(const std::shared_ptr<UIElement> &uiElement) {
     auto slider = std::dynamic_pointer_cast<Slider>(uiElement);
 
-    slider->getSprite()->setColor(glm::vec3((float)slider->getValue() / 100.0f));
+    slider->getSprite()->setBlendColor(glm::vec3((float)slider->getValue() / 100.0f));
 }
 
 void UIEditor::deleteOnReleaseIfLeftPanel(const std::shared_ptr<UIElement> &uiElement) {

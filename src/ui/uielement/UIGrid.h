@@ -14,8 +14,8 @@ private:
     int nHorizontal;
     int nVertical;
 
-    int outerBorderSize = 4;
-    int innerBorderSize = 2;
+    int outerBorderSize = 0;
+    int innerBorderSize = 0;
 
 public:
     UIGrid(std::string name, const glm::vec2 &position, const glm::vec2 &size, int nHorizontal, int nVertical)

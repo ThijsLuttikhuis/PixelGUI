@@ -9,10 +9,11 @@
 #include "UIElement.h"
 #include "GLFW/glfw3.h"
 #include "utilities/DebugPrinter.h"
+#include "Callbackable.h"
 
 namespace PG {
 
-class Button : virtual public UIElement {
+class Button : virtual public UIElement, virtual public Callbackable {
 public:
     enum pressMode {
         pressOnClick,
@@ -21,16 +22,7 @@ public:
         isDraggingForPressOnReleaseAfterDrag, // used to check dragging for pressOnReleaseAfterDrag
     };
 private:
-
     pressMode pressMode = pressOnReleaseAfterDrag;
-
-    void (* callbackFunc)(const std::shared_ptr<UIElement> &button) = emptyCallback;
-
-    static void emptyCallback(const std::shared_ptr<UIElement> &uiElement) {
-        (void) uiElement;
-        DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Callback:       ", uiElement, " (Empty)");
-        throw std::bad_function_call();
-    };
 
 public:
     Button() : UIElement() {};
@@ -44,16 +36,16 @@ public:
           : UIElement(std::move(name), position, size, std::move(sprite), keyboardKey),
             pressMode(pressMode) {}
 
-    void setCallbackFunction(void (* func)(const std::shared_ptr<UIElement> &button));
-
-    void setPressMode(enum pressMode pressMode);
-
     void onClick(glm::vec2 relativePos) override;
 
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
     void onRelease(glm::vec2 mousePos) override;
 
+    /// Set when the button will be pressed.
+    void setPressMode(enum pressMode pressMode);
+
+    /// Get when the button will be pressed.
     [[nodiscard]] enum pressMode getPressMode();
 
 };

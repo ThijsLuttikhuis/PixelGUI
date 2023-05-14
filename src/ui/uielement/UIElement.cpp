@@ -2,11 +2,13 @@
 // Created by thijs on 13-06-22.
 //
 
-#include "UIElement.h"
+#define GLM_FORCE_SWIZZLE
+#include "glm/glm.hpp"
 
 #include <utility>
 #include "ui/sprite/Sprite.h"
 #include "utilities/DebugPrinter.h"
+#include "UIElement.h"
 
 namespace PG {
 
@@ -49,14 +51,12 @@ void UIElement::setSize(int width, int height) {
 }
 
 void UIElement::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
-                     const std::unique_ptr<TextRenderer> &textRenderer) {
+                     const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex) {
 
     if (!visible || !sprite) {
         return;
     }
-
-    auto args = std::make_shared<SpriteArgs>(1.0f);
-    sprite->draw(spriteRenderer, textRenderer, position, size, args);
+    sprite->draw(spriteRenderer, textRenderer, position, size, baseZIndex);
 }
 
 void UIElement::setColor(const glm::vec3 &color_) {

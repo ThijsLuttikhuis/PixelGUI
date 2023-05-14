@@ -39,8 +39,10 @@ protected:
     bool enabled = true;
     bool visible = true;
 
+    /// Get if position is within the bounding box of this UIElement.
     [[nodiscard]] bool isPositionInBox(double x, double y) const;
 
+    /// Get if position is within the bounding box of {pos, size}.
     static bool isPositionInBox(double x, double y, glm::vec2 pos, glm::vec2 size);
 
 public:
@@ -65,81 +67,111 @@ public:
 
     virtual ~UIElement() = default;
 
+    /// Check if two UIElements are the same based on their unique identifier.
     bool operator ==(const UIElement &other) const {
         return uniqueID == other.uniqueID;
     }
 
-    /// functions
-    virtual void onHover(glm::vec2 mousePos);
-
-    virtual void onClick(glm::vec2 mousePos);
-
-    virtual void onRelease(glm::vec2 mousePos);
-
-    virtual void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos);
-
-    /// render
-    virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
-                      const std::unique_ptr<TextRenderer> &textRenderer);
-
-    /// setters
-    void forceSetUniqueID(int uniqueID_);
-
-    void setParent(std::weak_ptr<Scene> parent_);
-
-    void setPosition(glm::vec2 position_);
-
-    void setPosition(int left, int up);
-
-    void setSize(glm::vec2 size);
-
-    void setSize(int width, int height);
-
-    void setColor(const glm::vec3 &color_);
-
-    void setAlpha(float alpha_);
-
-    void setVisibility(bool visible_);
-
-    void setEnabled(bool enabled_);
-
-    void enable();
-
-    void disable();
-
-    void hide();
-
-    void show();
-
-    /// getters
     [[nodiscard]] std::shared_ptr<UIElement> getSharedFromThis();
 
+    /// Called when hovering on the UIElement.
+    virtual void onHover(glm::vec2 mousePos);
+
+    /// Called when mouse down on the UIElement.
+    virtual void onClick(glm::vec2 mousePos);
+
+    /// Called when mouse up on the UIElement.
+    virtual void onRelease(glm::vec2 mousePos);
+
+    /// Called when hovering on the UIElement while clicking.
+    virtual void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos);
+
+    /// Draw the UIElement according to the sprite it contains.
+    virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+                      const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex);
+
+    /// Force set unique identifier of UIElement.
+    void forceSetUniqueID(int uniqueID_);
+
+    /// Set parent of UIElement, which must be a Scene.
+    void setParent(std::weak_ptr<Scene> parent_);
+
+    /// Set position of UIElement.
+    void setPosition(glm::vec2 position_);
+
+    /// Set position of UIElement.
+    void setPosition(int left, int up);
+
+    /// Set size of UIElement.
+    void setSize(glm::vec2 size_);
+
+    /// Set size of UIElement.
+    void setSize(int width, int height);
+
+    /// Set color of UIElement.
+    void setColor(const glm::vec3 &color_);
+
+    /// Set alpha channel of color of UIElement.
+    void setAlpha(float alpha_);
+
+    /// Set visibility of UIElement.
+    void setVisibility(bool visible_);
+
+    /// Set if content of UIElement is enabled.
+    void setEnabled(bool enabled_);
+
+    /// Set enabled to true.
+    void enable();
+
+    /// Set enabled to false.
+    void disable();
+
+    /// Set visibility to true.
+    void show();
+
+    /// Set visibility to false.
+    void hide();
+
+    /// Get unique identifier of UIElement.
     [[nodiscard]] int getUniqueID() const;
 
+    /// Get parent of UIElement, which must be a Scene.
     [[nodiscard]] std::weak_ptr<Scene> getParent() const;
 
+    /// Get if UIElement has a parent.
     [[nodiscard]] bool hasParent() const;
 
-    [[nodiscard]] const glm::vec2 &getPosition() const;
-
-    [[nodiscard]] const glm::vec2 &getSize() const;
-
-    [[nodiscard]] const std::string &getName() const;
-
+    /// Get if position is hovering over UIElement.
     [[nodiscard]] virtual bool isMouseHovering(double xPos, double yPos) const;
 
+    /// Get if position is hovering over UIElement.
     [[nodiscard]] virtual bool isMouseHovering(const glm::vec2 &pos) const;
 
+    /// Get position of UIElement.
+    [[nodiscard]] const glm::vec2 &getPosition() const;
+
+    /// Get size of UIElement.
+    [[nodiscard]] const glm::vec2 &getSize() const;
+
+    /// Get name of UIElement.
+    [[nodiscard]] const std::string &getName() const;
+
+    /// Get sprite of UIElement.
     [[nodiscard]] const std::shared_ptr<Sprite> &getSprite() const;
 
+    /// Get if position is hovering over UIElement and UIElement is enabled.
     [[nodiscard]] bool isPressed(double xPos, double yPos) const;
 
+    /// Get if keyboardKey is the same as key.
     [[nodiscard]] bool isKeyPressed(int key) const;
 
+    /// Get if enabled is true.
     [[nodiscard]] bool isEnabled() const;
 
+    /// Get if visible is true.
     [[nodiscard]] bool isVisible() const;
 
+    /// Get if visible is false.
     [[nodiscard]] bool isHidden() const;
 };
 

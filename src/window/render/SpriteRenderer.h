@@ -19,41 +19,6 @@ class Sprite;
 
 class UIElement;
 
-class SpriteArgs {
-public:
-    enum sceneAnchor : int {
-        TOP_LEFT = 1,
-        TOP = 2,
-        TOP_RIGHT = 3,
-        LEFT = 4,
-        MIDDLE = 5,
-        RIGHT = 6,
-        BOTTOM_LEFT = 7,
-        BOTTOM = 8,
-        BOTTOM_RIGHT = 9
-    };
-    enum NamedZIndex : int {
-
-    };
-
-    static float namedZIndexToFloat(NamedZIndex name) {
-        return static_cast<float>((int) name) / 100.0f;
-    }
-
-    explicit SpriteArgs(float zIndex, sceneAnchor anchor = TOP_LEFT,
-                        glm::mat4 model = glm::mat4(1.0))
-          : zIndex(zIndex), anchor(anchor), model(model) {}
-
-    explicit SpriteArgs(NamedZIndex namedZIndex, sceneAnchor anchor = TOP_LEFT,
-                        glm::mat4 model = glm::mat4(1.0))
-          : SpriteArgs(namedZIndexToFloat(namedZIndex), anchor, model) {}
-
-    float zIndex = 0.0f;
-    sceneAnchor anchor = BOTTOM_LEFT;
-    glm::mat4 model = glm::mat4(1.0f);
-    glm::vec3 blendColor = glm::vec3(1.0f);
-};
-
 class SpriteRenderer {
 private:
     std::shared_ptr<Shader> shader;
@@ -78,7 +43,7 @@ public:
     void setBaseUI(const std::shared_ptr<UIElement> &baseUI_);
 
     void drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position,
-                    const glm::vec2 &size, const std::shared_ptr<SpriteArgs> &args) const;
+                    const glm::vec2 &size, float baseZIndex) const;
 };
 
 }

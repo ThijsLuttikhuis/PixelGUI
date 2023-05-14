@@ -24,7 +24,7 @@ void Slider::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
             throw std::exception();
     }
     value = std::clamp(value, minValue, maxValue);
-    DebugPrinter::print(DebugPrinter::ALL, "slider value: ", value, "  ", dragDeltaPos.x);
+    DebugPrinter::print(DebugPrinter::ALL, "slider value: ", value, "  ", dragDeltaPos.x, " ", mousePos.x);
 
     try {
         callbackFunc(getSharedFromThis());
@@ -34,20 +34,20 @@ void Slider::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     }
 }
 
-void Slider::setCallbackFunction(void (* func)(const std::shared_ptr<UIElement> &)) {
-    callbackFunc = func;
-}
-
 void Slider::setSlideMode(enum Slider::slideMode slideMode_) {
     slideMode = slideMode_;
 }
 
-int Slider::getValue() {
+int Slider::getValue() const {
     return value;
 }
 
-enum Slider::slideMode Slider::getSlideMode() {
+enum Slider::slideMode Slider::getSlideMode() const {
     return slideMode;
+}
+
+void Slider::setValue(int value_) {
+    value = value_;
 }
 
 }

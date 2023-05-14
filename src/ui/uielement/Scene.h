@@ -26,38 +26,19 @@ protected:
 
     std::weak_ptr<UIElement> draggingChildPtr = std::weak_ptr<UIElement>();
 
+    /// Get index of uiElement in children
+    [[nodiscard]] int getChildIndex(const std::shared_ptr<UIElement> &uiElement);
+
+    /// Remove uiElement from children based in index.
     void removeUIElement(int index);
-public:
-    Scene(std::string name, const glm::vec2 &position, const glm::vec2 &size)
-          : UIElement(std::move(name), position, size) {}
 
-    Scene(std::string name, const glm::vec2 &position, const glm::vec2 &size,
-          std::shared_ptr<Sprite> sprite)
-          : UIElement(std::move(name), position, size, std::move(sprite)) {}
-
-    void onClick(glm::vec2 relativePos) override;
-
-    void onHover(glm::vec2 mousePos) override;
-
-    void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
-
-    void setDraggingChildPtr(const std::shared_ptr<UIElement> &uiElement);
-
+private:
     /// Find child the mouse is dragging over and set draggingChildPtr to that child.
-    bool updateDraggingChild(glm::vec2 &relativeToScenePos, glm::vec2 &relativeToSceneDragStartPos);
+    bool updateDraggingChild(glm::vec2 &relativeToScenePos);
 
-    void setBoundObjectsInBox(bool boundObjects);
-
-    void setChangeOwnerMode(enum changeOwnerMode changeOwner_);
-
-    virtual void addUIElement(const std::shared_ptr<UIElement> &uiElement);
-
-    virtual void removeUIElement(const std::shared_ptr<UIElement> &uiElement);
-
-    void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
-              const std::unique_ptr<TextRenderer> &textRenderer) override;
-
-    void onRelease(glm::vec2 mousePos) override;
+    /// Find child the mouse is dragging over and change owner if its position is outside of this scene.
+    bool updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild,
+                           const glm::vec2 &mousePos, const glm::vec2 &dragStartPos);
 
     /**
      * Change owner of UIElement from (this) to a different Scene.
@@ -66,19 +47,50 @@ public:
      * @param[in] newOwner Scene (shared_ptr) the new owner for <B>UIElementToChange</B>.
      * @return[out] <B>true</B> if owner was changed successfully, else <B>false</B>.
      */
-    bool changeOwner(const std::shared_ptr<UIElement>& uiElementToChange, const std::shared_ptr<Scene>& newOwner);
+    bool changeOwner(const std::shared_ptr<UIElement> &uiElementToChange, const std::shared_ptr<Scene> &newOwner);
 
+public:
+    Scene(std::string name, const glm::vec2 &position, const glm::vec2 &size)
+          : UIElement(std::move(name), position, size) {}
+
+    Scene(std::string name, const glm::vec2 &position, const glm::vec2 &size,
+          std::shared_ptr<Sprite> sprite)
+          : UIElement(std::move(name), position, size, std::move(sprite)) {}
+
+    void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+              const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex) override;
+
+    void onRelease(glm::vec2 mousePos) override;
+
+    void onClick(glm::vec2 relativePos) override;
+
+    void onHover(glm::vec2 mousePos) override;
+
+    void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
+
+    /// Add UIElement to children.
+    virtual void addUIElement(const std::shared_ptr<UIElement> &uiElement);
+
+    /// Remove UIElement from children.
+    virtual void removeUIElement(const std::shared_ptr<UIElement> &uiElement);
+
+    /// Set the child the uiElement is currently dragging on.
+    void setDraggingChildPtr(const std::shared_ptr<UIElement> &uiElement);
+
+    /// Set if objects are allowed to leave the Scene.
+    void setBoundObjectsInBox(bool boundObjects);
+
+    /// Set policy on owner change.
+    void setChangeOwnerMode(enum changeOwnerMode changeOwner_);
 
     /// Get children of parent.
     [[nodiscard]] std::vector<std::shared_ptr<UIElement>> getSiblings();
 
+    /// Get children.
     [[nodiscard]] std::vector<std::shared_ptr<UIElement>> getChildren();
 
-    [[nodiscard]] int getChildIndex(const std::shared_ptr<UIElement> &uiElement);
-
+    /// Get policy on owner change.
     [[nodiscard]] enum changeOwnerMode getChangeOwnerMode() const;
-
-    bool updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild, const glm::vec2 &draggingChildPos);
 
 };
 

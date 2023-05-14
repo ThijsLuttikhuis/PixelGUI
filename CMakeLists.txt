@@ -45,6 +45,8 @@ set(INCLUDE_UI
         src/ui/uielement/UIElement.cpp
         src/ui/uielement/Scene.cpp
         src/ui/uielement/Scene.h
+        src/ui/uielement/Callbackable.cpp
+        src/ui/uielement/Callbackable.h
         src/ui/uielement/Draggable.cpp
         src/ui/uielement/Draggable.h
         src/ui/uielement/DraggableButton.cpp

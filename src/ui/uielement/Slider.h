@@ -7,10 +7,11 @@
 
 #include <functional>
 #include "UIElement.h"
+#include "Callbackable.h"
 
 namespace PG {
 
-class Slider : virtual public UIElement {
+class Slider : virtual public UIElement, virtual public Callbackable {
 public:
     enum slideMode {
         horizontalOnDrag,
@@ -26,14 +27,6 @@ private:
     int maxValue = 100;
     double slideSpeed = 0.4;
 
-    void (* callbackFunc)(const std::shared_ptr<UIElement> &button) = emptyCallback;
-
-    static void emptyCallback(const std::shared_ptr<UIElement> &uiElement) {
-        (void) uiElement;
-        DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Callback:       ", uiElement, " (Empty)");
-        throw std::bad_function_call();
-    };
-
 public:
     Slider() : UIElement() {};
 
@@ -48,13 +41,17 @@ public:
 
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
-    void setCallbackFunction(void (* func)(const std::shared_ptr<UIElement> &slider));
+    /// Set value of the slider.
+    void setValue(int value_);
 
+    /// Set mode of the slider (e.g. horizontalOnDrag, verticalOnDrag).
     void setSlideMode(enum slideMode slideMode);
 
-    [[nodiscard]] int getValue();
+    /// Get value of the slider.
+    [[nodiscard]] int getValue() const;
 
-    [[nodiscard]] enum slideMode getSlideMode();
+    /// Get mode of the slider.
+    [[nodiscard]] enum slideMode getSlideMode() const;
 
 };
 

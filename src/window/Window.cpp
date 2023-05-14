@@ -61,8 +61,8 @@ Window::Window(int xPixels, int yPixels, const std::string &windowTitle)
 
     glViewport(0, 0, xPixels, yPixels);
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //glEnable(GL_ALPHA_TEST);
 
@@ -118,7 +118,7 @@ void Window::render() {
     spriteRenderer->setBaseUI(baseUI);
     textRenderer->setBaseUI(baseUI);
 
-    baseUI->draw(spriteRenderer, textRenderer);
+    baseUI->draw(spriteRenderer, textRenderer, 0);
 
     swapBuffers();
 }

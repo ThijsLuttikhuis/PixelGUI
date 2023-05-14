@@ -16,12 +16,6 @@ class pgu {
 public:
     typedef std::variant<char, int, double, glm::vec2, glm::vec3> anyTypeGLM;
 
-    /// clamp glm::vec2 element-wise between low and high
-    static glm::vec2 &clampVec(glm::vec2 &vector, const glm::vec2 &low, const glm::vec2 &high);
-
-    /// clamp glm::vec3 element-wise between low and high
-    static glm::vec3 &clampVec(glm::vec3 &vector, const glm::vec3 &low, const glm::vec3 &high);
-
     /**
      *
      * @param infoString std::string containing <type>; and any number of <name>: <value>; pairs.
@@ -40,6 +34,7 @@ public:
 
     static std::string fullFile(const std::list<std::string>& fileParts);
 
+    static anyTypeGLM str2vecGLM(const std::string &str);
 };
 
 }

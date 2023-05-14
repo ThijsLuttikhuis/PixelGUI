@@ -6,11 +6,10 @@
 
 namespace PG {
 
-    void MultiSprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer, const std::unique_ptr<TextRenderer> &textRenderer,
-                           const glm::vec2 &position,
-                           const glm::vec2 &size, const std::shared_ptr<SpriteArgs> &args) {
+void MultiSprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+                       const std::unique_ptr<TextRenderer> &textRenderer,
+                       const glm::vec2 &position, const glm::vec2 &size, float baseZIndex) {
 
-        args->blendColor = color;
-        spriteComposite->draw(spriteRenderer, textRenderer, position, size, args);
-    }
+    spriteComposite->draw(spriteRenderer, textRenderer, getSharedFromThis(), position, size, baseZIndex);
+}
 }
