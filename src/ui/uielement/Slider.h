@@ -25,7 +25,7 @@ private:
     int value = 50;
     int minValue = 0;
     int maxValue = 100;
-    double slideSpeed = 0.4;
+    double slideSpeed = 0.05;
 
 public:
     Slider() : UIElement() {};
@@ -53,6 +53,7 @@ public:
     /// Get mode of the slider.
     [[nodiscard]] enum slideMode getSlideMode() const;
 
+    void updateSlideOutOfScreen(glm::vec2 mousePos);
 };
 
 }

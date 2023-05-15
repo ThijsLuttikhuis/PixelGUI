@@ -2,12 +2,13 @@
 // Created by thijs on 13-06-22.
 //
 
-#define GLM_FORCE_SWIZZLE
-#include "glm/glm.hpp"
-
 #include <utility>
-#include "ui/sprite/Sprite.h"
+
 #include "utilities/DebugPrinter.h"
+#include "ui/sprite/Sprite.h"
+#include "Scene.h"
+#include "RootScene.h"
+
 #include "UIElement.h"
 
 namespace PG {
@@ -63,14 +64,14 @@ void UIElement::setColor(const glm::vec3 &color_) {
     sprite->setColor(color_);
 }
 
-bool UIElement::isPositionInBox(double x, double y, glm::vec2 position, glm::vec2 size) {
-    bool xInBox = (x >= position.x && x < position.x + size.x);
-    bool yInBox = (y >= position.y && y < position.y + size.y);
+bool UIElement::isPositionInBox(double x, double y, glm::vec2 position, glm::vec2 size, float insideEdge) {
+    bool xInBox = (x >= position.x + insideEdge && x < position.x + size.x - insideEdge);
+    bool yInBox = (y >= position.y + insideEdge && y < position.y + size.y - insideEdge);
     return xInBox && yInBox;
 }
 
-bool UIElement::isPositionInBox(double x, double y) const {
-    return isPositionInBox(x, y, position, size);
+bool UIElement::isPositionInBox(double x, double y, float insideEdge) const {
+    return isPositionInBox(x, y, position, size, insideEdge);
 }
 
 bool UIElement::isMouseHovering(double xPos, double yPos) const {
@@ -164,6 +165,26 @@ void UIElement::show() {
 
 std::weak_ptr<Scene> UIElement::getParent() const {
     return parentPtr;
+}
+
+std::shared_ptr<Window> UIElement::getWindow() {
+    auto rootScene = getRootScene();
+    return rootScene->getWindow();
+}
+
+glm::vec2 UIElement::getAbsoluteMousePosition() {
+    auto rootScene = getRootScene();
+    return rootScene->getAbsoluteMousePosition();
+}
+
+std::shared_ptr<RootScene> UIElement::getRootScene() {
+    if (hasParent()) {
+        auto parent = std::shared_ptr<Scene>(parentPtr);
+        return parent->getRootScene();
+    }
+    else {
+        throw messageException("Root UIElement is not of type RootScene");
+    }
 }
 
 bool UIElement::hasParent() const {

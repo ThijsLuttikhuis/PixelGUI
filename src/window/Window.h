@@ -18,6 +18,8 @@ namespace PG {
 
 class Window;
 
+class RootScene;
+
 class SpriteRenderer;
 
 class TextRenderer;
@@ -37,17 +39,17 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 class Window : public std::enable_shared_from_this<Window> {
 
 private:
-
     int xPixels;
     int yPixels;
     GLFWwindow* glfwWindow;
+    std::string title;
 
     std::unique_ptr<TextRenderer> textRenderer;
     std::unique_ptr<SpriteRenderer> spriteRenderer;
 
     std::unique_ptr<std::vector<bool>> keysPressed = std::make_unique<std::vector<bool>>(512, false);
 
-    std::shared_ptr<Scene> baseUI;
+    std::shared_ptr<RootScene> rootScene;
 
     void swapBuffers();
 
@@ -56,29 +58,26 @@ public:
 
     ~Window();
 
-    /// functions
     void initialize();
 
     static void closeWindow();
 
-    /// IO
     void handleMouseButton(glm::vec2 pos, int buttonID, bool isRelease) const;
 
     void handleMouseDrag(glm::vec2 pos, glm::vec2 dPos) const;
 
     void handleMousePosition(glm::vec2 pos) const;
 
+    void forceSetMousePosition(glm::vec2 pos) const;
+
     void handleKeyboard(int key, int action, int scanCode);
 
-    /// draw
     void render();
 
-    /// setters
     void setWindowSize(int displayWidth_, int displayHeight_);
 
     void addUIElement(const std::shared_ptr<UIElement> &uiElement);
 
-    /// getters
     [[nodiscard]] std::shared_ptr<Window> getSharedFromThis();
 
     [[nodiscard]] int getDisplayWidth() const;
@@ -88,6 +87,8 @@ public:
     [[nodiscard]] int getXPixels() const;
 
     [[nodiscard]] int getYPixels() const;
+
+    [[nodiscard]] glm::vec2 getMousePosition() const;
 
     [[nodiscard]] bool shouldClose() const;
 };

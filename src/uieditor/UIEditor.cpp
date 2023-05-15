@@ -66,6 +66,7 @@ void UIEditor::initialize() {
 
     auto rightPanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
     rightPanel->setChangeOwnerMode(Scene::changeOwnerMode::noOwnerChange);
+    rightPanel->setBoundObjectsInBox(false);
 
     window->addUIElement(rightPanel);
 

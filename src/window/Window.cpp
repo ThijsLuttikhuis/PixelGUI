@@ -10,6 +10,7 @@
 
 #include "window/render/TextRenderer.h"
 #include "window/render/SpriteRenderer.h"
+#include "ui/uielement/RootScene.h"
 
 #include "Window.h"
 
@@ -20,10 +21,7 @@ std::shared_ptr<Window> Window::getSharedFromThis() {
 }
 
 Window::Window(int xPixels, int yPixels, const std::string &windowTitle)
-      : xPixels(xPixels), yPixels(yPixels),
-        baseUI(std::make_shared<Scene>(windowTitle,
-                                       glm::vec2(0.0f),
-                                       glm::vec2(xPixels, yPixels))) {
+      : xPixels(xPixels), yPixels(yPixels) {
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -64,13 +62,16 @@ Window::Window(int xPixels, int yPixels, const std::string &windowTitle)
 //    glEnable(GL_BLEND);
 //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //glEnable(GL_ALPHA_TEST);
+//    glEnable(GL_ALPHA_TEST);
 
     glfwSwapInterval(1);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     glClearDepth(1.0);
+
+    glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
 }
 
 Window::~Window() {
@@ -81,6 +82,8 @@ void Window::initialize() {
     callback_window_ptr = getSharedFromThis();
     callback_left_mouse_button_pressed = std::make_unique<bool>(false);
     callback_drag_start_position = std::make_unique<glm::vec2>(0, 0);
+
+    rootScene = std::make_shared<RootScene>(title,getSharedFromThis(), std::make_shared<Sprite>("mousecursor"), std::make_shared<Sprite>("mousecursordown"));
 
     auto rootPath = std::filesystem::current_path();
     while (rootPath.stem() != "PixelGUI") {
@@ -115,10 +118,10 @@ void Window::render() {
     glClear(GL_COLOR_BUFFER_BIT);
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    spriteRenderer->setBaseUI(baseUI);
-    textRenderer->setBaseUI(baseUI);
+    spriteRenderer->setBaseUI(rootScene);
+    textRenderer->setBaseUI(rootScene);
 
-    baseUI->draw(spriteRenderer, textRenderer, 0);
+    rootScene->draw(spriteRenderer, textRenderer, 0);
 
     swapBuffers();
 }
@@ -145,10 +148,9 @@ void Window::handleMouseButton(glm::vec2 pos, int buttonID, bool isRelease) cons
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_ALWAYS, "mouse click:    ", pos.x, ", ", pos.y);
 
     if (isRelease) {
-        baseUI->onRelease(pos);
-    }
-    else {
-        baseUI->onClick(pos);
+        rootScene->onRelease(pos);
+    } else {
+        rootScene->onClick(pos);
     }
 }
 
@@ -157,7 +159,7 @@ void Window::handleMousePosition(glm::vec2 pos) const {
 
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_ALWAYS, "mouse position: ", pos.x, ", ", pos.y);
 
-    baseUI->onHover(pos);
+    rootScene->onHover(pos);
 }
 
 void Window::handleMouseDrag(glm::vec2 pos, glm::vec2 dragStartPos) const {
@@ -167,7 +169,7 @@ void Window::handleMouseDrag(glm::vec2 pos, glm::vec2 dragStartPos) const {
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_POSITION_ALWAYS,
                         "mouse drag:     ", dragStartPos.x, " ", pos.x, ", ", dragStartPos.y, " ", pos.y);
 
-    baseUI->onDrag(pos, dragStartPos);
+    rootScene->onDrag(pos, dragStartPos);
 }
 
 void Window::handleKeyboard(int key, int action, int scanCode) {
@@ -228,7 +230,16 @@ int Window::getYPixels() const {
 }
 
 void Window::addUIElement(const std::shared_ptr<UIElement> &uiElement) {
-    baseUI->addUIElement(uiElement);
+    rootScene->addUIElement(uiElement);
+}
+
+glm::vec2 Window::getMousePosition() const {
+    return rootScene->getAbsoluteMousePosition();
+}
+
+void Window::forceSetMousePosition(glm::vec2 pos) const {
+    glfwSetCursorPos(glfwWindow, pos.x, pos.y);
+    rootScene->forceSetMousePosition(pos);
 }
 
 }

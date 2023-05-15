@@ -18,6 +18,10 @@
 
 namespace PG {
 
+class Window;
+
+class RootScene;
+
 class Scene;
 
 class UIElement : public std::enable_shared_from_this<UIElement> {
@@ -40,10 +44,10 @@ protected:
     bool visible = true;
 
     /// Get if position is within the bounding box of this UIElement.
-    [[nodiscard]] bool isPositionInBox(double x, double y) const;
+    [[nodiscard]] bool isPositionInBox(double x, double y, float insideEdge = 0) const;
 
     /// Get if position is within the bounding box of {pos, size}.
-    static bool isPositionInBox(double x, double y, glm::vec2 pos, glm::vec2 size);
+    [[nodiscard]] static bool isPositionInBox(double x, double y, glm::vec2 pos, glm::vec2 size, float insideEdge = 0);
 
 public:
     UIElement() {
@@ -67,12 +71,12 @@ public:
 
     virtual ~UIElement() = default;
 
+    [[nodiscard]] std::shared_ptr<UIElement> getSharedFromThis();
+
     /// Check if two UIElements are the same based on their unique identifier.
     bool operator ==(const UIElement &other) const {
         return uniqueID == other.uniqueID;
     }
-
-    [[nodiscard]] std::shared_ptr<UIElement> getSharedFromThis();
 
     /// Called when hovering on the UIElement.
     virtual void onHover(glm::vec2 mousePos);
@@ -90,11 +94,11 @@ public:
     virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                       const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex);
 
-    /// Force set unique identifier of UIElement.
+    /// Force set unique identifier of UIElement. Do not use unless you know what you are doing ;-)
     void forceSetUniqueID(int uniqueID_);
 
     /// Set parent of UIElement, which must be a Scene.
-    void setParent(std::weak_ptr<Scene> parent_);
+    virtual void setParent(std::weak_ptr<Scene> parent_);
 
     /// Set position of UIElement.
     void setPosition(glm::vec2 position_);
@@ -135,6 +139,15 @@ public:
     /// Get unique identifier of UIElement.
     [[nodiscard]] int getUniqueID() const;
 
+    /// Get mouse position in xPixel, yPixel relative to RootScene
+    [[nodiscard]] virtual glm::vec2 getAbsoluteMousePosition();
+
+    /// Get Window which is connected to RootScene
+    virtual std::shared_ptr<Window> getWindow();
+
+    /// Get top of the UIElement tree, which should always be a RootScene
+    virtual std::shared_ptr<RootScene> getRootScene();
+
     /// Get parent of UIElement, which must be a Scene.
     [[nodiscard]] std::weak_ptr<Scene> getParent() const;
 
@@ -173,6 +186,7 @@ public:
 
     /// Get if visible is false.
     [[nodiscard]] bool isHidden() const;
+
 };
 
 }

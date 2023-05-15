@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include "Scene.h"
+#include "Draggable.h"
 
 namespace PG {
 
@@ -88,15 +89,12 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
 
     if (changeOwnerMode == alwaysAllowOwnerChange || changeOwnerMode == onlyGiveUIElements) {
         if (!isMouseHovering(mousePos)) {
-            bool ownerChanged = updateOwnerChange(draggingChild, mousePos, dragStartPos);
-            if (ownerChanged) {
-                return;
+            auto draggingChildDraggable = std::dynamic_pointer_cast<Draggable>(draggingChild);
+            if (draggingChildDraggable) {
+                updateOwnerChange(draggingChild, mousePos, dragStartPos);
             }
         }
     }
-
-
-
 }
 
 bool Scene::updateDraggingChild(glm::vec2 &relativeToScenePos) {

@@ -19,23 +19,23 @@ include_directories(include
         include/glm-0.9.7.1/
         )
 
-add_library(GLAD "src/glad.c"
+add_library(glad src/glad.c)
+
+add_library(utils
         src/utilities/pgu.cpp
         src/utilities/pgu.h
         src/utilities/messageException.cpp
         src/utilities/messageException.h
+        src/utilities/DebugPrinter.h
         )
 
 set(LIBS
         ${LIBS}
-        GLAD
-        ${OPENGL_LIBRARY}
+        glad
         glfw
+        utils
+        ${OPENGL_LIBRARY}
         ${GLFW_LIBRARIES}
-        )
-
-set(INCLUDE_UTILITIES
-        src/utilities/DebugPrinter.h
         )
 
 set(INCLUDE_UI
@@ -55,6 +55,8 @@ set(INCLUDE_UI
         src/ui/uielement/UIGrid.h
         src/ui/uielement/Slider.cpp
         src/ui/uielement/Slider.h
+        src/ui/uielement/RootScene.cpp
+        src/ui/uielement/RootScene.h
 
         src/ui/sprite/Sprite.h
         src/ui/sprite/Sprite.cpp

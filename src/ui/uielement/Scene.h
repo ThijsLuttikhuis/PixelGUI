@@ -62,7 +62,7 @@ public:
 
     void onRelease(glm::vec2 mousePos) override;
 
-    void onClick(glm::vec2 relativePos) override;
+    void onClick(glm::vec2 mousePos) override;
 
     void onHover(glm::vec2 mousePos) override;
 
