@@ -90,6 +90,9 @@ public:
     /// Called when hovering on the UIElement while clicking.
     virtual void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos);
 
+    /// Called when a keyboard key is pressed.
+    virtual void onKeyboardKey(int key, int action, int scanCode, const std::unique_ptr<std::vector<bool>> &keysPressed);
+
     /// Draw the UIElement according to the sprite it contains.
     virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                       const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex);
@@ -149,7 +152,7 @@ public:
     virtual std::shared_ptr<RootScene> getRootScene();
 
     /// Get parent of UIElement, which must be a Scene.
-    [[nodiscard]] std::weak_ptr<Scene> getParent() const;
+    [[nodiscard]] std::shared_ptr<Scene> getParent() const;
 
     /// Get if UIElement has a parent.
     [[nodiscard]] bool hasParent() const;

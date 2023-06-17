@@ -6,10 +6,42 @@
 #include <string>
 #include <map>
 #include <vector>
+
+#include "GLFW/glfw3.h"
+
 #include "pgu.h"
 
 
+
 namespace PG {
+
+std::string pgu::keyboardKey2string(int key, int scanCode) {
+    auto knownKey = glfwGetKeyName(key, scanCode);
+    if (knownKey) {
+        return {knownKey};
+    }
+
+    switch (key) {
+        case GLFW_KEY_ENTER:
+            return "Enter";
+        case GLFW_KEY_ESCAPE:
+            return "Escape";
+        case GLFW_KEY_TAB:
+            return "Tab";
+        case GLFW_KEY_CAPS_LOCK:
+            return "Caps";
+        case GLFW_KEY_LEFT_SHIFT:
+            return "Shift";
+        case GLFW_KEY_LEFT_CONTROL:
+            return "Ctrl";
+        case GLFW_KEY_LEFT_ALT:
+            return "Alt";
+        case GLFW_KEY_SPACE:
+            return "Space";
+        default:
+            return "Unknown";
+    }
+}
 
 std::string pgu::removeChars(std::string &str, const std::string &charsToRemove) {
     str.erase(remove_if(str.begin(),
@@ -101,31 +133,6 @@ std::map<std::string, pgu::anyTypeGLM> pgu::infoString2Map(const std::string &in
     }
 
     return strMap;
-}
-
-std::string pgu::fullFile(const std::string &root, const std::string &ext) {
-#ifdef __unix__
-    return root + "/" + ext; //TODO: check if this works on ubuntu
-#else
-    return root + "\\\\" + ext;
-#endif
-    }
-
-std::string pgu::fullFile(const std::list<std::string>& fileParts) {
-    std::string fullF;
-
-#ifdef __unix__
-    for (const auto &filePart: fileParts) {
-        fullF += filePart + "/";
-    }
-#else
-    for (const auto &filePart: fileParts) {
-        fullF += filePart + "\\";
-    }
-#endif
-
-    fullF.pop_back();
-    return fullF;
 }
 
 }

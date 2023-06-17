@@ -13,6 +13,8 @@ namespace PG {
 class UIEditor : public std::enable_shared_from_this<UIEditor> {
 private:
     std::shared_ptr<Window> window;
+
+    int frameCounter = 0;
 public:
     UIEditor();
 
@@ -30,6 +32,7 @@ public:
 
     static void deleteOnReleaseIfLeftPanel(const std::shared_ptr<UIElement> &uiElement);
 
+    static void printTextInput(const std::shared_ptr<UIElement> &uiElement);
 };
 
 }

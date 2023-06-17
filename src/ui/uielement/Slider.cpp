@@ -42,6 +42,8 @@ void Slider::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
 }
 
 void Slider::updateSlideOutOfScreen(glm::vec2 mousePos) {
+    (void) mousePos;
+
     auto absoluteMouse = getAbsoluteMousePosition();
     auto windowSize = getRootScene()->getSize();
     float insideEdge = 2.0f;

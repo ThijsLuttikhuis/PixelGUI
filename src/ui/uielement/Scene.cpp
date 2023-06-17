@@ -69,13 +69,30 @@ void Scene::onHover(glm::vec2 mousePos) {
     }
 }
 
+void Scene::onKeyboardKey(int key, int action, int scanCode, const std::unique_ptr<std::vector<bool>> &keysPressed) {
+    if (!textInputChildPtr.expired()) {
+        auto textInputChild = std::shared_ptr<UIElement>(textInputChildPtr);
+        textInputChild->onKeyboardKey(key, action, scanCode,keysPressed);
+        return;
+    }
+
+    for (auto &uiElement: children) {
+        if (!uiElement->isEnabled() || uiElement->isHidden()) {
+            continue;
+        }
+
+        uiElement->onKeyboardKey(key, action, scanCode, keysPressed);
+    }
+}
+
 void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     glm::vec2 relativeToScenePos = mousePos - position;
     glm::vec2 relativeToSceneDragStartPos = dragStartPos - position;
 
+    // check if dragging on a child object, and update if so
     if (draggingChildPtr.expired()) {
-        updateDraggingChild(relativeToScenePos);
-        if (draggingChildPtr.expired()) {
+        bool newDraggingChild = updateDraggingChild(relativeToScenePos);
+        if (!newDraggingChild) {
             return;
         }
     }
@@ -87,6 +104,7 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     auto draggingChild = std::shared_ptr<UIElement>(draggingChildPtr);
     draggingChild->onDrag(relativeToScenePos, relativeToSceneDragStartPos);
 
+    // update ownership of dragging child if the mouse is not on this scene
     if (changeOwnerMode == alwaysAllowOwnerChange || changeOwnerMode == onlyGiveUIElements) {
         if (!isMouseHovering(mousePos)) {
             auto draggingChildDraggable = std::dynamic_pointer_cast<Draggable>(draggingChild);
@@ -98,7 +116,6 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
 }
 
 bool Scene::updateDraggingChild(glm::vec2 &relativeToScenePos) {
-
     return std::any_of(children.cbegin(), children.cend(),
                        [relativeToScenePos, this](auto uiElement) {
 
@@ -127,6 +144,7 @@ bool Scene::updateOwnerChange(const std::shared_ptr<UIElement> &draggingChild,
             continue;
         }
 
+        // check if dragging child is on a different scene, if so, change ownership to that scene
         glm::vec2 siblingPos = siblingScene->getPosition();
         glm::vec2 siblingSize = siblingScene->getSize();
         if (isPositionInBox(mousePos.x, mousePos.y,
@@ -169,7 +187,7 @@ bool Scene::changeOwner(const std::shared_ptr<UIElement> &uiElementToChange, con
     if (!draggingChildPtr.expired()) {
         auto draggingChild = std::shared_ptr<UIElement>(draggingChildPtr);
         if (draggingChild == uiElementToChange) {
-            newOwner->setDraggingChildPtr(draggingChild);
+            newOwner->setDraggingChild(draggingChild);
             draggingChildPtr = std::weak_ptr<UIElement>();
         }
     }
@@ -183,7 +201,7 @@ void Scene::addUIElement(const std::shared_ptr<UIElement> &uiElement) {
 
 void Scene::removeUIElement(int index) {
     if (index < 0 || index >= (int) children.size()) {
-        throw std::exception();
+        throw messageException("Scene::removeUIElement: index " + std::to_string(index) + "does not exist!");
     }
     children.erase(children.begin() + index);
 }
@@ -211,12 +229,35 @@ void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
     }
 }
 
-void Scene::setDraggingChildPtr(const std::shared_ptr<UIElement> &uiElement) {
+void Scene::setDraggingChild(const std::shared_ptr<UIElement> &uiElement) {
     draggingChildPtr = uiElement;
 
     if (hasParent()) {
-        auto parent = std::shared_ptr<Scene>(parentPtr);
-        parent->setDraggingChildPtr(getSharedFromThis());
+        getParent()->setDraggingChild(getSharedFromThis());
+    }
+}
+
+void Scene::clearDraggingChild() {
+    draggingChildPtr = std::weak_ptr<UIElement>();
+
+    if (hasParent()) {
+        getParent()->clearDraggingChild();
+    }
+}
+
+void Scene::setTextInputChild(const std::shared_ptr<UIElement> &uiElement) {
+    textInputChildPtr = uiElement;
+
+    if (hasParent()) {
+        getParent()->setTextInputChild(getSharedFromThis());
+    }
+}
+
+void Scene::clearTextInputChild() {
+    textInputChildPtr = draggingChildPtr = std::weak_ptr<UIElement>();
+
+    if (hasParent()) {
+        getParent()->clearDraggingChild();
     }
 }
 
@@ -255,6 +296,20 @@ int Scene::getChildIndex(const std::shared_ptr<UIElement> &uiElement) {
 
     DebugPrinter::print(DebugPrinter::ALL, "Scene::getChildIndex: ", uiElement->getName(), " not found");
     return -1;
+}
+
+std::shared_ptr<UIElement> Scene::getDraggingChild() {
+    if (draggingChildPtr.expired()) {
+        return {};
+    }
+    return std::shared_ptr<UIElement>(draggingChildPtr);
+}
+
+std::shared_ptr<UIElement> Scene::getTextInputChild() {
+    if (textInputChildPtr.expired()) {
+        return {};
+    }
+    return std::shared_ptr<UIElement>(textInputChildPtr);
 }
 
 }

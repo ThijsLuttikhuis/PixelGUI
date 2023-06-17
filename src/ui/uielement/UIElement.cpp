@@ -119,6 +119,14 @@ void UIElement::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     DebugPrinter::print(DebugPrinter::DEBUG_MOUSE_BUTTON_UIELEMENT, "Dragging on:    UIElement ", name);
 }
 
+void UIElement::onKeyboardKey(int key, int action, int scanCode, const std::unique_ptr<std::vector<bool>> &keysPressed) {
+    (void) key, (void) action, (void) scanCode, (void) keysPressed;
+
+    if (keyboardKey == key) {
+        DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS, "Pressed key for:     UIElement ", name);
+    }
+}
+
 bool UIElement::isPressed(double xPos, double yPos) const {
     return enabled && isMouseHovering(xPos, yPos);
 }
@@ -163,8 +171,11 @@ void UIElement::show() {
     visible = true;
 }
 
-std::weak_ptr<Scene> UIElement::getParent() const {
-    return parentPtr;
+std::shared_ptr<Scene> UIElement::getParent() const {
+    if (parentPtr.expired()) {
+        throw messageException("UIElement::getParent: parent deleted :(");
+    }
+    return std::shared_ptr<Scene>(parentPtr);
 }
 
 std::shared_ptr<Window> UIElement::getWindow() {

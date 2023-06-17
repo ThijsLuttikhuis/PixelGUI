@@ -11,6 +11,7 @@
 namespace PG {
 
 class RootScene : public Scene {
+public:
 private:
     std::weak_ptr<Window> window;
     glm::vec2 mousePosition;

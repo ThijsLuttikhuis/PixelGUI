@@ -45,7 +45,6 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
             auto windowPtr = std::shared_ptr<Window>(callback_window_ptr);
             windowPtr->handleMouseButton(glm::vec2(xpos, ypos), GLFW_MOUSE_BUTTON_LEFT, true);
-
         }
     }
 }

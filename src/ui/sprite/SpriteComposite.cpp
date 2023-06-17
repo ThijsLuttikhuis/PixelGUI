@@ -62,6 +62,7 @@ void SpriteComposite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer
                            const std::shared_ptr<Sprite> &referenceSprite,
                            const glm::vec2 &position, const glm::vec2 &size, float baseZIndex) {
 
+    (void) size;
     for (unsigned long i = 0; i < sprites.size(); i++) {
         sprites[i]->setBlendColor(referenceSprite->getBlendColor());
         sprites[i]->draw(spriteRenderer, textRenderer, positions[i] + position, sizes[i], baseZIndex);

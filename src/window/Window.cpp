@@ -183,13 +183,15 @@ void Window::handleKeyboard(int key, int action, int scanCode) {
         if (action == GLFW_PRESS) {
             keysPressed->at(key) = true;
 
-            auto keyName = glfwGetKeyName(key, scanCode);
-            DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS, "press key:     ", (keyName ? keyName : "UNKNOWN"));
+            auto keyName = pgu::keyboardKey2string(key, scanCode);
+            DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS, "press key:     " + keyName);
+
+            rootScene->onKeyboardKey(key, action, scanCode, keysPressed);
         } else if (action == GLFW_RELEASE) {
             keysPressed->at(key) = false;
 
-            auto keyName = glfwGetKeyName(key, scanCode);
-            DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS, "release key:   ", (keyName ? keyName : "UNKNOWN"));
+            auto keyName = pgu::keyboardKey2string(key, scanCode);
+            DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS, "release key:   " + keyName);
         }
     }
 }

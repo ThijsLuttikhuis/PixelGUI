@@ -17,6 +17,7 @@ public:
         onlyReceiveUIElements,
         onlyGiveUIElements
     };
+
 protected:
     bool boundObjectsInBox = true;
 
@@ -25,6 +26,7 @@ protected:
     std::vector<std::shared_ptr<UIElement>> children;
 
     std::weak_ptr<UIElement> draggingChildPtr = std::weak_ptr<UIElement>();
+    std::weak_ptr<UIElement> textInputChildPtr = std::weak_ptr<UIElement>();
 
     /// Get index of uiElement in children
     [[nodiscard]] int getChildIndex(const std::shared_ptr<UIElement> &uiElement);
@@ -68,6 +70,9 @@ public:
 
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
+    void onKeyboardKey(int key, int action, int scanCode,
+                       const std::unique_ptr<std::vector<bool>> &keysPressed) override;
+
     /// Add UIElement to children.
     virtual void addUIElement(const std::shared_ptr<UIElement> &uiElement);
 
@@ -75,13 +80,26 @@ public:
     virtual void removeUIElement(const std::shared_ptr<UIElement> &uiElement);
 
     /// Set the child the uiElement is currently dragging on.
-    void setDraggingChildPtr(const std::shared_ptr<UIElement> &uiElement);
+    void setDraggingChild(const std::shared_ptr<UIElement> &uiElement);
+
+    void clearDraggingChild();
+
+    /// Set the child which is currently receiving text input
+    void setTextInputChild(const std::shared_ptr<UIElement> &uiElement);
+
+    void clearTextInputChild();
 
     /// Set if objects are allowed to leave the Scene.
     void setBoundObjectsInBox(bool boundObjects);
 
     /// Set policy on owner change.
     void setChangeOwnerMode(enum changeOwnerMode changeOwner_);
+
+    /// Get the child the uiElement is currently dragging on.
+    [[nodiscard]] std::shared_ptr<UIElement> getDraggingChild();
+
+    /// Get the child which is currently receiving text input.
+    [[nodiscard]] std::shared_ptr<UIElement> getTextInputChild();
 
     /// Get children of parent.
     [[nodiscard]] std::vector<std::shared_ptr<UIElement>> getSiblings();

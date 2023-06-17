@@ -98,7 +98,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        )
+        src/ui/uielement/TextInput.cpp src/ui/uielement/TextInput.h)
 
 target_link_libraries(PixelGUI ${LIBS})
 

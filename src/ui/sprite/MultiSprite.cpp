@@ -12,4 +12,5 @@ void MultiSprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
 
     spriteComposite->draw(spriteRenderer, textRenderer, getSharedFromThis(), position, size, baseZIndex);
 }
+
 }

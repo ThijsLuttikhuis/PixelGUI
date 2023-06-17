@@ -15,7 +15,7 @@ class Callbackable {
 public:
 
 protected:
-    void (* callbackFunc)(const std::shared_ptr<UIElement> &button) = emptyCallback;
+    void (* callbackFunc)(const std::shared_ptr<UIElement> &) = emptyCallback;
 
     static void emptyCallback(const std::shared_ptr<UIElement> &uiElement) {
         (void) uiElement;
@@ -25,7 +25,7 @@ protected:
 
 public:
     /// Set function that can be called.
-    void setCallbackFunction(void (* func)(const std::shared_ptr<UIElement> &button));
+    virtual void setCallbackFunction(void (* func)(const std::shared_ptr<UIElement> &));
 };
 
 }

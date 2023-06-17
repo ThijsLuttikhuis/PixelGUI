@@ -7,6 +7,7 @@
 #include "UIEditor.h"
 #include "ui/uielement/Slider.h"
 #include "ui/sprite/MultiSprite.h"
+#include "ui/uielement/TextInput.h"
 
 namespace PG {
 
@@ -110,28 +111,46 @@ void UIEditor::initialize() {
     sliderR->setCallbackFunction(sliderChangeColor);
 
 
+    name = "textInputR";
+    pos = glm::vec2(50, 400);
+    size = glm::vec2(80, 16);
+    key = GLFW_KEY_ENTER;
+
+    spriteComposite = std::make_shared<SpriteComposite>("rectangle; size: {80, 16}; edgeColor: {0.3, 1.0, 0.3}; fillColor: {0.96, 0.96, 0.96};");
+
+    sprite = std::make_shared<MultiSprite>(spriteComposite);
+
+
+    auto textInputR = std::make_shared<TextInput>(name, pos, size,
+                                            std::move(sprite), key);
+    textInputR->setCallbackFunction(printTextInput);
+
+
     name = "SliderR2";
     pos = glm::vec2(50, 300);
     size = glm::vec2(50, 32);
 
-    auto spriteComposite2 = std::make_shared<SpriteComposite>("rectangle; size: {20, 20};");
-    sprite = std::make_shared<MultiSprite>(spriteComposite2);
-    sprite->setZIndex(1.0f);
+    key = GLFW_KEY_A;
+
+    spriteComposite = std::make_shared<SpriteComposite>("rectangle; size: {20, 20};");
+    sprite = std::make_shared<MultiSprite>(spriteComposite);
 
     auto sliderR2 = std::make_shared<Slider>(name, pos, size,
-                                            std::move(sprite), key,
-                                            Slider::slideMode::horizontalOnDrag);
+                                             std::move(sprite), key,
+                                             Slider::slideMode::horizontalOnDrag);
     sliderR2->setCallbackFunction(sliderChangeColor);
 
     leftPanel->addUIElement(buttonFactory);
     middlePanel->addUIElement(buttonM);
     rightPanel->addUIElement(sliderR);
     rightPanel->addUIElement(sliderR2);
+    rightPanel->addUIElement(textInputR);
 
 }
 
 void UIEditor::run() {
     while (!window->shouldClose()) {
+        frameCounter ++;
         window->render();
     }
 }
@@ -146,12 +165,9 @@ void UIEditor::makeDraggableButtonCopyOnClick(const std::shared_ptr<UIElement> &
     draggableButtonCopy->setCallbackFunction(deleteOnReleaseIfLeftPanel);
     draggableButtonCopy->setPressMode(Button::pressMode::pressOnReleaseAfterDrag);
 
-    if (uiElement->hasParent()) {
-        auto parent = std::shared_ptr<Scene>(uiElement->getParent());
-
-        parent->addUIElement(draggableButtonCopy);
-        parent->setDraggingChildPtr(draggableButtonCopy);
-    }
+    auto parent = uiElement->getParent();
+    parent->addUIElement(draggableButtonCopy);
+    parent->setDraggingChild(draggableButtonCopy);
 
     draggableButtonCopy->onClick(glm::vec2(draggableButtonCopy->getPosition()));
 }
@@ -163,18 +179,20 @@ void UIEditor::sayHi(const std::shared_ptr<UIElement> &uiElement) {
 void UIEditor::sliderChangeColor(const std::shared_ptr<UIElement> &uiElement) {
     auto slider = std::dynamic_pointer_cast<Slider>(uiElement);
 
-    slider->getSprite()->setBlendColor(glm::vec3((float)slider->getValue() / 100.0f));
+    slider->getSprite()->setBlendColor(glm::vec3((float) slider->getValue() / 100.0f));
 }
 
 void UIEditor::deleteOnReleaseIfLeftPanel(const std::shared_ptr<UIElement> &uiElement) {
-    auto parentPtr = uiElement->getParent();
-    if (parentPtr.expired()) {
-        return;
-    }
-    auto parent = std::shared_ptr<Scene>(parentPtr);
+    auto parent = uiElement->getParent();
     if (parent->getName() == "LeftPanel") {
         parent->removeUIElement(uiElement);
     }
+}
+
+void UIEditor::printTextInput(const std::shared_ptr<UIElement> &uiElement) {
+    auto textInput = std::dynamic_pointer_cast<TextInput>(uiElement);
+    DebugPrinter::print(DebugPrinter::ALL, "input: ", textInput->getInput());
+
 }
 
 }
