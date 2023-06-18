@@ -27,7 +27,7 @@ add_library(utils
         src/utilities/messageException.cpp
         src/utilities/messageException.h
         src/utilities/DebugPrinter.h
-        )
+        src/utilities/StringWriter.cpp src/utilities/StringWriter.h)
 
 set(LIBS
         ${LIBS}

@@ -83,7 +83,8 @@ void Window::initialize() {
     callback_left_mouse_button_pressed = std::make_unique<bool>(false);
     callback_drag_start_position = std::make_unique<glm::vec2>(0, 0);
 
-    rootScene = std::make_shared<RootScene>(title,getSharedFromThis(), std::make_shared<Sprite>("mousecursor"), std::make_shared<Sprite>("mousecursordown"));
+    rootScene = std::make_shared<RootScene>(title, getSharedFromThis(), std::make_shared<Sprite>("mousecursor"),
+                                            std::make_shared<Sprite>("mousecursordown"));
 
     auto rootPath = std::filesystem::current_path();
     while (rootPath.stem() != "PixelGUI") {
@@ -182,16 +183,14 @@ void Window::handleKeyboard(int key, int action, int scanCode) {
     if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS) {
             keysPressed->at(key) = true;
-
-            auto keyName = pgu::keyboardKey2string(key, scanCode);
-            DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS, "press key:     " + keyName);
+            DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS,
+                                "press key:     " + pgu::keyboardKey2string(key, scanCode));
 
             rootScene->onKeyboardKey(key, action, scanCode, keysPressed);
         } else if (action == GLFW_RELEASE) {
             keysPressed->at(key) = false;
-
-            auto keyName = pgu::keyboardKey2string(key, scanCode);
-            DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS, "release key:   " + keyName);
+            DebugPrinter::print(DebugPrinter::DEBUG_KEYBOARD_KEYS,
+                                "release key:   " + pgu::keyboardKey2string(key, scanCode));
         }
     }
 }

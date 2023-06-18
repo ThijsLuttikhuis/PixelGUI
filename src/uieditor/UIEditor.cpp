@@ -123,7 +123,7 @@ void UIEditor::initialize() {
 
     auto textInputR = std::make_shared<TextInput>(name, pos, size,
                                             std::move(sprite), key);
-    textInputR->setCallbackFunction(printTextInput);
+    textInputR->setCallbackFunction(setIntTextInput);
 
 
     name = "SliderR2";
@@ -189,10 +189,20 @@ void UIEditor::deleteOnReleaseIfLeftPanel(const std::shared_ptr<UIElement> &uiEl
     }
 }
 
-void UIEditor::printTextInput(const std::shared_ptr<UIElement> &uiElement) {
+void UIEditor::setIntTextInput(const std::shared_ptr<UIElement> &uiElement) {
     auto textInput = std::dynamic_pointer_cast<TextInput>(uiElement);
-    DebugPrinter::print(DebugPrinter::ALL, "input: ", textInput->getInput());
 
+    std::string str = textInput->getInput();
+    std::string newStr;
+    try {
+        int strInt = std::stoi(str);
+        newStr = std::to_string(strInt);
+    }
+    catch (const std::exception &err) {
+        std::cerr << err.what() << std::endl;
+    }
+
+    textInput->setInput(newStr);
 }
 
-}
+} // PG

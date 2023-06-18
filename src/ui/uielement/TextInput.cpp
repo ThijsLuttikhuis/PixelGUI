@@ -19,18 +19,19 @@ void TextInput::callbackOnClickTextInput(const std::shared_ptr<UIElement> &uiEle
 }
 
 const std::string &TextInput::getInput() {
-    return input;
+    return input->string();
 }
 
 void TextInput::onKeyboardKey(int key, int action, int scanCode,
                               const std::unique_ptr<std::vector<bool>> &keysPressed) {
 
+    (void) action;
 
     std::shared_ptr<Scene> parent = getParent();
     auto textInputChild = parent->getTextInputChild();
     if (key == keyboardKey) {
         if (textInputChild && textInputChild == getSharedFromThis()) {
-            std::cout << input << std::endl;
+            callbackFuncOnPressEnter(getSharedFromThis());
             parent->clearTextInputChild();
         } else {
             parent->setTextInputChild(getSharedFromThis());
@@ -40,11 +41,7 @@ void TextInput::onKeyboardKey(int key, int action, int scanCode,
         return;
     }
 
-    auto keyName = glfwGetKeyName(key, scanCode);
-    if (keyName) {
-        // TODO: make textWriter class that implements backspace / shift etc etc
-        input += keyName;
-    }
+    input->write(key, scanCode, keysPressed);
 }
 
 void TextInput::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
@@ -53,8 +50,13 @@ void TextInput::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
     if (!visible || !sprite) {
         return;
     }
+
     sprite->draw(spriteRenderer, textRenderer, position, size, baseZIndex);
-    textRenderer->drawText("^" + input + "^", 0.0f, position, size, glm::vec3(0.0f));
+    textRenderer->drawText("^" + input->string() + "^", 0.0f, position, size, glm::vec3(0.0f));
+}
+
+void TextInput::setInput(std::string &str) {
+    input->setString(str);
 }
 
 }

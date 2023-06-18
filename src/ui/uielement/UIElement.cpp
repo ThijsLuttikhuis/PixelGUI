@@ -57,6 +57,7 @@ void UIElement::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
     if (!visible || !sprite) {
         return;
     }
+
     sprite->draw(spriteRenderer, textRenderer, position, size, baseZIndex);
 }
 
