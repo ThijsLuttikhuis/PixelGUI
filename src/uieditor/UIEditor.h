@@ -22,7 +22,7 @@ public:
 
     void run();
 
-    static void makeDraggableButtonCopyOnClick(const std::shared_ptr<UIElement> &button);
+    static void makeDraggableButtonResizableCopyOnClick(const std::shared_ptr<UIElement> &uiElement);
 
     [[nodiscard]] std::shared_ptr<UIEditor> getSharedFromThis();
 

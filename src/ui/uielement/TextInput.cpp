@@ -29,7 +29,7 @@ void TextInput::onKeyboardKey(int key, int action, int scanCode,
 
     std::shared_ptr<Scene> parent = getParent();
     auto textInputChild = parent->getTextInputChild();
-    if (key == keyboardKey) {
+    if (key == getKeyboardKey()) {
         if (textInputChild && textInputChild == getSharedFromThis()) {
             callbackFuncOnPressEnter(getSharedFromThis());
             parent->clearTextInputChild();
@@ -57,6 +57,28 @@ void TextInput::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
 
 void TextInput::setInput(std::string &str) {
     input->setString(str);
+}
+
+void TextInput::setIntTextInput(const std::shared_ptr<UIElement> &uiElement) {
+    auto textInput = std::dynamic_pointer_cast<TextInput>(uiElement);
+
+    std::string str = textInput->getInput();
+    std::string newStr;
+    try {
+        int strInt = std::stoi(str);
+        newStr = std::to_string(strInt);
+        textInput->setInput(newStr);
+        callbackFuncOnPressEnter(textInput);
+    }
+    catch (const std::exception &err) {
+        std::cerr << err.what() << std::endl;
+    }
+}
+
+void TextInput::setStringTextInput(const std::shared_ptr<UIElement> &uiElement) {
+    auto textInput = std::dynamic_pointer_cast<TextInput>(uiElement);
+
+    callbackFuncOnPressEnter(textInput);
 }
 
 }

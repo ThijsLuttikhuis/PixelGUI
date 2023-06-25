@@ -30,15 +30,14 @@ private:
     int uniqueID;
 
     std::string name{};
+    std::weak_ptr<Scene> parentPtr;
+    int keyboardKey = GLFW_KEY_UNKNOWN;
 
 protected:
-    std::weak_ptr<Scene> parentPtr;
+    std::shared_ptr<Sprite> sprite{};
 
     glm::vec2 position{};
     glm::vec2 size{};
-    std::shared_ptr<Sprite> sprite{};
-
-    int keyboardKey = GLFW_KEY_UNKNOWN;
 
     bool enabled = true;
     bool visible = true;
@@ -59,13 +58,13 @@ public:
     }
 
     UIElement(std::string name, const glm::vec2 &position, const glm::vec2 &size, int keyboardKey = GLFW_KEY_UNKNOWN)
-          : name(std::move(name)), position(position), size(size), keyboardKey(keyboardKey) {
+          : name(std::move(name)), keyboardKey(keyboardKey), position(position), size(size) {
         uniqueID = uniqueIDCounter++;
     }
 
     UIElement(std::string name, const glm::vec2 &position, const glm::vec2 &size,
               std::shared_ptr<Sprite> sprite, int keyboardKey = GLFW_KEY_UNKNOWN)
-          : name(std::move(name)), position(position), size(size), sprite(std::move(sprite)), keyboardKey(keyboardKey) {
+          : name(std::move(name)), keyboardKey(keyboardKey), sprite(std::move(sprite)), position(position), size(size) {
         uniqueID = uniqueIDCounter++;
     }
 
@@ -172,6 +171,9 @@ public:
     /// Get name of UIElement.
     [[nodiscard]] const std::string &getName() const;
 
+    /// Get keyboard key
+    [[nodiscard]] int getKeyboardKey() const;
+
     /// Get sprite of UIElement.
     [[nodiscard]] const std::shared_ptr<Sprite> &getSprite() const;
 
@@ -192,6 +194,6 @@ public:
 
 };
 
-}
+} // PG
 
 #endif //PIXELGUI_UIELEMENT_H

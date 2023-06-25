@@ -203,4 +203,8 @@ bool UIElement::hasParent() const {
     return !parentPtr.expired();
 }
 
+int UIElement::getKeyboardKey() const {
+    return keyboardKey;
+}
+
 }

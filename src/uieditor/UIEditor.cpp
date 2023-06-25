@@ -8,6 +8,8 @@
 #include "ui/uielement/Slider.h"
 #include "ui/sprite/MultiSprite.h"
 #include "ui/uielement/TextInput.h"
+#include "ui/uielement/ButtonOnPress.h"
+#include "DraggableButtonResizable.h"
 
 namespace PG {
 
@@ -79,10 +81,9 @@ void UIEditor::initialize() {
     sprite = std::make_shared<Sprite>("arrow");
     key = GLFW_KEY_A;
 
-    auto buttonFactory = std::make_shared<Button>(name, pos, size,
-                                                  std::move(sprite), key,
-                                                  Button::pressMode::pressOnClick);
-    buttonFactory->setCallbackFunction(makeDraggableButtonCopyOnClick);
+    auto buttonFactory = std::make_shared<ButtonOnPress>(name, pos, size,
+                                                         std::move(sprite), key);
+    buttonFactory->setCallbackFunction(makeDraggableButtonResizableCopyOnClick);
 
     name = "ButtonM";
     pos = glm::vec2(100, 100);
@@ -90,9 +91,8 @@ void UIEditor::initialize() {
     sprite = std::make_shared<Sprite>("arrow");
     key = GLFW_KEY_A;
 
-    auto buttonM = std::make_shared<Button>(name, pos, size,
-                                            std::move(sprite), key,
-                                            Button::pressMode::pressOnReleaseAfterDrag);
+    auto buttonM = std::make_shared<ButtonOnRelease>(name, pos, size,
+                                                     std::move(sprite), key);
     buttonM->setCallbackFunction(sayHi);
 
     name = "SliderR";
@@ -105,24 +105,23 @@ void UIEditor::initialize() {
     sprite = std::make_shared<MultiSprite>(spriteComposite);
     key = GLFW_KEY_A;
 
-    auto sliderR = std::make_shared<Slider>(name, pos, size,
-                                            std::move(sprite), key,
-                                            Slider::slideMode::horizontalOnDrag);
+    auto sliderR = std::make_shared<Slider<int>>(name, pos, size, std::move(sprite),
+                                                 50, 0, 100, 50, 0.05, key);
     sliderR->setCallbackFunction(sliderChangeColor);
-
 
     name = "textInputR";
     pos = glm::vec2(50, 400);
     size = glm::vec2(80, 16);
     key = GLFW_KEY_ENTER;
 
-    spriteComposite = std::make_shared<SpriteComposite>("rectangle; size: {80, 16}; edgeColor: {0.3, 1.0, 0.3}; fillColor: {0.96, 0.96, 0.96};");
+    spriteComposite = std::make_shared<SpriteComposite>(
+          "rectangle; size: {80, 16}; edgeColor: {0.3, 1.0, 0.3}; fillColor: {0.96, 0.96, 0.96};");
 
     sprite = std::make_shared<MultiSprite>(spriteComposite);
 
 
     auto textInputR = std::make_shared<TextInput>(name, pos, size,
-                                            std::move(sprite), key);
+                                                  std::move(sprite), key);
     textInputR->setCallbackFunction(setIntTextInput);
 
 
@@ -135,9 +134,8 @@ void UIEditor::initialize() {
     spriteComposite = std::make_shared<SpriteComposite>("rectangle; size: {20, 20};");
     sprite = std::make_shared<MultiSprite>(spriteComposite);
 
-    auto sliderR2 = std::make_shared<Slider>(name, pos, size,
-                                             std::move(sprite), key,
-                                             Slider::slideMode::horizontalOnDrag);
+    auto sliderR2 = std::make_shared<Slider<int>>(name, pos, size, std::move(sprite),
+                                                  50, 0, 100, 50, 0.05, key, Slider<int>::horizontalOnDrag());
     sliderR2->setCallbackFunction(sliderChangeColor);
 
     leftPanel->addUIElement(buttonFactory);
@@ -150,20 +148,19 @@ void UIEditor::initialize() {
 
 void UIEditor::run() {
     while (!window->shouldClose()) {
-        frameCounter ++;
+        frameCounter++;
         window->render();
     }
 }
 
-void UIEditor::makeDraggableButtonCopyOnClick(const std::shared_ptr<UIElement> &uiElement) {
+void UIEditor::makeDraggableButtonResizableCopyOnClick(const std::shared_ptr<UIElement> &uiElement) {
     auto button = std::dynamic_pointer_cast<Button>(uiElement);
 
-    auto draggableButtonCopy = std::make_shared<DraggableButton>(button->getName(),
-                                                                 button->getPosition(), button->getSize(),
-                                                                 button->getSprite());
+    auto draggableButtonCopy = std::make_shared<DraggableButtonResizable>(button->getName(),
+                                                                          button->getPosition(), button->getSize(),
+                                                                          button->getSprite());
 
     draggableButtonCopy->setCallbackFunction(deleteOnReleaseIfLeftPanel);
-    draggableButtonCopy->setPressMode(Button::pressMode::pressOnReleaseAfterDrag);
 
     auto parent = uiElement->getParent();
     parent->addUIElement(draggableButtonCopy);
@@ -177,9 +174,9 @@ void UIEditor::sayHi(const std::shared_ptr<UIElement> &uiElement) {
 }
 
 void UIEditor::sliderChangeColor(const std::shared_ptr<UIElement> &uiElement) {
-    auto slider = std::dynamic_pointer_cast<Slider>(uiElement);
-
-    slider->getSprite()->setBlendColor(glm::vec3((float) slider->getValue() / 100.0f));
+    auto slider = std::dynamic_pointer_cast<Slider<int>>(uiElement);
+    auto value = slider->getValue();
+    slider->getSprite()->setBlendColor(glm::vec3(static_cast<float>(value) / 100.0f));
 }
 
 void UIEditor::deleteOnReleaseIfLeftPanel(const std::shared_ptr<UIElement> &uiElement) {

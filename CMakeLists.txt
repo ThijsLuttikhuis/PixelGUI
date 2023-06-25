@@ -4,10 +4,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(PixelGUI)
 
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wall -Wextra -Wpedantic -Werror")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wnone")
 set(CMAKE_CXX_FLAGS "-lstdc++fs")
-
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
@@ -27,7 +26,8 @@ add_library(utils
         src/utilities/messageException.cpp
         src/utilities/messageException.h
         src/utilities/DebugPrinter.h
-        src/utilities/StringWriter.cpp src/utilities/StringWriter.h)
+        src/utilities/StringWriter.cpp
+        src/utilities/StringWriter.h)
 
 set(LIBS
         ${LIBS}
@@ -57,6 +57,14 @@ set(INCLUDE_UI
         src/ui/uielement/Slider.h
         src/ui/uielement/RootScene.cpp
         src/ui/uielement/RootScene.h
+        src/ui/uielement/TextInput.cpp
+        src/ui/uielement/TextInput.h
+        src/ui/uielement/ButtonOnPress.cpp
+        src/ui/uielement/ButtonOnPress.h
+        src/ui/uielement/ButtonOnRelease.cpp
+        src/ui/uielement/ButtonOnRelease.h
+        src/ui/uielement/EditableValue.cpp
+        src/ui/uielement/EditableValue.h
 
         src/ui/sprite/Sprite.h
         src/ui/sprite/Sprite.cpp
@@ -69,6 +77,8 @@ set(INCLUDE_UI
 set(INCLUDE_UI_EDITOR
         src/uieditor/UIEditor.cpp
         src/uieditor/UIEditor.h
+        src/uieditor/DraggableButtonResizable.cpp
+        src/uieditor/DraggableButtonResizable.h
         )
 
 set(INCLUDE_WINDOW
@@ -98,7 +108,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        src/ui/uielement/TextInput.cpp src/ui/uielement/TextInput.h)
+        )
 
 target_link_libraries(PixelGUI ${LIBS})
 

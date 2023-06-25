@@ -69,4 +69,8 @@ void SpriteComposite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer
     }
 }
 
+const std::vector<std::shared_ptr<Sprite>> &SpriteComposite::getSprites() const {
+    return sprites;
+}
+
 }

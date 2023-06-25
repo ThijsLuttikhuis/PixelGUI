@@ -8,51 +8,49 @@
 #include <functional>
 #include "UIElement.h"
 #include "Callbackable.h"
+#include "EditableValue.h"
 
 namespace PG {
 
-class Slider : virtual public UIElement, virtual public Callbackable {
+template<typename T>
+class Slider : public UIElement, public EditableValue<T>, public Callbackable {
 public:
-    enum slideMode {
-        horizontalOnDrag,
-        verticalOnDrag
-    };
-private:
-    slideMode slideMode = horizontalOnDrag;
-    glm::vec2 oldDragStartPos = glm::vec2{};
-    int dragStartValue = 50;
+    static glm::vec2 horizontalOnDrag() { return {1.0f, 0.0f}; }
 
-    int value = 50;
-    int minValue = 0;
-    int maxValue = 100;
+    static glm::vec2 verticalOnDrag() { return {0.0f, 1.0f}; }
+
+private:
+    glm::vec2 slideDirection;
+    glm::vec2 oldDragStartPos = glm::vec2{};
+    T dragStartValue;
     double slideSpeed = 0.05;
 
 public:
-    Slider() : UIElement() {};
+    Slider() = default;
 
     Slider(std::string name, const glm::vec2 &position, const glm::vec2 &size,
-    int keyboardKey = GLFW_KEY_UNKNOWN, enum slideMode slideMode = horizontalOnDrag)
-    : UIElement(std::move(name), position, size, keyboardKey), slideMode(slideMode) {}
+           const T &value, const T &minValue, const T &maxValue, const T &dragStartValue, double slideSpeed = 0.05,
+           int keyboardKey = GLFW_KEY_UNKNOWN, glm::vec2 slideMode = Slider::horizontalOnDrag())
+          : UIElement(std::move(name), position, size, keyboardKey),
+            EditableValue<T>(value, minValue, maxValue),
+            slideDirection(slideMode), dragStartValue(dragStartValue), slideSpeed(slideSpeed) {}
 
     Slider(std::string name, const glm::vec2 &position, const glm::vec2 &size, std::shared_ptr<Sprite> sprite,
-    int keyboardKey = GLFW_KEY_UNKNOWN, enum slideMode slideMode = horizontalOnDrag)
-    : UIElement(std::move(name), position, size, std::move(sprite), keyboardKey),
-      slideMode(slideMode) {}
+           const T &value, const T &minValue, const T &maxValue, const T &dragStartValue, double slideSpeed = 0.05,
+           int keyboardKey = GLFW_KEY_UNKNOWN, glm::vec2 slideMode = Slider::horizontalOnDrag())
+          : UIElement(std::move(name), position, size, std::move(sprite), keyboardKey),
+            EditableValue<T>(value, minValue, maxValue),
+            slideDirection(slideMode), dragStartValue(dragStartValue), slideSpeed(slideSpeed) {}
 
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
-    /// Set value of the slider.
-    void setValue(int value_);
-
-    /// Set mode of the slider (e.g. horizontalOnDrag, verticalOnDrag).
-    void setSlideMode(enum slideMode slideMode);
-
-    /// Get value of the slider.
-    [[nodiscard]] int getValue() const;
+    /// Set mode of the slider (e.g. horizontalOnDrag(), verticalOnDrag()).
+    void setSlideDirection(glm::vec2 slideDirection_);
 
     /// Get mode of the slider.
-    [[nodiscard]] enum slideMode getSlideMode() const;
+    [[nodiscard]] glm::vec2 getSlideDirection() const;
 
+    /// Update cursor when sliding out of the window.
     void updateSlideOutOfScreen(glm::vec2 mousePos);
 };
 

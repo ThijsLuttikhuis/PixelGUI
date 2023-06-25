@@ -29,6 +29,9 @@ public:
               const std::shared_ptr<Sprite> &referenceSprite, const glm::vec2 &position, const glm::vec2 &size, float baseZIndex);
 
     void addSprite(const std::shared_ptr<Sprite> &sprite, glm::vec2 position, glm::vec2 size);
+
+    /// get sprites
+    const std::vector<std::shared_ptr<Sprite>> &getSprites() const;
 };
 
 }

@@ -7,11 +7,11 @@
 
 #include "utilities/StringWriter.h"
 
-#include "Button.h"
+#include "ButtonOnRelease.h"
 
 namespace PG {
 
-class TextInput : virtual public Button {
+class TextInput : virtual public ButtonOnRelease {
 private:
     void (* callbackFuncOnPressEnter)(const std::shared_ptr<UIElement> &) = emptyCallback;
 
@@ -41,8 +41,8 @@ public:
     void onKeyboardKey(int key, int action, int scanCode,
                        const std::unique_ptr<std::vector<bool>> &keysPressed) override;
 
-    virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
-                      const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex);
+    void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+                      const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex) override;
 
     static void callbackOnClickTextInput(const std::shared_ptr<UIElement> &uiElement);
 
@@ -50,7 +50,12 @@ public:
 
     void setInput(std::string &str);
 
+    void setIntTextInput(const std::shared_ptr<UIElement> &uiElement);
+
+    void setStringTextInput(const std::shared_ptr<UIElement> &uiElement);
+
     [[nodiscard]] const std::string &getInput();
+
 };
 
 }

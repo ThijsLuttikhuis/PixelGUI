@@ -257,7 +257,7 @@ void Scene::clearTextInputChild() {
     textInputChildPtr = draggingChildPtr = std::weak_ptr<UIElement>();
 
     if (hasParent()) {
-        getParent()->clearDraggingChild();
+        getParent()->clearTextInputChild();
     }
 }
 
@@ -274,12 +274,12 @@ void Scene::setChangeOwnerMode(enum changeOwnerMode changeOwner_) {
 }
 
 std::vector<std::shared_ptr<UIElement>> Scene::getSiblings() {
-    if (parentPtr.expired()) {
+    if (!hasParent()) {
         auto onlyChildUIElement = getSharedFromThis();
         return {onlyChildUIElement};
     }
 
-    auto parent = std::shared_ptr<Scene>(parentPtr);
+    auto parent = getParent();
     return parent->getChildren();
 }
 
