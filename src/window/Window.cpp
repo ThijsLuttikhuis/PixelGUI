@@ -239,6 +239,8 @@ glm::vec2 Window::getMousePosition() const {
 }
 
 void Window::forceSetMousePosition(glm::vec2 pos) const {
+    pos /= glm::vec2((double) xPixels / getDisplayWidth(), (double) yPixels / getDisplayHeight());
+
     glfwSetCursorPos(glfwWindow, pos.x, pos.y);
     rootScene->forceSetMousePosition(pos);
 }

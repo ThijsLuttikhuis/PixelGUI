@@ -34,7 +34,7 @@ void UIEditor::initialize() {
     name = "LeftPanel";
     pos = glm::vec2(0, 0);
     size = glm::vec2(200, 540);
-    spriteComposite = std::make_shared<SpriteComposite>(
+    spriteComposite = MultiSprite::getSpriteCompositeFromString(
           "rectangle; size: {200, 540}; edgeColor: {0.3, 0.5, 0.4}; fillColor: {0.3, 0.3, 0.3}; edgeWidth: 8;");
 
     sprite = std::make_shared<MultiSprite>(spriteComposite);
@@ -48,7 +48,7 @@ void UIEditor::initialize() {
     name = "MiddlePanel";
     pos = glm::vec2(200, 0);
     size = glm::vec2(560, 540);
-    spriteComposite = std::make_shared<SpriteComposite>(
+    spriteComposite = MultiSprite::getSpriteCompositeFromString(
           "rectangle; size: {560, 540}; edgeColor: {0.5, 0.4, 0.3}; fillColor: {0.3, 0.3, 0.3}; edgeWidth: 8;");
 
     sprite = std::make_shared<MultiSprite>(spriteComposite);
@@ -62,7 +62,7 @@ void UIEditor::initialize() {
     name = "RightPanel";
     pos = glm::vec2(760, 0);
     size = glm::vec2(200, 540);
-    spriteComposite = std::make_shared<SpriteComposite>(
+    spriteComposite = MultiSprite::getSpriteCompositeFromString(
           "rectangle; size: {200, 540}; edgeColor: {0.4, 0.3, 0.5}; fillColor: {0.3, 0.3, 0.3}; edgeWidth: 8;");
 
     sprite = std::make_shared<MultiSprite>(spriteComposite);
@@ -99,7 +99,7 @@ void UIEditor::initialize() {
     pos = glm::vec2(50, 200);
     size = glm::vec2(80, 16);
 
-    spriteComposite = std::make_shared<SpriteComposite>(
+    spriteComposite = MultiSprite::getSpriteCompositeFromString(
           "rectangle; size: {80, 16}; edgeColor: {0.3, 1.0, 0.3}; fillColor: {1.0, 0.0, 0.0};");
 
     sprite = std::make_shared<MultiSprite>(spriteComposite);
@@ -114,7 +114,7 @@ void UIEditor::initialize() {
     size = glm::vec2(80, 16);
     key = GLFW_KEY_ENTER;
 
-    spriteComposite = std::make_shared<SpriteComposite>(
+    spriteComposite = MultiSprite::getSpriteCompositeFromString(
           "rectangle; size: {80, 16}; edgeColor: {0.3, 1.0, 0.3}; fillColor: {0.96, 0.96, 0.96};");
 
     sprite = std::make_shared<MultiSprite>(spriteComposite);
@@ -131,7 +131,7 @@ void UIEditor::initialize() {
 
     key = GLFW_KEY_A;
 
-    spriteComposite = std::make_shared<SpriteComposite>("rectangle; size: {20, 20};");
+    spriteComposite = MultiSprite::getSpriteCompositeFromString("rectangle; size: {20, 20};");
     sprite = std::make_shared<MultiSprite>(spriteComposite);
 
     auto sliderR2 = std::make_shared<Slider<int>>(name, pos, size, std::move(sprite),

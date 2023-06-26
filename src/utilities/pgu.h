@@ -7,6 +7,7 @@
 
 #include <variant>
 #include <list>
+#include <iostream>
 #include "glm/glm.hpp"
 #include "messageException.h"
 
@@ -37,6 +38,6 @@ public:
     static std::string keyboardKey2string(int key, int scanCode);
 };
 
-}
+} // PG
 
 #endif //PIXELGUI_PGU_H

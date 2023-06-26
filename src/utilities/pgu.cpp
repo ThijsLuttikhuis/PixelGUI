@@ -160,7 +160,6 @@ std::map<std::string, pgu::anyTypeGLM> pgu::infoString2Map(const std::string &in
         semicolon = infoString.find(';', semicolon + 1);
     }
 
-
     if (colons.size() + 1 != semicolons.size()) {
         throw messageException("pgu::infoString2Map: invalid string: " + infoString);
     }

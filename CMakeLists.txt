@@ -108,7 +108,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        )
+        src/ui/sprite/RectangleSpriteComposite.cpp src/ui/sprite/RectangleSpriteComposite.h)
 
 target_link_libraries(PixelGUI ${LIBS})
 

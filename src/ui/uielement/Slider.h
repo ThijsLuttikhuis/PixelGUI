@@ -23,20 +23,20 @@ private:
     glm::vec2 slideDirection;
     glm::vec2 oldDragStartPos = glm::vec2{};
     T dragStartValue;
-    double slideSpeed = 0.05;
+    float slideSpeed = 0.05;
 
 public:
     Slider() = default;
 
     Slider(std::string name, const glm::vec2 &position, const glm::vec2 &size,
-           const T &value, const T &minValue, const T &maxValue, const T &dragStartValue, double slideSpeed = 0.05,
+           const T &value, const T &minValue, const T &maxValue, const T &dragStartValue, float slideSpeed = 0.05,
            int keyboardKey = GLFW_KEY_UNKNOWN, glm::vec2 slideMode = Slider::horizontalOnDrag())
           : UIElement(std::move(name), position, size, keyboardKey),
             EditableValue<T>(value, minValue, maxValue),
             slideDirection(slideMode), dragStartValue(dragStartValue), slideSpeed(slideSpeed) {}
 
     Slider(std::string name, const glm::vec2 &position, const glm::vec2 &size, std::shared_ptr<Sprite> sprite,
-           const T &value, const T &minValue, const T &maxValue, const T &dragStartValue, double slideSpeed = 0.05,
+           const T &value, const T &minValue, const T &maxValue, const T &dragStartValue, float slideSpeed = 0.05,
            int keyboardKey = GLFW_KEY_UNKNOWN, glm::vec2 slideMode = Slider::horizontalOnDrag())
           : UIElement(std::move(name), position, size, std::move(sprite), keyboardKey),
             EditableValue<T>(value, minValue, maxValue),
@@ -51,7 +51,7 @@ public:
     [[nodiscard]] glm::vec2 getSlideDirection() const;
 
     /// Update cursor when sliding out of the window.
-    void updateSlideOutOfScreen(glm::vec2 mousePos);
+    void updateSlideOutOfScreen(glm::vec2 &mousePos);
 };
 
 }
