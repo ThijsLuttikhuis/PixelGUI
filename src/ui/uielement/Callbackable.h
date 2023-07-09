@@ -12,8 +12,6 @@
 namespace PG {
 
 class Callbackable {
-public:
-
 protected:
     void (* callbackFunc)(const std::shared_ptr<UIElement> &) = emptyCallback;
 
@@ -24,6 +22,8 @@ protected:
     };
 
 public:
+    Callbackable() = default;
+
     /// Set function that can be called.
     virtual void setCallbackFunction(void (* func)(const std::shared_ptr<UIElement> &));
 };

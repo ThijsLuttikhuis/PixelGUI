@@ -3,6 +3,8 @@
 //
 
 #include "EditableValue.h"
+#include "glm/vec2.hpp"
+#include "glm/detail/func_common.hpp"
 
 namespace PG {
 
@@ -10,6 +12,12 @@ template<typename T>
 void EditableValue<T>::setValue(const T &value_) {
     value = value_;
     value = std::clamp(value, minValue, maxValue);
+}
+
+template<>
+void EditableValue<glm::vec2>::setValue(const glm::vec2 &value_) {
+    value = value_;
+    value = glm::clamp(value, minValue, maxValue);
 }
 
 template<typename T>
@@ -59,6 +67,11 @@ void EditableValue<int>::setMaxValue(const int &maxValue_) {
 
 template<>
 const int &EditableValue<int>::getValue() const {
+    return value;
+}
+
+template<>
+const glm::vec2 &EditableValue<glm::vec2>::getValue() const {
     return value;
 }
 

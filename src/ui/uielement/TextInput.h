@@ -11,20 +11,20 @@
 
 namespace PG {
 
-class TextInput : virtual public ButtonOnRelease {
+class TextInput : public ButtonOnRelease {
 private:
     void (* callbackFuncOnPressEnter)(const std::shared_ptr<UIElement> &) = emptyCallback;
 
     std::unique_ptr<StringWriter> input;
 public:
-    TextInput() : UIElement() {
+    TextInput() : ButtonOnRelease() {
         callbackFunc = callbackOnClickTextInput;
         input = std::make_unique<StringWriter>();
     }
 
     TextInput(std::string name, const glm::vec2 &position, const glm::vec2 &size,
               int keyboardKey = GLFW_KEY_UNKNOWN)
-          : UIElement(std::move(name), position, size, keyboardKey) {
+          : ButtonOnRelease(std::move(name), position, size, keyboardKey) {
 
         callbackFunc = callbackOnClickTextInput;
         input = std::make_unique<StringWriter>();
@@ -32,7 +32,7 @@ public:
 
     TextInput(std::string name, const glm::vec2 &position, const glm::vec2 &size, std::shared_ptr<Sprite> sprite,
               int keyboardKey = GLFW_KEY_UNKNOWN)
-          : UIElement(std::move(name), position, size, std::move(sprite), keyboardKey) {
+          : ButtonOnRelease(std::move(name), position, size, std::move(sprite), keyboardKey) {
 
         callbackFunc = callbackOnClickTextInput;
         input = std::make_unique<StringWriter>();

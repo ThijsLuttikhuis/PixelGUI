@@ -9,7 +9,7 @@
 #include "ui/sprite/MultiSprite.h"
 #include "ui/uielement/TextInput.h"
 #include "ui/uielement/ButtonOnPress.h"
-#include "DraggableButtonResizable.h"
+#include "ui/uielement/DraggableButtonResizable.h"
 
 namespace PG {
 
@@ -154,19 +154,21 @@ void UIEditor::run() {
 }
 
 void UIEditor::makeDraggableButtonResizableCopyOnClick(const std::shared_ptr<UIElement> &uiElement) {
-    auto button = std::dynamic_pointer_cast<Button>(uiElement);
+    auto button = std::dynamic_pointer_cast<ButtonOnPress>(uiElement);
 
-    auto draggableButtonCopy = std::make_shared<DraggableButtonResizable>(button->getName(),
-                                                                          button->getPosition(), button->getSize(),
-                                                                          button->getSprite());
+    auto draggableButtonCopy = std::make_shared<DraggableButtonResizable>(
+          button->getName(), button->getPosition(),
+          button->getSize(), button->getSprite());
 
     draggableButtonCopy->setCallbackFunction(deleteOnReleaseIfLeftPanel);
 
     auto parent = uiElement->getParent();
-    parent->addUIElement(draggableButtonCopy);
-    parent->setDraggingChild(draggableButtonCopy);
+    draggableButtonCopy->Button::setParent(parent);
 
-    draggableButtonCopy->onClick(glm::vec2(draggableButtonCopy->getPosition()));
+    parent->addUIElement(static_cast<std::shared_ptr<Button>>(draggableButtonCopy));
+    parent->setDraggingChild(static_cast<std::shared_ptr<Button>>(draggableButtonCopy));
+
+    draggableButtonCopy->onClick(glm::vec2(draggableButtonCopy->Button::getPosition()));
 }
 
 void UIEditor::sayHi(const std::shared_ptr<UIElement> &uiElement) {

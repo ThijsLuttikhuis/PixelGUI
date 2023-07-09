@@ -77,8 +77,8 @@ set(INCLUDE_UI
 set(INCLUDE_UI_EDITOR
         src/uieditor/UIEditor.cpp
         src/uieditor/UIEditor.h
-        src/uieditor/DraggableButtonResizable.cpp
-        src/uieditor/DraggableButtonResizable.h
+        src/ui/uielement/DraggableButtonResizable.cpp
+        src/ui/uielement/DraggableButtonResizable.h
         )
 
 set(INCLUDE_WINDOW
@@ -108,7 +108,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        src/ui/sprite/RectangleSpriteComposite.cpp src/ui/sprite/RectangleSpriteComposite.h)
+        src/ui/sprite/RectangleSpriteComposite.cpp src/ui/sprite/RectangleSpriteComposite.h src/ui/uielement/CustomMouse.cpp src/ui/uielement/CustomMouse.h)
 
 target_link_libraries(PixelGUI ${LIBS})
 

@@ -6,20 +6,24 @@
 #define PIXELGUI_BUTTON_H
 
 #include <functional>
-#include "UIElement.h"
-#include "GLFW/glfw3.h"
+
 #include "utilities/DebugPrinter.h"
 #include "Callbackable.h"
+#include "UIElement.h"
 
 namespace PG {
 
-class Button : virtual public UIElement, virtual public Callbackable {
-protected:
-    Button() = default;
+class Button : virtual public UIElement, public Callbackable {
 public:
+    Button() = default;
 
+    Button(std::string name, const glm::vec2 &position, const glm::vec2 &size, int keyboardKey = GLFW_KEY_UNKNOWN)
+    : UIElement(std::move(name), position, size, keyboardKey) {}
+
+    Button(std::string name, const glm::vec2 &position, const glm::vec2 &size,
+          std::shared_ptr<Sprite> sprite, int keyboardKey = GLFW_KEY_UNKNOWN)
+    : UIElement(std::move(name), position, size, std::move(sprite), keyboardKey) {}
 };
-
 
 } // PG
 

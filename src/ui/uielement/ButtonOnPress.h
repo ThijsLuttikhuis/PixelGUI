@@ -13,7 +13,7 @@ class ButtonOnPress : public Button {
 private:
 
 public:
-    ButtonOnPress() : UIElement() {};
+    ButtonOnPress() : Button() {};
 
     ButtonOnPress(std::string name, const glm::vec2 &position, const glm::vec2 &size,
                   int keyboardKey = GLFW_KEY_UNKNOWN)

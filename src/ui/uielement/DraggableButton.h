@@ -10,7 +10,7 @@
 
 namespace PG {
 
-class DraggableButton : virtual public Draggable, virtual public ButtonOnRelease {
+class DraggableButton : public Draggable, public ButtonOnRelease {
 private:
 
 public:

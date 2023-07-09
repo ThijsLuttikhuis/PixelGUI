@@ -17,28 +17,7 @@ namespace PG {
 class Sprite : virtual public std::enable_shared_from_this<Sprite> {
 public:
 public:
-    enum sceneAnchor {
-        BOTTOM_LEFT_SCENE = 1,
-        BOTTOM_SCENE = 2,
-        BOTTOM_RIGHT_SCENE = 3,
-        LEFT_SCENE = 4,
-        MIDDLE_SCENE = 5,
-        RIGHT_SCENE = 6,
-        TOP_LEFT_SCENE = 7,
-        TOP_SCENE = 8,
-        TOP_RIGHT_SCENE = 9,
-    };
-    enum selfAnchor {
-        BOTTOM_LEFT_SELF = 1,
-        BOTTOM_SELF = 2,
-        BOTTOM_RIGHT_SELF = 3,
-        LEFT_SELF = 4,
-        MIDDLE_SELF = 5,
-        RIGHT_SELF = 6,
-        TOP_LEFT_SELF = 7,
-        TOP_SELF = 8,
-        TOP_RIGHT_SELF = 9,
-    };
+
     enum NamedZIndex : int {
 
     };
@@ -48,8 +27,7 @@ protected:
     float alpha;
 
     float zIndex = 0.5f;
-    sceneAnchor sceneAnchor_ = TOP_LEFT_SCENE;
-    selfAnchor selfAnchor_ = TOP_LEFT_SELF;
+
     glm::mat4 model = glm::mat4(1.0f);
     glm::vec3 blendColor = glm::vec3(1.0f);
 

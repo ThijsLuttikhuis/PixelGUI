@@ -6,8 +6,11 @@
 #define PIXELGUI_DRAGGABLEBUTTONRESIZABLE_H
 
 
+#include <utility>
+
 #include "glm/vec2.hpp"
 #include "ui/uielement/DraggableButton.h"
+#include "ui/uielement/Slider.h"
 
 namespace PG {
 
@@ -16,8 +19,11 @@ private:
     bool resizing = false;
     float edgeSize = 4.0f;
 
-    std::shared_ptr<Sprite> resizingSprite{};
+//    std::shared_ptr<Slider<int>> resizingSlider{}; TODO
+
 public:
+    DraggableButtonResizable() = default;
+
     DraggableButtonResizable(std::string name, const glm::vec2 &pos, const glm::vec2 &size,
                              int keyboardKey = GLFW_KEY_UNKNOWN)
           : UIElement(std::move(name), pos, size, keyboardKey) {}

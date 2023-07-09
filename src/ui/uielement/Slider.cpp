@@ -53,15 +53,15 @@ template<typename T>
 void Slider<T>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     if (oldDragStartPos != dragStartPos) {
         oldDragStartPos = dragStartPos;
-        dragStartValue = this->getValue();
+        this->dragStartValue = this->getValue();
     }
 
     updateSlideOutOfScreen(mousePos);
 
     glm::vec2 dragDeltaPos = mousePos - dragStartPos;
-    dragDeltaPos *= slideDirection;
-    double dValue = (dragDeltaPos.x + dragDeltaPos.y) * slideSpeed;
-    setValue(static_cast<T>(dragStartValue + dValue));
+    dragDeltaPos *= this->slideDirection;
+    T dValue = static_cast<T>((dragDeltaPos.x + dragDeltaPos.y) * this->slideSpeed);
+    setValue(static_cast<T>(this->dragStartValue + dValue));
 
     try {
         callbackFunc(getSharedFromThis());
@@ -71,19 +71,43 @@ void Slider<T>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     }
 }
 
+
 template<>
-void Slider<int>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
+void Slider<glm::vec2>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     if (oldDragStartPos != dragStartPos) {
         oldDragStartPos = dragStartPos;
-        dragStartValue = this->getValue();
+        this->dragStartValue = this->getValue();
     }
 
     updateSlideOutOfScreen(mousePos);
 
     glm::vec2 dragDeltaPos = mousePos - dragStartPos;
-    dragDeltaPos *= slideDirection;
-    double dValue = (dragDeltaPos.x + dragDeltaPos.y) * slideSpeed;
-    setValue(static_cast<int>(dragStartValue + dValue));
+    dragDeltaPos *= this->slideDirection;
+    glm::vec2 dValue = static_cast<glm::vec2>((dragDeltaPos.x + dragDeltaPos.y) * this->slideSpeed);
+    setValue(static_cast<glm::vec2>(this->dragStartValue + dValue));
+
+    try {
+        callbackFunc(getSharedFromThis());
+    }
+    catch (const std::exception &err) {
+        std::cerr << err.what() << std::endl;
+    }
+}
+
+
+template<>
+void Slider<int>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
+    if (oldDragStartPos != dragStartPos) {
+        oldDragStartPos = dragStartPos;
+        this->dragStartValue = this->getValue();
+    }
+
+    updateSlideOutOfScreen(mousePos);
+
+    glm::vec2 dragDeltaPos = mousePos - dragStartPos;
+    dragDeltaPos *= this->slideDirection;
+    int dValue = static_cast<int>((dragDeltaPos.x + dragDeltaPos.y) * this->slideSpeed);
+    setValue(static_cast<int>(this->dragStartValue + dValue));
 
     try {
         callbackFunc(getSharedFromThis());

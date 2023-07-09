@@ -30,17 +30,17 @@ public:
 
     Slider(std::string name, const glm::vec2 &position, const glm::vec2 &size,
            const T &value, const T &minValue, const T &maxValue, const T &dragStartValue, float slideSpeed = 0.05,
-           int keyboardKey = GLFW_KEY_UNKNOWN, glm::vec2 slideMode = Slider::horizontalOnDrag())
+           int keyboardKey = GLFW_KEY_UNKNOWN, glm::vec2 slideDirection = Slider::horizontalOnDrag())
           : UIElement(std::move(name), position, size, keyboardKey),
             EditableValue<T>(value, minValue, maxValue),
-            slideDirection(slideMode), dragStartValue(dragStartValue), slideSpeed(slideSpeed) {}
+            slideDirection(slideDirection), dragStartValue(dragStartValue), slideSpeed(slideSpeed) {}
 
     Slider(std::string name, const glm::vec2 &position, const glm::vec2 &size, std::shared_ptr<Sprite> sprite,
            const T &value, const T &minValue, const T &maxValue, const T &dragStartValue, float slideSpeed = 0.05,
-           int keyboardKey = GLFW_KEY_UNKNOWN, glm::vec2 slideMode = Slider::horizontalOnDrag())
+           int keyboardKey = GLFW_KEY_UNKNOWN, glm::vec2 slideDirection = Slider::horizontalOnDrag())
           : UIElement(std::move(name), position, size, std::move(sprite), keyboardKey),
             EditableValue<T>(value, minValue, maxValue),
-            slideDirection(slideMode), dragStartValue(dragStartValue), slideSpeed(slideSpeed) {}
+            slideDirection(slideDirection), dragStartValue(dragStartValue), slideSpeed(slideSpeed) {}
 
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 

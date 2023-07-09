@@ -14,7 +14,7 @@ protected:
     bool pressed = false;
     bool dragging = false;
 public:
-    ButtonOnRelease() : UIElement() {};
+    ButtonOnRelease() : Button() {};
 
     ButtonOnRelease(std::string name, const glm::vec2 &position, const glm::vec2 &size,
                     int keyboardKey = GLFW_KEY_UNKNOWN)
@@ -29,7 +29,6 @@ public:
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
     void onRelease(glm::vec2 mousePos) override;
-
 
 };
 

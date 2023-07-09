@@ -12,9 +12,9 @@
 #include "ui/sprite/Sprite.h"
 #include "window/render/TextRenderer.h"
 #include "window/render/SpriteRenderer.h"
-#include "GLFW/glfw3.h"
 #include "utilities/DebugPrinter.h"
 #include "utilities/pgu.h"
+#include "GLFW/glfw3.h"
 
 namespace PG {
 
@@ -25,6 +25,18 @@ class RootScene;
 class Scene;
 
 class UIElement : public std::enable_shared_from_this<UIElement> {
+    enum sceneAnchor {
+        BOTTOM_LEFT_SCENE = 1,
+        BOTTOM_SCENE = 2,
+        BOTTOM_RIGHT_SCENE = 3,
+        LEFT_SCENE = 4,
+        MIDDLE_SCENE = 5,
+        RIGHT_SCENE = 6,
+        TOP_LEFT_SCENE = 7,
+        TOP_SCENE = 8,
+        TOP_RIGHT_SCENE = 9,
+    };
+
 private:
     static int uniqueIDCounter;
     int uniqueID;
@@ -35,6 +47,7 @@ private:
 
 protected:
     std::shared_ptr<Sprite> sprite{};
+    sceneAnchor sceneAnchor_ = TOP_LEFT_SCENE;
 
     glm::vec2 position{};
     glm::vec2 size{};

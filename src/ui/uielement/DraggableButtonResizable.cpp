@@ -7,18 +7,11 @@
 namespace PG {
 
 void DraggableButtonResizable::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
-    if (resizing) {
-        dragging = true;
+    if (this->resizing) {
+        this->dragging = true;
 
         // resize
-        glm::vec2 diff = mousePos - dragStartPos;
-        size += diff;
-        if (size.x < 1) {
-            size.x = 1;
-        }
-        if (size.y < 1) {
-            size.y = 1;
-        }
+
     } else {
         DraggableButton::onDrag(mousePos, dragStartPos);
     }
