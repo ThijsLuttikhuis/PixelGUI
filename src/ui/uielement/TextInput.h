@@ -18,14 +18,14 @@ private:
 
     std::unique_ptr<StringWriter> input;
 public:
-    TextInput() : ButtonOnRelease() {
+    TextInput() : UIElement() {
         callbackFunc = callbackOnClickTextInput;
         input = std::make_unique<StringWriter>();
     }
 
     TextInput(std::string name, const glm::vec2 &position, const glm::vec2 &size,
               int keyboardKey = GLFW_KEY_UNKNOWN)
-          : ButtonOnRelease(std::move(name), position, size, keyboardKey) {
+          : UIElement(std::move(name), position, size, keyboardKey) {
 
         callbackFunc = callbackOnClickTextInput;
         input = std::make_unique<StringWriter>();
@@ -33,7 +33,7 @@ public:
 
     TextInput(std::string name, const glm::vec2 &position, const glm::vec2 &size, std::shared_ptr<Sprite> sprite,
               int keyboardKey = GLFW_KEY_UNKNOWN)
-          : ButtonOnRelease(std::move(name), position, size, std::move(sprite), keyboardKey) {
+          : UIElement(std::move(name), position, size, std::move(sprite), keyboardKey) {
 
         callbackFunc = callbackOnClickTextInput;
         input = std::make_unique<StringWriter>();
