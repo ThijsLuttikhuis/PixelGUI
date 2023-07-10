@@ -7,14 +7,17 @@
 
 #include <memory>
 #include "ui/uielement/UIElement.h"
+#include "HelperSprite.h"
 
 namespace PG {
 
-class CustomMouse : virtual public UIElement {
+class CustomMouse : virtual public UIElement, public HelperSprite {
 private:
-    std::shared_ptr<Sprite> customSprite;
 
 public:
+
+
+    void onHover(glm::vec2 mousePos) override;
 
 
 

@@ -112,6 +112,7 @@ void Window::initialize() {
 }
 
 void Window::render() {
+    rootScene->onHover(getMousePosition());
 
     glfwPollEvents();
 

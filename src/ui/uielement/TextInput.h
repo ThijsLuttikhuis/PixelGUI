@@ -8,10 +8,11 @@
 #include "utilities/StringWriter.h"
 
 #include "ButtonOnRelease.h"
+#include "CustomMouse.h"
 
 namespace PG {
 
-class TextInput : public ButtonOnRelease {
+class TextInput : public ButtonOnRelease, public CustomMouse {
 private:
     void (* callbackFuncOnPressEnter)(const std::shared_ptr<UIElement> &) = emptyCallback;
 

@@ -17,6 +17,7 @@ private:
     glm::vec2 mouseSize = glm::vec2(8, 12);
     std::shared_ptr<Sprite> mouseSprite;
     std::shared_ptr<Sprite> mouseDownSprite;
+    std::weak_ptr<Sprite> currentMouseSpritePtr = mouseSprite;
 
 public:
     RootScene(std::string name, const std::shared_ptr<Window> &window, std::shared_ptr<Sprite> mouseSprite, std::shared_ptr<Sprite> mouseDownSprite)
@@ -41,6 +42,8 @@ public:
 
     void forceSetMousePosition(glm::vec2 pos);
 
+    void setCurrentMouseSprite(const std::shared_ptr<Sprite> &sprite);
+
     void setWindow(std::weak_ptr<Window> window_);
 
     void setParent(std::weak_ptr<Scene> scene_) final;
@@ -50,6 +53,7 @@ public:
     std::shared_ptr<RootScene> getRootScene() final;
 
     glm::vec2 getAbsoluteMousePosition() final;
+
 };
 
 }

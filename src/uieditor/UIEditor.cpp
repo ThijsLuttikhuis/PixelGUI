@@ -161,7 +161,7 @@ void UIEditor::makeDraggableButtonResizableCopyOnClick(const std::shared_ptr<UIE
           button->getSize(), button->getSprite());
 
     draggableButtonCopy->setCallbackFunction(deleteOnReleaseIfLeftPanel);
-
+    draggableButtonCopy->setHelperSprite(std::make_shared<Sprite>("mouseresizehover"));
     auto parent = uiElement->getParent();
     draggableButtonCopy->Button::setParent(parent);
 

@@ -65,14 +65,18 @@ void UIElement::setColor(const glm::vec3 &color_) {
     sprite->setColor(color_);
 }
 
-bool UIElement::isPositionInBox(double x, double y, glm::vec2 position, glm::vec2 size, float insideEdge) {
-    bool xInBox = (x >= position.x + insideEdge && x < position.x + size.x - insideEdge);
-    bool yInBox = (y >= position.y + insideEdge && y < position.y + size.y - insideEdge);
-    return xInBox && yInBox;
+bool UIElement::isPositionInBox(const std::shared_ptr<PositionAnchor>& positionAnchor, double x, double y,
+                                glm::vec2 position_, glm::vec2 size_, float insideEdge) {
+
+    return positionAnchor->isPositionInBox(x, y, position_, size_, insideEdge);
+}
+
+bool UIElement::isPositionInBox(double x, double y, glm::vec2 position_, glm::vec2 size_, float insideEdge) {
+    return isPositionInBox(positionAnchor, x, y, position_, size_, insideEdge);
 }
 
 bool UIElement::isPositionInBox(double x, double y, float insideEdge) const {
-    return isPositionInBox(x, y, position, size, insideEdge);
+    return isPositionInBox(positionAnchor, x, y, position, size, insideEdge);
 }
 
 bool UIElement::isMouseHovering(double xPos, double yPos) const {
@@ -206,5 +210,6 @@ bool UIElement::hasParent() const {
 int UIElement::getKeyboardKey() const {
     return keyboardKey;
 }
+
 
 }

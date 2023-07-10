@@ -8,18 +8,24 @@
 
 #include <utility>
 
+
 #include "glm/vec2.hpp"
 #include "ui/uielement/DraggableButton.h"
 #include "ui/uielement/Slider.h"
+#include "HelperSprite.h"
+#include "Slider.h"
+#include "CustomMouse.h"
 
 namespace PG {
 
-class DraggableButtonResizable : public DraggableButton {
+class DraggableButtonResizable : public DraggableButton, public CustomMouse {
 private:
     bool resizing = false;
     float edgeSize = 4.0f;
 
-//    std::shared_ptr<Slider<int>> resizingSlider{}; TODO
+    std::shared_ptr<Slider<int>> resizeSlider;
+
+
 
 public:
     DraggableButtonResizable() = default;

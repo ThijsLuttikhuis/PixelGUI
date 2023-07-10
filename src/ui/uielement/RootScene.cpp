@@ -62,15 +62,21 @@ void RootScene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
 void RootScene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                      const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex) {
 
-    if (mouseSprite && isMouseHovering(mousePosition)) {
-        mouseSprite->draw(spriteRenderer, textRenderer, mousePosition, mouseSize, baseZIndex);
+    if (!currentMouseSpritePtr.expired() && isMouseHovering(mousePosition)) {
+        auto currentMouseSprite = std::shared_ptr<Sprite>(currentMouseSpritePtr);
+        currentMouseSprite->draw(spriteRenderer, textRenderer, mousePosition, mouseSize, baseZIndex);
     }
+    currentMouseSpritePtr = mouseSprite;
 
     Scene::draw(spriteRenderer, textRenderer, baseZIndex);
 }
 
 void RootScene::forceSetMousePosition(glm::vec2 pos) {
     mousePosition = pos;
+}
+
+void RootScene::setCurrentMouseSprite(const std::shared_ptr<Sprite> &sprite) {
+    currentMouseSpritePtr = sprite;
 }
 
 }
