@@ -10,6 +10,7 @@
 #include "ui/uielement/TextInput.h"
 #include "ui/uielement/ButtonOnPress.h"
 #include "ui/uielement/DraggableButtonResizable.h"
+#include "ui/sprite/CustomMouseSprite.h"
 
 namespace PG {
 
@@ -122,6 +123,8 @@ void UIEditor::initialize() {
 
     auto textInputR = std::make_shared<TextInput>(name, pos, size,
                                                   std::move(sprite), key);
+    auto customMouse = std::make_shared<CustomMouseSprite>();
+    textInputR->setCustomMouse(customMouse);
     textInputR->setCallbackFunction(setIntTextInput);
 
 
@@ -161,9 +164,11 @@ void UIEditor::makeDraggableButtonResizableCopyOnClick(const std::shared_ptr<UIE
           button->getSize(), button->getSprite());
 
     draggableButtonCopy->setCallbackFunction(deleteOnReleaseIfLeftPanel);
-    draggableButtonCopy->setHelperSprite(std::make_shared<Sprite>("mouseresizehover"));
+
+    auto customMouse = std::make_shared<CustomMouseSprite>("mouseresizehover");
+    draggableButtonCopy->setCustomMouse(customMouse);
     auto parent = uiElement->getParent();
-    draggableButtonCopy->Button::setParent(parent);
+    draggableButtonCopy->setParent(parent);
 
     parent->addUIElement(static_cast<std::shared_ptr<Button>>(draggableButtonCopy));
     parent->setDraggingChild(static_cast<std::shared_ptr<Button>>(draggableButtonCopy));

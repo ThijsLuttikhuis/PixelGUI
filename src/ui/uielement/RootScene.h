@@ -7,6 +7,7 @@
 
 #include "Scene.h"
 #include "window/Window.h"
+#include "ui/sprite/CustomMouseSprite.h"
 
 namespace PG {
 
@@ -15,12 +16,12 @@ private:
     std::weak_ptr<Window> window;
     glm::vec2 mousePosition;
     glm::vec2 mouseSize = glm::vec2(8, 12);
-    std::shared_ptr<Sprite> mouseSprite;
-    std::shared_ptr<Sprite> mouseDownSprite;
-    std::weak_ptr<Sprite> currentMouseSpritePtr = mouseSprite;
+    std::shared_ptr<CustomMouseSprite> mouseSprite;
+    std::shared_ptr<CustomMouseSprite> mouseDownSprite;
+    std::weak_ptr<CustomMouseSprite> currentMouseSpritePtr = mouseSprite;
 
 public:
-    RootScene(std::string name, const std::shared_ptr<Window> &window, std::shared_ptr<Sprite> mouseSprite, std::shared_ptr<Sprite> mouseDownSprite)
+    RootScene(std::string name, const std::shared_ptr<Window> &window, std::shared_ptr<CustomMouseSprite> mouseSprite, std::shared_ptr<CustomMouseSprite> mouseDownSprite)
           : Scene(std::move(name), glm::vec2(0),
                   {window->getXPixels(), window->getYPixels()}),
             window(window), mouseSprite(std::move(mouseSprite)), mouseDownSprite(std::move(mouseDownSprite)) {};
@@ -42,7 +43,7 @@ public:
 
     void forceSetMousePosition(glm::vec2 pos);
 
-    void setCurrentMouseSprite(const std::shared_ptr<Sprite> &sprite);
+    void setCurrentMouseSprite(const std::shared_ptr<CustomMouseSprite> &sprite);
 
     void setWindow(std::weak_ptr<Window> window_);
 

@@ -81,4 +81,22 @@ void TextInput::setStringTextInput(const std::shared_ptr<UIElement> &uiElement) 
     callbackFuncOnPressEnter(textInput);
 }
 
+std::shared_ptr<CustomMouseSprite> &TextInput::getCustomMouse() {
+    return customMouse;
+}
+
+void TextInput::setParent(std::weak_ptr<Scene> parent_) {
+    UIElement::setParent(parent_);
+    if (customMouse) {
+        customMouse->setRootScene(getRootScene());
+    }
+}
+
+void TextInput::setCustomMouse(const std::shared_ptr<CustomMouseSprite> &customMouse_) {
+    customMouse = customMouse_;
+    if (hasParent()) {
+        customMouse->setRootScene(getRootScene());
+    }
+}
+
 }

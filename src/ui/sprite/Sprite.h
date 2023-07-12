@@ -16,8 +16,6 @@ namespace PG {
 
 class Sprite : virtual public std::enable_shared_from_this<Sprite> {
 public:
-public:
-
     enum NamedZIndex : int {
 
     };

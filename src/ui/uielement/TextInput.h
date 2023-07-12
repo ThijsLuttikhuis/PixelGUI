@@ -8,13 +8,15 @@
 #include "utilities/StringWriter.h"
 
 #include "ButtonOnRelease.h"
-#include "CustomMouse.h"
+#include "ui/sprite/CustomMouseSprite.h"
 
 namespace PG {
 
-class TextInput : public ButtonOnRelease, public CustomMouse {
+class TextInput : public ButtonOnRelease {
 private:
     void (* callbackFuncOnPressEnter)(const std::shared_ptr<UIElement> &) = emptyCallback;
+
+    std::shared_ptr<CustomMouseSprite> customMouse;
 
     std::unique_ptr<StringWriter> input;
 public:
@@ -55,7 +57,13 @@ public:
 
     void setStringTextInput(const std::shared_ptr<UIElement> &uiElement);
 
+    void setParent(std::weak_ptr<Scene> parent_) override;
+
+    void setCustomMouse(const std::shared_ptr<CustomMouseSprite> &customMouse_);
+
     [[nodiscard]] const std::string &getInput();
+
+    [[nodiscard]] std::shared_ptr<CustomMouseSprite> &getCustomMouse();
 
 };
 

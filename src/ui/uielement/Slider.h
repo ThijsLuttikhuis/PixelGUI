@@ -13,7 +13,7 @@
 namespace PG {
 
 template<typename T>
-class Slider : public UIElement, public EditableValue<T>, public Callbackable {
+class Slider : virtual public UIElement, public EditableValue<T>, virtual public Callbackable {
 public:
     static glm::vec2 horizontalOnDrag() { return {1.0f, 0.0f}; }
 

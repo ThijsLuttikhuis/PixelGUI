@@ -13,7 +13,7 @@
 
 namespace PG {
 
-class Button : virtual public UIElement, public Callbackable {
+class Button : virtual public UIElement, virtual public Callbackable {
 public:
     Button() = default;
 

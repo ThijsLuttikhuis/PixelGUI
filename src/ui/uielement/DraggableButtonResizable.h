@@ -14,18 +14,18 @@
 #include "ui/uielement/Slider.h"
 #include "HelperSprite.h"
 #include "Slider.h"
-#include "CustomMouse.h"
+#include "ui/sprite/CustomMouseSprite.h"
 
 namespace PG {
 
-class DraggableButtonResizable : public DraggableButton, public CustomMouse {
+class DraggableButtonResizable : public DraggableButton, public Slider<int> {
 private:
     bool resizing = false;
     float edgeSize = 4.0f;
 
-    std::shared_ptr<Slider<int>> resizeSlider;
+    std::shared_ptr<CustomMouseSprite> customMouse;
 
-
+    bool isPositionOnEdge(glm::vec2 mousePos);
 
 public:
     DraggableButtonResizable() = default;
@@ -44,6 +44,13 @@ public:
 
     void onRelease(glm::vec2 mousePos) override;
 
+    void onHover(glm::vec2 mousePos) override;
+
+    void setParent(std::weak_ptr<Scene> parent_) override;
+
+    void setCustomMouse(const std::shared_ptr<CustomMouseSprite> &customMouse_);
+
+    [[nodiscard]] std::shared_ptr<CustomMouseSprite> &getCustomMouse();
 };
 
 } // PG

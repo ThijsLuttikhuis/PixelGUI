@@ -17,13 +17,12 @@ public:
     PositionAnchor() = default;
     virtual ~PositionAnchor() = default;
 
-    virtual bool isPositionInBox(double x, double y, glm::vec2 pos, glm::vec2 size, float insideEdge) = 0;
-
+    virtual bool isPositionInBox(double x, double y, glm::vec2 position, glm::vec2 size, float insideEdge) = 0;
 };
 
 class AnchorTopLeft : public PositionAnchor {
 public:
-    bool isPositionInBox(double x, double y, glm::vec2 pos, glm::vec2 size, float insideEdge) override;
+    bool isPositionInBox(double x, double y, glm::vec2 position, glm::vec2 size, float insideEdge) override;
 };
 
 class AnchorTop : public PositionAnchor {
@@ -40,7 +39,8 @@ class AnchorLeft : public PositionAnchor {
 };
 
 class AnchorMiddle : public PositionAnchor {
-
+public:
+    bool isPositionInBox(double x, double y, glm::vec2 position, glm::vec2 size, float insideEdge) override;
 };
 
 class AnchorRight : public PositionAnchor {

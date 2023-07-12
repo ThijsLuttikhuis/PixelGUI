@@ -11,7 +11,7 @@
 #include "window/render/TextRenderer.h"
 #include "window/render/SpriteRenderer.h"
 #include "ui/uielement/RootScene.h"
-
+#include "ui/uielement/PositionAnchor.h"
 #include "Window.h"
 
 namespace PG {
@@ -83,8 +83,11 @@ void Window::initialize() {
     callback_left_mouse_button_pressed = std::make_unique<bool>(false);
     callback_drag_start_position = std::make_unique<glm::vec2>(0, 0);
 
-    rootScene = std::make_shared<RootScene>(title, getSharedFromThis(), std::make_shared<Sprite>("mousecursor"),
-                                            std::make_shared<Sprite>("mousecursordown"));
+    auto mouseCursorSprite = std::make_shared<CustomMouseSprite>("mousecursor", std::make_shared<AnchorTopLeft>());
+    auto mouseCursorDownSprite = std::make_shared<CustomMouseSprite>("mousecursordown", std::make_shared<AnchorTopLeft>());
+    rootScene = std::make_shared<RootScene>(title, getSharedFromThis(), mouseCursorSprite, mouseCursorDownSprite);
+    mouseCursorSprite->setRootScene(rootScene);
+    mouseCursorDownSprite->setRootScene(rootScene);
 
     auto rootPath = std::filesystem::current_path();
     while (rootPath.stem() != "PixelGUI") {
