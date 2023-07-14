@@ -15,14 +15,19 @@
 #include "HelperSprite.h"
 #include "Slider.h"
 #include "ui/sprite/CustomMouseSprite.h"
+#include "ui/sprite/MultiSprite.h"
+#include "ui/sprite/RectangleSpriteComposite.h"
 
 namespace PG {
 
 class DraggableButtonResizable : public DraggableButton, public Slider<int> {
 private:
     bool resizing = false;
-    float edgeSize = 4.0f;
+    bool drawEdgeSprite = false;
+    int edgeSize = 5;
+    glm::vec2 mouseOnEdgePosition{};
 
+    std::shared_ptr<Sprite> edgeSprite{};
     std::shared_ptr<CustomMouseSprite> customMouse;
 
     bool isPositionOnEdge(glm::vec2 mousePos);
@@ -50,7 +55,15 @@ public:
 
     void setCustomMouse(const std::shared_ptr<CustomMouseSprite> &customMouse_);
 
+    void setEdgeSprite(const std::shared_ptr<Sprite> &edgeSprite_);
+
+    void setEdgeSprite(int edgeWidth = 5.0f, glm::vec4 edgeColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
+                                                     glm::vec4 fillColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+
     [[nodiscard]] std::shared_ptr<CustomMouseSprite> &getCustomMouse();
+
+    void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+                      const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex) override;
 };
 
 } // PG

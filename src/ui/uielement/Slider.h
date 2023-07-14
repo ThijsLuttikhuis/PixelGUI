@@ -13,7 +13,7 @@
 namespace PG {
 
 template<typename T>
-class Slider : virtual public UIElement, public EditableValue<T>, virtual public Callbackable {
+class Slider : virtual public UIElement, public EditableValue<T>, public Callbackable {
 public:
     static glm::vec2 horizontalOnDrag() { return {1.0f, 0.0f}; }
 
@@ -23,7 +23,7 @@ private:
     glm::vec2 slideDirection;
     glm::vec2 oldDragStartPos = glm::vec2{};
     T dragStartValue;
-    float slideSpeed = 0.05;
+    float slideSpeed = 1.0f;
 
 public:
     Slider() = default;
@@ -46,6 +46,9 @@ public:
 
     /// Set mode of the slider (e.g. horizontalOnDrag(), verticalOnDrag()).
     void setSlideDirection(glm::vec2 slideDirection_);
+
+    /// Set start position of the slider.
+    void setDragStartPos(const glm::vec2 &dragStartPos);
 
     /// Get mode of the slider.
     [[nodiscard]] glm::vec2 getSlideDirection() const;

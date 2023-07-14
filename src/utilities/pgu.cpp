@@ -127,7 +127,14 @@ pgu::anyTypeGLM pgu::str2vecGLM(const std::string &str) {
         comma = str.find(',', comma + 1);
     }
 
-    if (commas.size() == 2) {
+    if (commas.size() == 3) {
+        glm::vec4 vec;
+        vec.w = std::stof(str.substr(openBracket + 1, commas[0] - openBracket));
+        vec.x = std::stof(str.substr(commas[0] + 1, commas[1] - commas[0]));
+        vec.y = std::stof(str.substr(commas[1] + 1, commas[2] - commas[1]));
+        vec.z = std::stof(str.substr(commas[2] + 1, closeBracket - commas[2]));
+        return vec;
+    } else if (commas.size() == 2) {
         glm::vec3 vec;
         vec.x = std::stof(str.substr(openBracket + 1, commas[0] - openBracket));
         vec.y = std::stof(str.substr(commas[0] + 1, commas[1] - commas[0]));

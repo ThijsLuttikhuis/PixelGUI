@@ -94,7 +94,6 @@ void Slider<glm::vec2>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     }
 }
 
-
 template<>
 void Slider<int>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     if (oldDragStartPos != dragStartPos) {
@@ -108,6 +107,8 @@ void Slider<int>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     dragDeltaPos *= this->slideDirection;
     int dValue = static_cast<int>((dragDeltaPos.x + dragDeltaPos.y) * this->slideSpeed);
     setValue(static_cast<int>(this->dragStartValue + dValue));
+
+    std::cout << this->getValue() << " " << dValue << " " << this->dragStartValue << std::endl;
 
     try {
         callbackFunc(getSharedFromThis());
@@ -135,6 +136,16 @@ void Slider<int>::setSlideDirection(glm::vec2 slideDirection_) {
 template<>
 glm::vec2 Slider<int>::getSlideDirection() const {
     return slideDirection;
+}
+
+template<typename T>
+void Slider<T>::setDragStartPos(const glm::vec2 &dragStartPos) {
+    oldDragStartPos = dragStartPos;
+}
+
+template<>
+void Slider<int>::setDragStartPos(const glm::vec2 &dragStartPos) {
+    oldDragStartPos = dragStartPos;
 }
 
 } // PG

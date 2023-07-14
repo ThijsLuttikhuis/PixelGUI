@@ -16,11 +16,11 @@ void MultiSprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
 
 std::shared_ptr<SpriteComposite> MultiSprite::getSpriteCompositeFromString(const std::string &prefabString) {
 
-        if (prefabString.starts_with("rectangle")) {
-            return std::make_shared<RectangleSpriteComposite>(prefabString);
-        } else {
-            throw messageException("SpriteComposite::SpriteComposite: prefab type not found: " + prefabString);
-        }
+    if (prefabString.starts_with("rectangle")) {
+        return std::make_shared<RectangleSpriteComposite>(prefabString);
+    } else {
+        throw messageException("SpriteComposite::SpriteComposite: prefab type not found: " + prefabString);
     }
+}
 
 } // PG

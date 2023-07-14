@@ -24,6 +24,8 @@ private:
 public:
     SpriteComposite() = default;
 
+    virtual ~SpriteComposite() = default;
+
     void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer, const std::unique_ptr<TextRenderer> &textRenderer,
               const std::shared_ptr<Sprite> &referenceSprite, const glm::vec2 &position, const glm::vec2 &size, float baseZIndex);
 

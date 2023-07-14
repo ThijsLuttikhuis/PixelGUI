@@ -33,6 +33,8 @@ public:
     static void deleteOnReleaseIfLeftPanel(const std::shared_ptr<UIElement> &uiElement);
 
     static void setIntTextInput(const std::shared_ptr<UIElement> &uiElement);
+
+    static void sliderUpdateUIElementSize(const std::shared_ptr<UIElement> &uiElement);
 };
 
 }

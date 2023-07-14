@@ -156,25 +156,6 @@ void UIEditor::run() {
     }
 }
 
-void UIEditor::makeDraggableButtonResizableCopyOnClick(const std::shared_ptr<UIElement> &uiElement) {
-    auto button = std::dynamic_pointer_cast<ButtonOnPress>(uiElement);
-
-    auto draggableButtonCopy = std::make_shared<DraggableButtonResizable>(
-          button->getName(), button->getPosition(),
-          button->getSize(), button->getSprite());
-
-    draggableButtonCopy->setCallbackFunction(deleteOnReleaseIfLeftPanel);
-
-    auto customMouse = std::make_shared<CustomMouseSprite>("mouseresizehover");
-    draggableButtonCopy->setCustomMouse(customMouse);
-    auto parent = uiElement->getParent();
-    draggableButtonCopy->setParent(parent);
-
-    parent->addUIElement(static_cast<std::shared_ptr<Button>>(draggableButtonCopy));
-    parent->setDraggingChild(static_cast<std::shared_ptr<Button>>(draggableButtonCopy));
-
-    draggableButtonCopy->onClick(glm::vec2(draggableButtonCopy->Button::getPosition()));
-}
 
 void UIEditor::sayHi(const std::shared_ptr<UIElement> &uiElement) {
     DebugPrinter::print(DebugPrinter::ALL, "Hi! I'm ", uiElement->getName());
@@ -207,6 +188,39 @@ void UIEditor::setIntTextInput(const std::shared_ptr<UIElement> &uiElement) {
     }
 
     textInput->setInput(newStr);
+}
+
+void UIEditor::makeDraggableButtonResizableCopyOnClick(const std::shared_ptr<UIElement> &uiElement) {
+    auto button = std::dynamic_pointer_cast<ButtonOnPress>(uiElement);
+
+    auto draggableButtonCopy = std::make_shared<DraggableButtonResizable>(
+          button->getName(), button->getPosition(),
+          button->getSize(), button->getSprite());
+
+
+    auto customMouse = std::make_shared<CustomMouseSprite>("mouseresizehover");
+
+    draggableButtonCopy->setCustomMouse(customMouse);
+    draggableButtonCopy->setEdgeSprite(5, {1, 0, 0, 0.5}, {1, 1, 1, 0});
+    draggableButtonCopy->setMinValue(1);
+    draggableButtonCopy->setMaxValue(INT_MAX);
+    draggableButtonCopy->Slider<int>::setCallbackFunction(sliderUpdateUIElementSize);
+    draggableButtonCopy->Button::setCallbackFunction(deleteOnReleaseIfLeftPanel);
+
+    auto parent = uiElement->getParent();
+    draggableButtonCopy->setParent(parent);
+    parent->addUIElement(static_cast<std::shared_ptr<Button>>(draggableButtonCopy));
+    parent->setDraggingChild(static_cast<std::shared_ptr<Button>>(draggableButtonCopy));
+
+    draggableButtonCopy->onClick(glm::vec2(draggableButtonCopy->Button::getPosition()));
+}
+
+void UIEditor::sliderUpdateUIElementSize(const std::shared_ptr<UIElement> &uiElement) {
+    auto slider = std::dynamic_pointer_cast<DraggableButtonResizable>(uiElement);
+    auto value = slider->getValue();
+    auto size = slider->getSize();
+    slider->setSize(value, static_cast<int>(size.y));
+    slider->setEdgeSprite(5, {1, 0, 0, 0.5}, {1, 1, 1, 0});
 }
 
 } // PG

@@ -15,7 +15,7 @@ namespace PG {
 
 class pgu {
 public:
-    typedef std::variant<char, int, double, glm::vec2, glm::vec3> anyTypeGLM;
+    typedef std::variant<char, int, double, glm::vec2, glm::vec3, glm::vec4> anyTypeGLM;
 
     /**
      *
