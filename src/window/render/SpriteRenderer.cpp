@@ -4,17 +4,13 @@
 
 #define GLM_SWIZZLE
 
-#include <iostream>
 #include <filesystem>
 #include <string>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform2.hpp>
-#include <map>
-#include <utility>
 
 #include "SpriteRenderer.h"
 #include "ui/sprite/Sprite.h"
-#include "ui/uielement/UIElement.h"
+#include "ui/uielement/Scene.h"
 #include "utilities/DebugPrinter.h"
 
 namespace PG {
@@ -69,7 +65,7 @@ void SpriteRenderer::addTexture(const std::string &fileDir, const std::string &n
 void SpriteRenderer::addAllTexturesInDir(const std::string &dirFolder) {
 
     auto dirIt = std::filesystem::directory_iterator(dirFolder);
-    for (const auto &entry : dirIt) {
+    for (const auto &entry: dirIt) {
 
         DebugPrinter::print(DebugPrinter::ALL, "Object does not fit in scene space!");
 
@@ -84,16 +80,16 @@ bool SpriteRenderer::hasTexture(const std::string &textureName) {
     return textures.find(textureName) != textures.end();
 }
 
-void SpriteRenderer::setBaseUI(const std::shared_ptr<UIElement> &baseUI_) {
+void SpriteRenderer::setBaseUI(const std::shared_ptr<Scene> &baseUI_) {
     baseUI = baseUI_;
 }
 
-void SpriteRenderer::drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position,
-                                const glm::vec2 &size, float baseZIndex) const {
+void SpriteRenderer::drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position, const glm::vec2 &size,
+                                float baseZIndex) const {
 
     // move position from screen space to scene space
-    glm::vec2 basePos = baseUI ? baseUI->getPosition() : glm::vec2(0, 0);
-    glm::vec2 baseSize = baseUI ? baseUI->getSize() :  glm::vec2(0, 0);
+    glm::vec2 basePos = baseUI ? baseUI->getGlobalPosition() : glm::vec2(0, 0);
+    glm::vec2 baseSize = baseUI ? baseUI->getSize() : glm::vec2(0, 0);
     glm::vec2 screenPos = position + basePos;
 
     // check if object fits in scene space window
@@ -112,7 +108,10 @@ void SpriteRenderer::drawSprite(const std::shared_ptr<Sprite> &sprite, const glm
     shader->setMatrix4("model", model);
     shader->setVector3f("spriteColor", sprite->getColor() * sprite->getBlendColor());
     shader->setFloat("spriteAlpha", sprite->getAlpha());
-    shader->setFloat("zIndex", baseZIndex + sprite->getZIndex() * (1.0f - baseZIndex));
+    shader->setFloat("zIndex", 1.0f - 0.5f * (baseZIndex + baseZIndex * sprite->getZIndex()));
+
+    std::cout << sprite->getTextureName() << sprite->getZIndex() << baseZIndex << "\n";
+    std::cout << 0.5f * (baseZIndex + baseZIndex * sprite->getZIndex()) << "\n" << std::endl;
 
     // set texture
     glActiveTexture(GL_TEXTURE0);

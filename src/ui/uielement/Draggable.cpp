@@ -10,7 +10,7 @@ namespace PG {
 void Draggable::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     (void) dragStartPos;
 
-    position = mousePos - size * 0.5f;
+    setPosition(mousePos - getSize() * 0.5f);
 }
 
 }

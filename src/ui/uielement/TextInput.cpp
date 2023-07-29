@@ -47,12 +47,12 @@ void TextInput::onKeyboardKey(int key, int action, int scanCode,
 void TextInput::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                      const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex) {
 
-    if (!visible || !sprite) {
+    if (isHidden() || !hasSprite()) {
         return;
     }
 
-    sprite->draw(spriteRenderer, textRenderer, position, size, baseZIndex);
-    textRenderer->drawText("^" + input->string() + "^", 0.0f, position, size, glm::vec3(0.0f));
+    getSprite()->draw(spriteRenderer, textRenderer, getPosition(), getSize(), baseZIndex);
+    textRenderer->drawText("^" + input->string() + "^", 0.0f, getPosition(), getSize(), glm::vec3(0.0f));
 }
 
 void TextInput::setInput(std::string &str) {

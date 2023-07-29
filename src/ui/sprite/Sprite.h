@@ -31,12 +31,14 @@ protected:
 
 public:
     explicit Sprite(std::string textureName, glm::vec3 color = glm::vec3(1.0f), float alpha = 1.0f)
-          : textureName(std::move(textureName)), color(color), alpha(alpha) { }
+          : textureName(std::move(textureName)), color(color), alpha(alpha) {}
 
     virtual ~Sprite() = default;
 
-    virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer, const std::unique_ptr<TextRenderer> &textRenderer,
-                      const glm::vec2 &position, const glm::vec2 &size, float baseZIndex);
+    virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+                      const std::unique_ptr<TextRenderer> &textRenderer,
+                      const glm::vec2 &position, const glm::vec2 &size,
+                      float baseZIndex);
 
     void setColor(const glm::vec3 &color_);
 

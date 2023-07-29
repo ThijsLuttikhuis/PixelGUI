@@ -25,23 +25,22 @@ private:
     bool resizing = false;
     bool drawEdgeSprite = false;
     int edgeSize = 5;
-    glm::vec2 mouseOnEdgePosition{};
 
     std::shared_ptr<Sprite> edgeSprite{};
     std::shared_ptr<CustomMouseSprite> customMouse;
 
     bool isPositionOnEdge(glm::vec2 mousePos);
 
+    static void sliderUpdateUIElementSize(const std::shared_ptr<UIElement> &uiElement);
+
 public:
     DraggableButtonResizable() = default;
 
     DraggableButtonResizable(std::string name, const glm::vec2 &pos, const glm::vec2 &size,
-                             int keyboardKey = GLFW_KEY_UNKNOWN)
-          : UIElement(std::move(name), pos, size, keyboardKey) {}
+                             int keyboardKey = GLFW_KEY_UNKNOWN);
 
     DraggableButtonResizable(std::string name, const glm::vec2 &pos, const glm::vec2 &size,
-                             std::shared_ptr<Sprite> sprite, int keyboardKey = GLFW_KEY_UNKNOWN)
-          : UIElement(std::move(name), pos, size, std::move(sprite), keyboardKey) {}
+                             std::shared_ptr<Sprite> sprite, int keyboardKey = GLFW_KEY_UNKNOWN);
 
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
 
@@ -50,6 +49,9 @@ public:
     void onRelease(glm::vec2 mousePos) override;
 
     void onHover(glm::vec2 mousePos) override;
+
+    void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+              const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex) override;
 
     void setParent(std::weak_ptr<Scene> parent_) override;
 
@@ -62,8 +64,6 @@ public:
 
     [[nodiscard]] std::shared_ptr<CustomMouseSprite> &getCustomMouse();
 
-    void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
-                      const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex) override;
 };
 
 } // PG

@@ -108,7 +108,7 @@ set(INCLUDE_SOURCE_FILES
 add_executable(PixelGUI
         main.cpp
         ${INCLUDE_SOURCE_FILES}
-        src/ui/sprite/RectangleSpriteComposite.cpp src/ui/sprite/RectangleSpriteComposite.h src/ui/sprite/CustomMouseSprite.cpp src/ui/sprite/CustomMouseSprite.h src/ui/uielement/PositionAnchor.cpp src/ui/uielement/PositionAnchor.h src/ui/uielement/HelperSprite.cpp src/ui/uielement/HelperSprite.h)
+        src/ui/sprite/RectangleSpriteComposite.cpp src/ui/sprite/RectangleSpriteComposite.h src/ui/sprite/CustomMouseSprite.cpp src/ui/sprite/CustomMouseSprite.h src/ui/uielement/HelperSprite.cpp src/ui/uielement/HelperSprite.h)
 
 target_link_libraries(PixelGUI ${LIBS})
 

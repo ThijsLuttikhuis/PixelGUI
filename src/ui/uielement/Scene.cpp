@@ -8,15 +8,11 @@
 
 namespace PG {
 
-std::shared_ptr<UIElement> UIElement::getSharedFromThis() {
-    return shared_from_this();
-}
-
 void Scene::onClick(glm::vec2 mousePos) {
-    glm::vec2 relativeToScene = mousePos - position;
+    glm::vec2 relativeToScene = mousePos - getPosition();
 
     if (boundObjectsInBox) {
-        relativeToScene = glm::clamp(relativeToScene, glm::vec2(0), size - 1.0f);
+        relativeToScene = glm::clamp(relativeToScene, glm::vec2(0), getSize() - 1.0f);
     }
 
     draggingChildPtr = std::weak_ptr<UIElement>();
@@ -33,10 +29,10 @@ void Scene::onClick(glm::vec2 mousePos) {
 }
 
 void Scene::onRelease(glm::vec2 mousePos) {
-    glm::vec2 relativeToScene = mousePos - position;
+    glm::vec2 relativeToScene = mousePos - getPosition();
 
     if (boundObjectsInBox) {
-        relativeToScene = glm::clamp(relativeToScene, glm::vec2(0), size - 1.0f);
+        relativeToScene = glm::clamp(relativeToScene, glm::vec2(0), getSize() - 1.0f);
     }
 
     draggingChildPtr = std::weak_ptr<UIElement>();
@@ -53,10 +49,10 @@ void Scene::onRelease(glm::vec2 mousePos) {
 }
 
 void Scene::onHover(glm::vec2 mousePos) {
-    glm::vec2 relativeToScene = mousePos - position;
+    glm::vec2 relativeToScene = mousePos - getPosition();
 
     if (boundObjectsInBox) {
-        relativeToScene = glm::clamp(relativeToScene, glm::vec2(0), size - 1.0f);
+        relativeToScene = glm::clamp(relativeToScene, glm::vec2(0), getSize() - 1.0f);
     }
 
     for (auto &uiElement: children) {
@@ -86,8 +82,8 @@ void Scene::onKeyboardKey(int key, int action, int scanCode, const std::unique_p
 }
 
 void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
-    glm::vec2 relativeToScenePos = mousePos - position;
-    glm::vec2 relativeToSceneDragStartPos = dragStartPos - position;
+    glm::vec2 relativeToScenePos = mousePos - getPosition();
+    glm::vec2 relativeToSceneDragStartPos = dragStartPos - getPosition();
 
     // check if dragging on a child object, and update if so
     if (draggingChildPtr.expired()) {
@@ -98,7 +94,7 @@ void Scene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     }
 
     if (boundObjectsInBox) {
-        relativeToScenePos = glm::clamp(relativeToScenePos, glm::vec2(0), size - 1.0f);
+        relativeToScenePos = glm::clamp(relativeToScenePos, glm::vec2(0), getSize() - 1.0f);
     }
 
     auto draggingChild = std::shared_ptr<UIElement>(draggingChildPtr);
@@ -214,18 +210,18 @@ void Scene::removeUIElement(const std::shared_ptr<UIElement> &uiElement) {
 void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                  const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex) {
 
-    if (!visible) {
+    if (!isVisible()) {
         return;
     }
-    if (sprite) {
-        sprite->draw(spriteRenderer, textRenderer, position, size, baseZIndex);
+    if (hasSprite()) {
+        getSprite()->draw(spriteRenderer, textRenderer, getPosition(), getSize(), baseZIndex);
     }
 
     for (auto &uiElement: children) {
-        spriteRenderer->setBaseUI(getSharedFromThis());
-        textRenderer->setBaseUI(getSharedFromThis());
+        spriteRenderer->setBaseUI(std::dynamic_pointer_cast<Scene>(getSharedFromThis()));
+        textRenderer->setBaseUI(std::dynamic_pointer_cast<Scene>(getSharedFromThis()));
 
-        uiElement->draw(spriteRenderer, textRenderer, 1.0f - (baseZIndex / 2.0f));
+        uiElement->draw(spriteRenderer, textRenderer, 0.5f + 0.5f * baseZIndex);
     }
 }
 
@@ -310,6 +306,54 @@ std::shared_ptr<UIElement> Scene::getTextInputChild() {
         return {};
     }
     return std::shared_ptr<UIElement>(textInputChildPtr);
+}
+
+void Scene::setPosition(glm::vec2 position_) {
+    UIElement::setPosition(position_);
+}
+
+void Scene::setPosition(int left, int up) {
+    UIElement::setPosition(left, up);
+}
+
+void Scene::setPosition(glm::vec2 position_, pgu::positionAnchor anchor) {
+    UIElement::setPosition(position_, anchor);
+
+    if (hasParent()) {
+        globalPosition = position_ + getParent()->getGlobalPosition();
+    }
+    else {
+        globalPosition = position_;
+    }
+}
+
+void Scene::setPosition(int left, int up, pgu::positionAnchor anchor) {
+    UIElement::setPosition(left, up, anchor);
+}
+
+glm::vec2 Scene::getGlobalPosition() const {
+    return globalPosition;
+}
+
+void Scene::setGlobalPosition(glm::vec2 globalPosition_) {
+    globalPosition = globalPosition_;
+
+    if (hasParent()) {
+        setPosition(globalPosition_ - getParent()->getGlobalPosition());
+    }
+    else {
+        setPosition(globalPosition_);
+    }
+}
+
+void Scene::setGlobalPosition(int left, int up) {
+    setGlobalPosition(glm::vec2(left, up));
+}
+
+void Scene::setParent(std::weak_ptr<Scene> parent_) {
+    UIElement::setParent(parent_);
+
+    globalPosition = getPosition() + getParent()->getGlobalPosition();
 }
 
 }

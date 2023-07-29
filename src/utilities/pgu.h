@@ -8,13 +8,23 @@
 #include <variant>
 #include <list>
 #include <iostream>
+#include <memory>
+
 #include "glm/glm.hpp"
 #include "messageException.h"
 
 namespace PG {
 
+class Scene;
+
 class pgu {
 public:
+    enum class positionAnchor : int {
+        TopLeft, Top, TopRight,
+        Left, Middle, Right,
+        BottomLeft, Bottom, BottomRight
+    };
+
     typedef std::variant<char, int, double, glm::vec2, glm::vec3, glm::vec4> anyTypeGLM;
 
     /**
@@ -36,6 +46,9 @@ public:
 
     /// convert integer keyboard key to string
     static std::string keyboardKey2string(int key, int scanCode);
+
+    static glm::vec2 convertPosition(const glm::vec2 &position, pgu::positionAnchor anchor,
+                                     const std::shared_ptr<Scene> &parent);
 };
 
 } // PG

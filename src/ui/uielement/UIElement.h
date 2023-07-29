@@ -15,7 +15,6 @@
 #include "utilities/DebugPrinter.h"
 #include "utilities/pgu.h"
 #include "GLFW/glfw3.h"
-#include "PositionAnchor.h"
 
 namespace PG {
 
@@ -26,34 +25,6 @@ class RootScene;
 class Scene;
 
 class UIElement : public std::enable_shared_from_this<UIElement> {
-
-private:
-    static int uniqueIDCounter;
-    int uniqueID;
-
-    std::string name{};
-    std::weak_ptr<Scene> parentPtr;
-    int keyboardKey = GLFW_KEY_UNKNOWN;
-
-protected:
-    std::shared_ptr<Sprite> sprite{};
-    std::shared_ptr<PositionAnchor> positionAnchor = std::make_shared<AnchorTopLeft>();
-
-    glm::vec2 position{};
-    glm::vec2 size{};
-
-    bool enabled = true;
-    bool visible = true;
-
-    /// Get if position is within the bounding box of this UIElement.
-    [[nodiscard]] bool isPositionInBox(double x, double y, float insideEdge = 0) const;
-
-    /// Get if position is within the bounding box of {pos, size}.
-    [[nodiscard]] bool isPositionInBox(double x, double y, glm::vec2 pos, glm::vec2 size, float insideEdge = 0);
-
-    /// Get if position is within the bounding box of {pos, size}.
-    [[nodiscard]] static bool isPositionInBox(const std::shared_ptr<PositionAnchor>& positionAnchor, double x, double y, glm::vec2 pos, glm::vec2 size, float insideEdge = 0);
-
 public:
     UIElement() {
         uniqueID = uniqueIDCounter++;
@@ -76,12 +47,31 @@ public:
 
     virtual ~UIElement() = default;
 
-    [[nodiscard]] std::shared_ptr<UIElement> getSharedFromThis();
+private:
+    static int uniqueIDCounter;
+    int uniqueID;
 
-    /// Check if two UIElements are the same based on their unique identifier.
-    bool operator ==(const UIElement &other) const {
-        return uniqueID == other.uniqueID;
-    }
+    std::string name{};
+    std::weak_ptr<Scene> parentPtr;
+    int keyboardKey = GLFW_KEY_UNKNOWN;
+
+    std::shared_ptr<Sprite> sprite{};
+
+    glm::vec2 position{};
+    glm::vec2 size{};
+
+    bool enabled = true;
+    bool visible = true;
+protected:
+
+    /// Get if position is within the bounding box of this UIElement.
+    [[nodiscard]] bool isPositionInBox(double x, double y, float insideEdge = 0.0f) const;
+
+    /// Get if position is within the bounding box of {pos, size}.
+    [[nodiscard]] static bool isPositionInBox(double x, double y, glm::vec2 pos, glm::vec2 size, float insideEdge = 0.0f);
+
+public:
+    [[nodiscard]] std::shared_ptr<UIElement> getSharedFromThis();
 
     /// Called when hovering on the UIElement.
     virtual void onHover(glm::vec2 mousePos);
@@ -96,7 +86,8 @@ public:
     virtual void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos);
 
     /// Called when a keyboard key is pressed.
-    virtual void onKeyboardKey(int key, int action, int scanCode, const std::unique_ptr<std::vector<bool>> &keysPressed);
+    virtual void onKeyboardKey(int key, int action, int scanCode,
+                               const std::unique_ptr<std::vector<bool>> &keysPressed);
 
     /// Draw the UIElement according to the sprite it contains.
     virtual void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
@@ -108,23 +99,23 @@ public:
     /// Set parent of UIElement, which must be a Scene.
     virtual void setParent(std::weak_ptr<Scene> parent_);
 
-    /// Set position of UIElement.
-    void setPosition(glm::vec2 position_);
+    /// Set position of UIElement, relative to parent position
+    virtual void setPosition(glm::vec2 position_, pgu::positionAnchor anchor);
+
+    /// Set position of UIElement, relative to parent position
+    virtual void setPosition(int left, int up, pgu::positionAnchor anchor);
 
     /// Set position of UIElement.
-    void setPosition(int left, int up);
+    virtual void setPosition(glm::vec2 position_);
+
+    /// Set position of UIElement.
+    virtual void setPosition(int left, int up);
 
     /// Set size of UIElement.
     void setSize(glm::vec2 size_);
 
     /// Set size of UIElement.
     void setSize(int width, int height);
-
-    /// Set color of UIElement.
-    void setColor(const glm::vec3 &color_);
-
-    /// Set alpha channel of color of UIElement.
-    void setAlpha(float alpha_);
 
     /// Set visibility of UIElement.
     void setVisibility(bool visible_);
@@ -169,16 +160,19 @@ public:
     [[nodiscard]] virtual bool isMouseHovering(const glm::vec2 &pos) const;
 
     /// Get position of UIElement.
-    [[nodiscard]] const glm::vec2 &getPosition() const;
+    [[nodiscard]] virtual glm::vec2 getPosition() const;
 
     /// Get size of UIElement.
-    [[nodiscard]] const glm::vec2 &getSize() const;
+    [[nodiscard]] glm::vec2 getSize() const;
 
     /// Get name of UIElement.
     [[nodiscard]] const std::string &getName() const;
 
     /// Get keyboard key
     [[nodiscard]] int getKeyboardKey() const;
+
+    /// Check if UIElement has Sprite.
+    [[nodiscard]] bool hasSprite() const;
 
     /// Get sprite of UIElement.
     [[nodiscard]] const std::shared_ptr<Sprite> &getSprite() const;
@@ -198,6 +192,10 @@ public:
     /// Get if visible is false.
     [[nodiscard]] bool isHidden() const;
 
+    /// Check if two UIElements are the same based on their unique identifier.
+    bool operator ==(const UIElement &other) const {
+        return uniqueID == other.uniqueID;
+    }
 };
 
 } // PG

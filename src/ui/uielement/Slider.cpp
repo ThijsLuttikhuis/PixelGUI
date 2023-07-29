@@ -71,7 +71,6 @@ void Slider<T>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     }
 }
 
-
 template<>
 void Slider<glm::vec2>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
     if (oldDragStartPos != dragStartPos) {

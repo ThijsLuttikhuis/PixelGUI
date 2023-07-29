@@ -17,20 +17,22 @@ namespace PG {
 
 class Sprite;
 
-class UIElement;
+class Scene;
 
 class SpriteRenderer {
-private:
-    std::shared_ptr<Shader> shader;
-    unsigned int quadVAO{};
-
-    std::shared_ptr<UIElement> baseUI;
-    std::map<std::string, std::shared_ptr<Texture2D>> textures;
-
 public:
     SpriteRenderer(const std::shared_ptr<Shader> &shader, glm::mat4 projection);
 
     ~SpriteRenderer();
+private:
+    std::shared_ptr<Shader> shader;
+    unsigned int quadVAO{};
+
+    std::shared_ptr<Scene> baseUI;
+    std::map<std::string, std::shared_ptr<Texture2D>> textures;
+
+public:
+
 
     void addTexture(const std::string &name);
 
@@ -40,10 +42,10 @@ public:
 
     bool hasTexture(const std::string &textureName);
 
-    void setBaseUI(const std::shared_ptr<UIElement> &baseUI_);
+    void setBaseUI(const std::shared_ptr<Scene> &baseUI_);
 
-    void drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position,
-                    const glm::vec2 &size, float baseZIndex) const;
+    void drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position, const glm::vec2 &size,
+                    float baseZIndex) const;
 };
 
 }

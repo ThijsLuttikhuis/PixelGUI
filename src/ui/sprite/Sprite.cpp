@@ -3,6 +3,7 @@
 //
 
 #include <memory>
+#include <iostream>
 #include "Sprite.h"
 #include "window/render/Texture2D.h"
 
@@ -32,11 +33,11 @@ const std::string &Sprite::getTextureName() const {
     return textureName;
 }
 
-void Sprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer, const std::unique_ptr<TextRenderer> &textRenderer,
-                  const glm::vec2 &position, const glm::vec2 &size, float baseZIndex) {
+void Sprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+                 const std::unique_ptr<TextRenderer> &textRenderer,
+             const glm::vec2 &position, const glm::vec2 &size, float baseZIndex) {
 
     (void) textRenderer;
-
     spriteRenderer->drawSprite(getSharedFromThis(), position, size, baseZIndex);
 }
 
@@ -60,4 +61,6 @@ void Sprite::setZIndex(float zIndex_) {
     zIndex = zIndex_;
 }
 
-}
+
+
+} // PG

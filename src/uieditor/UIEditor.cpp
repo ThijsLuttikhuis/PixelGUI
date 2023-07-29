@@ -44,7 +44,13 @@ void UIEditor::initialize() {
     leftPanel->setBoundObjectsInBox(true);
     leftPanel->setChangeOwnerMode(Scene::changeOwnerMode::alwaysAllowOwnerChange);
 
-    window->addUIElement(leftPanel);
+    name = "rightTwoPanelsWrapper";
+    pos = glm::vec2(200, 0);
+    size = glm::vec2(760, 540);
+
+    auto rightTwoPanelsWrapper = std::make_shared<Scene>(name, pos, size);
+    rightTwoPanelsWrapper->setBoundObjectsInBox(true);
+    rightTwoPanelsWrapper->setChangeOwnerMode(Scene::changeOwnerMode::alwaysAllowOwnerChange);
 
     name = "MiddlePanel";
     pos = glm::vec2(200, 0);
@@ -58,8 +64,6 @@ void UIEditor::initialize() {
     middlePanel->setBoundObjectsInBox(true);
     middlePanel->setChangeOwnerMode(Scene::changeOwnerMode::alwaysAllowOwnerChange);
 
-    window->addUIElement(middlePanel);
-
     name = "RightPanel";
     pos = glm::vec2(760, 0);
     size = glm::vec2(200, 540);
@@ -71,8 +75,6 @@ void UIEditor::initialize() {
     auto rightPanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
     rightPanel->setChangeOwnerMode(Scene::changeOwnerMode::noOwnerChange);
     rightPanel->setBoundObjectsInBox(false);
-
-    window->addUIElement(rightPanel);
 
     // left panel has a button that can be copied
 
@@ -141,7 +143,19 @@ void UIEditor::initialize() {
                                                   50, 0, 100, 50, 0.05, key, Slider<int>::horizontalOnDrag());
     sliderR2->setCallbackFunction(sliderChangeColor);
 
+
+    /// add all UI elements to the window
+    window->addUIElement(leftPanel);
+//    window->addUIElement(rightTwoPanelsWrapper);
+
+    window->addUIElement(middlePanel);
+    window->addUIElement(rightPanel);
+
     leftPanel->addUIElement(buttonFactory);
+//    rightTwoPanelsWrapper->addUIElement(middlePanel);
+//    rightTwoPanelsWrapper->addUIElement(rightPanel);
+
+
     middlePanel->addUIElement(buttonM);
     rightPanel->addUIElement(sliderR);
     rightPanel->addUIElement(sliderR2);
@@ -197,14 +211,6 @@ void UIEditor::makeDraggableButtonResizableCopyOnClick(const std::shared_ptr<UIE
           button->getName(), button->getPosition(),
           button->getSize(), button->getSprite());
 
-
-    auto customMouse = std::make_shared<CustomMouseSprite>("mouseresizehover");
-
-    draggableButtonCopy->setCustomMouse(customMouse);
-    draggableButtonCopy->setEdgeSprite(5, {1, 0, 0, 0.5}, {1, 1, 1, 0});
-    draggableButtonCopy->setMinValue(1);
-    draggableButtonCopy->setMaxValue(INT_MAX);
-    draggableButtonCopy->Slider<int>::setCallbackFunction(sliderUpdateUIElementSize);
     draggableButtonCopy->Button::setCallbackFunction(deleteOnReleaseIfLeftPanel);
 
     auto parent = uiElement->getParent();
@@ -213,14 +219,6 @@ void UIEditor::makeDraggableButtonResizableCopyOnClick(const std::shared_ptr<UIE
     parent->setDraggingChild(static_cast<std::shared_ptr<Button>>(draggableButtonCopy));
 
     draggableButtonCopy->onClick(glm::vec2(draggableButtonCopy->Button::getPosition()));
-}
-
-void UIEditor::sliderUpdateUIElementSize(const std::shared_ptr<UIElement> &uiElement) {
-    auto slider = std::dynamic_pointer_cast<DraggableButtonResizable>(uiElement);
-    auto value = slider->getValue();
-    auto size = slider->getSize();
-    slider->setSize(value, static_cast<int>(size.y));
-    slider->setEdgeSprite(5, {1, 0, 0, 0.5}, {1, 1, 1, 0});
 }
 
 } // PG

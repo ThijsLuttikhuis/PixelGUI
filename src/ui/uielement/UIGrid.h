@@ -21,7 +21,7 @@ public:
     UIGrid(std::string name, const glm::vec2 &position, const glm::vec2 &size, int nHorizontal, int nVertical)
           : Scene(std::move(name), position, size), nHorizontal(nHorizontal), nVertical(nVertical) {
 
-        children = std::vector<std::shared_ptr<UIElement>>(nHorizontal * nVertical);
+//        children = std::vector<std::shared_ptr<UIElement>>(nHorizontal * nVertical);
     }
 
     UIGrid(std::string name, const glm::vec2 &position, const glm::vec2 &size,
@@ -29,7 +29,7 @@ public:
           : Scene(std::move(name), position, size, std::move(sprite)),
             nHorizontal(nHorizontal), nVertical(nVertical) {
 
-        children = std::vector<std::shared_ptr<UIElement>>(nHorizontal * nVertical);
+//        children = std::vector<std::shared_ptr<UIElement>>(nHorizontal * nVertical);
     }
 
     void addUIElement(const std::shared_ptr<UIElement> &uiElement) override;

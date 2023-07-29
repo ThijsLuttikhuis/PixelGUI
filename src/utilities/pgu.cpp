@@ -7,10 +7,8 @@
 #include <map>
 #include <vector>
 
-#include "GLFW/glfw3.h"
-
 #include "pgu.h"
-
+#include "ui/uielement/Scene.h"
 
 namespace PG {
 
@@ -185,6 +183,47 @@ std::map<std::string, pgu::anyTypeGLM> pgu::infoString2Map(const std::string &in
     }
 
     return strMap;
+}
+
+glm::vec2 pgu::convertPosition(const glm::vec2 &position, pgu::positionAnchor anchor,
+                               const std::shared_ptr<Scene> &parent) {
+
+    float xFactor = 0.0f;
+    float yFactor = 0.0f;
+    switch (anchor) {
+        case positionAnchor::TopLeft:
+            break;
+        case positionAnchor::Top:
+            xFactor = 0.5f;
+            break;
+        case positionAnchor::TopRight:
+            xFactor = 1.0f;
+            break;
+        case positionAnchor::Left:
+            yFactor = 0.5f;
+            break;
+        case positionAnchor::Middle:
+            xFactor = 0.5f;
+            yFactor = 0.5f;
+            break;
+        case positionAnchor::Right:
+            xFactor = 1.0f;
+            yFactor = 0.5f;
+            break;
+        case positionAnchor::BottomLeft:
+            yFactor = 1.0f;
+            break;
+        case positionAnchor::Bottom:
+            xFactor = 0.5f;
+            yFactor = 1.0f;
+            break;
+        case positionAnchor::BottomRight:
+            xFactor = 1.0f;
+            yFactor = 1.0f;
+            break;
+    }
+
+    return {position.x + parent->getSize().x * xFactor, position.y + parent->getSize().y * yFactor};
 }
 
 }

@@ -9,21 +9,27 @@ namespace PG {
 
 void UIGrid::addUIElement(const std::shared_ptr<UIElement> &uiElement) {
     (void) uiElement;
-    DebugPrinter::print(DebugPrinter::ESSENTIAL_ONLY,
-                        "UIGrid::addUIElement: please use setUIElement instead");
+
+//    (void) uiElement;
+//    DebugPrinter::print(DebugPrinter::ESSENTIAL_ONLY,
+//                        "UIGrid::addUIElement: please use setUIElement instead");
 }
 
 void UIGrid::setUIElement(const std::shared_ptr<UIElement> &uiElement, int x, int y) {
-    if (x < 0 || x >= nHorizontal || y < 0 || y >= nVertical) {
-        DebugPrinter::print(DebugPrinter::ESSENTIAL_ONLY,
-                            "UIGrid::setUIElement: trying to set element outside of the Grid");
-    }
-    int childIndex = getChildIndex(uiElement);
-    if (childIndex >= 0) {
-        removeUIElement(childIndex);
-    }
+    (void) uiElement;
+    (void) x;
+    (void) y;
 
-    children[x + y * nHorizontal] = uiElement;
+//    if (x < 0 || x >= nHorizontal || y < 0 || y >= nVertical) {
+//        DebugPrinter::print(DebugPrinter::ESSENTIAL_ONLY,
+//                            "UIGrid::setUIElement: trying to set element outside of the Grid");
+//    }
+//    int childIndex = getChildIndex(uiElement);
+//    if (childIndex >= 0) {
+//        removeUIElement(childIndex);
+//    }
+//
+//    children[x + y * nHorizontal] = uiElement;
 }
 
 }
