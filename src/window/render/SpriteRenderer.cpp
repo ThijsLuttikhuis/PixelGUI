@@ -110,9 +110,6 @@ void SpriteRenderer::drawSprite(const std::shared_ptr<Sprite> &sprite, const glm
     shader->setFloat("spriteAlpha", sprite->getAlpha());
     shader->setFloat("zIndex", 1.0f - 0.5f * (baseZIndex + baseZIndex * sprite->getZIndex()));
 
-    std::cout << sprite->getTextureName() << sprite->getZIndex() << baseZIndex << "\n";
-    std::cout << 0.5f * (baseZIndex + baseZIndex * sprite->getZIndex()) << "\n" << std::endl;
-
     // set texture
     glActiveTexture(GL_TEXTURE0);
     auto texture = textures.at(sprite->getTextureName());

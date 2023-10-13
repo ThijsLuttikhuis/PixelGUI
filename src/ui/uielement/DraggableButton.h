@@ -11,8 +11,6 @@
 namespace PG {
 
 class DraggableButton : public Draggable, public ButtonOnRelease {
-private:
-
 public:
     DraggableButton() = default;
 

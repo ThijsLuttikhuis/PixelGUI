@@ -11,6 +11,9 @@
 namespace PG {
 
 class HelperSprite : virtual public UIElement {
+public:
+    HelperSprite() = default;
+
 protected:
     std::shared_ptr<Sprite> helperSprite = std::make_shared<Sprite>("mouseselecthover");
 

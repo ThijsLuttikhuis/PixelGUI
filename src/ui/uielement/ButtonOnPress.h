@@ -10,8 +10,6 @@
 namespace PG {
 
 class ButtonOnPress : public Button {
-private:
-
 public:
     ButtonOnPress() : Button() {};
 

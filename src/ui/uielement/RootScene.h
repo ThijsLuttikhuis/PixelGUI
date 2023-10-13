@@ -12,14 +12,6 @@
 namespace PG {
 
 class RootScene : public Scene {
-private:
-    std::weak_ptr<Window> window;
-    glm::vec2 mousePosition;
-    glm::vec2 mouseSize = glm::vec2(8, 12);
-    std::shared_ptr<CustomMouseSprite> mouseSprite;
-    std::shared_ptr<CustomMouseSprite> mouseDownSprite;
-    std::weak_ptr<CustomMouseSprite> currentMouseSpritePtr = mouseSprite;
-
 public:
     RootScene(std::string name, const std::shared_ptr<Window> &window, std::shared_ptr<CustomMouseSprite> mouseSprite, std::shared_ptr<CustomMouseSprite> mouseDownSprite)
           : Scene(std::move(name), glm::vec2(0),
@@ -30,6 +22,15 @@ public:
           : Scene(std::move(name), glm::vec2(0),
                   {window->getXPixels(), window->getYPixels()}), window(window) {};
 
+private:
+    std::weak_ptr<Window> window;
+    glm::vec2 mousePosition;
+    glm::vec2 mouseSize = glm::vec2(8, 12);
+    std::shared_ptr<CustomMouseSprite> mouseSprite;
+    std::shared_ptr<CustomMouseSprite> mouseDownSprite;
+    std::weak_ptr<CustomMouseSprite> currentMouseSpritePtr = mouseSprite;
+
+public:
     void onRelease(glm::vec2 mousePos) override;
 
     void onClick(glm::vec2 relativePos) override;

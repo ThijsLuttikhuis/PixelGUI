@@ -10,8 +10,6 @@
 namespace PG {
 
 class Draggable : virtual public UIElement {
-private:
-
 public:
     Draggable() = default;
 

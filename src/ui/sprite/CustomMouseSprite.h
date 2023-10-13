@@ -15,6 +15,9 @@ namespace PG {
 class CustomMouseSprite : public Sprite {
 private:
     std::shared_ptr<RootScene> rootScene{};
+
+    glm::vec2 positionOffsetFactor{};
+
 public:
     explicit CustomMouseSprite(std::string textureName = "mouseselecthover")
           : Sprite(std::move(textureName)) {
@@ -28,9 +31,16 @@ public:
         zIndex = 1.0f;
     }
 
+    void draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
+                      const std::unique_ptr<TextRenderer> &textRenderer,
+                      const glm::vec2 &position, const glm::vec2 &size,
+                      float baseZIndex) override;
+
     void setMouse();
 
     void setRootScene(std::shared_ptr<RootScene> rootScene_);
+
+    void  setPositionOffsetFactor(glm::vec2 offsetFactor);
 };
 
 } // PG

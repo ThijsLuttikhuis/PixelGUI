@@ -56,7 +56,9 @@ void Slider<T>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
         this->dragStartValue = this->getValue();
     }
 
-    updateSlideOutOfScreen(mousePos);
+    if (allowLoopAroundOutOfScreen) {
+        updateSlideOutOfScreen(mousePos);
+    }
 
     glm::vec2 dragDeltaPos = mousePos - dragStartPos;
     dragDeltaPos *= this->slideDirection;
@@ -78,7 +80,9 @@ void Slider<glm::vec2>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
         this->dragStartValue = this->getValue();
     }
 
-    updateSlideOutOfScreen(mousePos);
+    if (allowLoopAroundOutOfScreen) {
+        updateSlideOutOfScreen(mousePos);
+    }
 
     glm::vec2 dragDeltaPos = mousePos - dragStartPos;
     dragDeltaPos *= this->slideDirection;
@@ -100,14 +104,14 @@ void Slider<int>::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
         this->dragStartValue = this->getValue();
     }
 
-    updateSlideOutOfScreen(mousePos);
+    if (allowLoopAroundOutOfScreen) {
+        updateSlideOutOfScreen(mousePos);
+    }
 
     glm::vec2 dragDeltaPos = mousePos - dragStartPos;
     dragDeltaPos *= this->slideDirection;
     int dValue = static_cast<int>((dragDeltaPos.x + dragDeltaPos.y) * this->slideSpeed);
     setValue(static_cast<int>(this->dragStartValue + dValue));
-
-    std::cout << this->getValue() << " " << dValue << " " << this->dragStartValue << std::endl;
 
     try {
         callbackFunc(getSharedFromThis());
@@ -147,4 +151,13 @@ void Slider<int>::setDragStartPos(const glm::vec2 &dragStartPos) {
     oldDragStartPos = dragStartPos;
 }
 
+template<typename T>
+void Slider<T>::setAllowLoopAroundOutOfScreen(bool allowLoopAround) {
+    allowLoopAroundOutOfScreen = allowLoopAround;
+}
+
+template<>
+void Slider<int>::setAllowLoopAroundOutOfScreen(bool allowLoopAround) {
+    allowLoopAroundOutOfScreen = allowLoopAround;
+}
 } // PG

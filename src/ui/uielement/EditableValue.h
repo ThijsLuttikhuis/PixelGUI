@@ -11,16 +11,18 @@ namespace PG {
 
 template<typename T>
 class EditableValue {
+public:
+    EditableValue() = default;
+
+    EditableValue(const T &value, const T &minValue, const T &maxValue)
+          : value(value), minValue(minValue), maxValue(maxValue) {}
+
 private:
     T value;
     T minValue;
     T maxValue; 
 
 public:
-    EditableValue() = default;
-
-    EditableValue(const T &value, const T &minValue, const T &maxValue)
-          : value(value), minValue(minValue), maxValue(maxValue) {}
 
     void setValue(const T &value_);
 

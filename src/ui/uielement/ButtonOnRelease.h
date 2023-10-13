@@ -10,9 +10,6 @@
 namespace PG {
 
 class ButtonOnRelease : public Button {
-protected:
-    bool pressed = false;
-    bool dragging = false;
 public:
     ButtonOnRelease() : Button() {};
 
@@ -24,6 +21,11 @@ public:
                     std::shared_ptr<Sprite> sprite, int keyboardKey = GLFW_KEY_UNKNOWN)
           : UIElement(std::move(name), position, size, std::move(sprite), keyboardKey) {}
 
+protected:
+    bool pressed = false;
+    bool dragging = false;
+
+public:
     void onClick(glm::vec2 relativePos) override;
 
     void onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) override;
