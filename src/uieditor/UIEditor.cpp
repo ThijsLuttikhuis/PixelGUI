@@ -11,6 +11,7 @@
 #include "ui/uielement/ButtonOnPress.h"
 #include "ui/uielement/DraggableButtonResizable.h"
 #include "ui/sprite/CustomMouseSprite.h"
+#include "ui/uielement/ExtendedScene.h"
 
 namespace PG {
 
@@ -60,7 +61,7 @@ void UIEditor::initialize() {
 
     sprite = std::make_shared<MultiSprite>(spriteComposite);
 
-    auto middlePanel = std::make_shared<Scene>(name, pos, size, std::move(sprite));
+    auto middlePanel = std::make_shared<ExtendedScene>(name, pos, size, std::move(sprite));
     middlePanel->setBoundObjectsInBox(true);
     middlePanel->setChangeOwnerMode(Scene::changeOwnerMode::alwaysAllowOwnerChange);
 
@@ -152,9 +153,6 @@ void UIEditor::initialize() {
     window->addUIElement(rightPanel);
 
     leftPanel->addUIElement(buttonFactory);
-//    rightTwoPanelsWrapper->addUIElement(middlePanel);
-//    rightTwoPanelsWrapper->addUIElement(rightPanel);
-
 
     middlePanel->addUIElement(buttonM);
     rightPanel->addUIElement(sliderR);

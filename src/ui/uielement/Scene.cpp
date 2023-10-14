@@ -225,7 +225,7 @@ void Scene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
     }
 }
 
-void Scene::setDraggingChild(const std::shared_ptr<UIElement> &uiElement) {
+void Scene::setDraggingChild(const std::weak_ptr<UIElement> &uiElement) {
     draggingChildPtr = uiElement;
 
     if (hasParent()) {
@@ -241,7 +241,7 @@ void Scene::clearDraggingChild() {
     }
 }
 
-void Scene::setTextInputChild(const std::shared_ptr<UIElement> &uiElement) {
+void Scene::setTextInputChild(const std::weak_ptr<UIElement> &uiElement) {
     textInputChildPtr = uiElement;
 
     if (hasParent()) {

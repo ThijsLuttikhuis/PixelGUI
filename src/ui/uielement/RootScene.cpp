@@ -62,7 +62,6 @@ void RootScene::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos) {
 void RootScene::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
                      const std::unique_ptr<TextRenderer> &textRenderer, float baseZIndex) {
 
-
     Scene::draw(spriteRenderer, textRenderer, baseZIndex);
 
     spriteRenderer->setBaseUI(std::dynamic_pointer_cast<Scene>(getSharedFromThis()));

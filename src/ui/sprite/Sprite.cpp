@@ -38,7 +38,7 @@ void Sprite::draw(const std::unique_ptr<SpriteRenderer> &spriteRenderer,
              const glm::vec2 &position, const glm::vec2 &size, float baseZIndex) {
 
     (void) textRenderer;
-    spriteRenderer->drawSprite(getSharedFromThis(), position, size, baseZIndex);
+    spriteRenderer->drawSprite(getSharedFromThis(), position, size, baseZIndex, rotation);
 }
 
 float Sprite::getZIndex() const {

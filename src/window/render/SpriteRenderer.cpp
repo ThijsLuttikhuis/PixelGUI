@@ -85,7 +85,7 @@ void SpriteRenderer::setBaseUI(const std::shared_ptr<Scene> &baseUI_) {
 }
 
 void SpriteRenderer::drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position, const glm::vec2 &size,
-                                float baseZIndex) const {
+                                float baseZIndex, float rotation) const {
 
     // move position from screen space to scene space
     glm::vec2 basePos = baseUI ? baseUI->getGlobalPosition() : glm::vec2(0, 0);
@@ -101,6 +101,7 @@ void SpriteRenderer::drawSprite(const std::shared_ptr<Sprite> &sprite, const glm
     }
 
     auto model = glm::translate(sprite->getModel(), glm::vec3(screenPos, 0.0f));
+    model = glm::rotate(model, glm::radians(rotation), glm::vec3(0, 0, 1.0f));
     model = glm::scale(model, glm::vec3(size, 1.0f));
 
     // apply shader variables

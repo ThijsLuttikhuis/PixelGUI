@@ -12,8 +12,8 @@ DraggableButtonResizable::DraggableButtonResizable(std::string name, const glm::
                                                    std::shared_ptr<Sprite> sprite, int keyboardKey)
       : UIElement(std::move(name), pos, size, std::move(sprite), keyboardKey) {
 
-    customMouse = std::make_shared<CustomMouseSprite>("mouseresizehover");
-    customMouse->setPositionOffsetFactor({-0.5f, -0.5f});
+    resizingMouse = std::make_shared<CustomMouseSprite>("mouseresizehover");
+    resizingMouse->setPositionOffsetFactor({-0.5f, -0.5f});
     setEdgeSprite(5, {1, 0, 0, 0.5}, {1, 1, 1, 0});
     setMinValue(1);
     setMaxValue(INT_MAX);
@@ -25,8 +25,8 @@ DraggableButtonResizable::DraggableButtonResizable(std::string name, const glm::
                                                    int keyboardKey)
       : UIElement(std::move(name), pos, size, keyboardKey) {
 
-    customMouse = std::make_shared<CustomMouseSprite>("mouseresizehover");
-    customMouse->setPositionOffsetFactor({-0.5f, -0.5f});
+    resizingMouse = std::make_shared<CustomMouseSprite>("mouseresizehover");
+//    resizingMouse->setPositionOffsetFactor({-0.5f, -0.5f});
     setEdgeSprite(5, {1, 0, 0, 0.5}, {1, 1, 1, 0});
     setMinValue(1);
     setMaxValue(INT_MAX);
@@ -46,10 +46,9 @@ void DraggableButtonResizable::onDrag(glm::vec2 mousePos, glm::vec2 dragStartPos
 }
 
 void DraggableButtonResizable::onRelease(glm::vec2 mousePos) {
-
     if (!dragging) {
         // if mouse is on the edge of the button, switch to resizing mode
-        resizing = static_cast<bool>(isPositionOnEdge(mousePos));
+        resizing |= static_cast<bool>(isPositionOnEdge(mousePos));
 
     } else {
         try {
@@ -61,7 +60,6 @@ void DraggableButtonResizable::onRelease(glm::vec2 mousePos) {
     }
     dragging = false;
     lockSlideDir = false;
-
 }
 
 void DraggableButtonResizable::onClick(glm::vec2 mousePos) {
@@ -69,23 +67,25 @@ void DraggableButtonResizable::onClick(glm::vec2 mousePos) {
     resizing &= isPositionOnEdgeBool(mousePos);
     pressed = true;
     dragging = false;
+    lockSlideDir = false;
 }
 
 void DraggableButtonResizable::onHover(glm::vec2 mousePos) {
-    if (resizing && isPositionOnEdge(mousePos)) {
-        customMouse->setMouse();
+    auto elementEdge = isPositionOnEdge(mousePos);
+
+    if (resizing && elementEdge) {
+        float rotation_ = elementEdge.toRotation();
+        resizingMouse->setMouse(rotation_);
     }
     if (resizing) {
         drawEdgeSprite = true;
     }
-    auto elementEdge = isPositionOnEdge(mousePos);
     if (elementEdge) {
-        auto slideDir = elementEdge.toSlideDirection();
+        glm::vec2 slideDir = elementEdge.toSlideDirection();
         slideDir = glm::normalize(slideDir * getSize());
-
+        slideDir = slideDir.x != 0 ? slideDir * abs(slideDir.x) : slideDir;
         if (!lockSlideDir) {
             setSlideDirection(slideDir);
-            std::cout << slideDir.x << "  set " << slideDir.y << std::endl;
         }
         setValue(static_cast<int>(slideDir.x != 0 ? getSize().x : getSize().y));
         resizingEdge = elementEdge;
@@ -123,20 +123,20 @@ DraggableButtonResizable::elementEdge DraggableButtonResizable::isPositionOnEdge
 }
 
 std::shared_ptr<CustomMouseSprite> &DraggableButtonResizable::getCustomMouse() {
-    return customMouse;
+    return resizingMouse;
 }
 
 void DraggableButtonResizable::setParent(std::weak_ptr<Scene> parent_) {
     UIElement::setParent(parent_);
-    if (customMouse) {
-        customMouse->setRootScene(getRootScene());
+    if (resizingMouse) {
+        resizingMouse->setRootScene(getRootScene());
     }
 }
 
 void DraggableButtonResizable::setCustomMouse(const std::shared_ptr<CustomMouseSprite> &customMouse_) {
-    customMouse = customMouse_;
+    resizingMouse = customMouse_;
     if (hasParent()) {
-        customMouse->setRootScene(getRootScene());
+        resizingMouse->setRootScene(getRootScene());
     }
 }
 

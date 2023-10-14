@@ -45,7 +45,7 @@ public:
     void setBaseUI(const std::shared_ptr<Scene> &baseUI_);
 
     void drawSprite(const std::shared_ptr<Sprite> &sprite, const glm::vec2 &position, const glm::vec2 &size,
-                    float baseZIndex) const;
+                    float baseZIndex, float rotation = 0) const;
 };
 
 }

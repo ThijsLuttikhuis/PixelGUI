@@ -66,8 +66,6 @@ protected:
                     return {1, 0};
                 case edge::bottom:
                     return {0, 1};
-                case edge::none:
-                    return {0, 0};
                 case edge::topLeft:
                     return {-1, -1};
                 case edge::topRight:
@@ -76,8 +74,29 @@ protected:
                     return {-1, 1};
                 case edge::bottomRight:
                     return {1, 1};
+                case edge::none:
                 default:
                     return {0, 0};
+            }
+        }
+
+        [[nodiscard]] float toRotation() const {
+            switch (edge) {
+                case edge::top:
+                case edge::bottom:
+                    return 0;
+                case edge::left:
+                case edge::right:
+                    return 90;
+                case edge::topLeft:
+                case edge::bottomRight:
+                    return 135;
+                case edge::topRight:
+                case edge::bottomLeft:
+                    return 45;
+                case edge::none:
+                default:
+                    return 0;
             }
         }
     };
@@ -92,7 +111,7 @@ private:
     float edgeSize = 5.0f;
 
     std::shared_ptr<Sprite> edgeSprite{};
-    std::shared_ptr<CustomMouseSprite> customMouse;
+    std::shared_ptr<CustomMouseSprite> resizingMouse;
 
     elementEdge isPositionOnEdge(glm::vec2 mousePos);
 

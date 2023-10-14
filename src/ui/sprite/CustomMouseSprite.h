@@ -36,7 +36,7 @@ public:
                       const glm::vec2 &position, const glm::vec2 &size,
                       float baseZIndex) override;
 
-    void setMouse();
+    void setMouse(float rotation = 0);
 
     void setRootScene(std::shared_ptr<RootScene> rootScene_);
 

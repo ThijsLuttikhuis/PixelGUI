@@ -9,14 +9,24 @@ The main goal is to make PixelGUI function as a basis for creating games with a 
 + Draw sprites to a screen
 + Handle mouse and keyboard inputs
 + Provide interactive elements like buttons
++ Drag elements and resize them
++ Text input
 
 ## What PixelGUI can not do (yet)
 - Draw lines, simple shapes (TODO)
 - Plot data to a figure (TODO)
 - More interactive elements like switches, labels etc. (TODO)
 - Create a user interface with a UI Editor (TODO)
+- Allow Saving / Loading (TODO)
 - Provide Audio output
 - Make you a cup of coffee
+
+## What is up next
+- Add ExtendedScene : Slider and fix dragging the Scene
+- Connect elements to the right panel (where you can edit their properties)
+- Allow reordering of front/back of elements
+- Text input cursor, indicator, read value
+- ...
 
 ## How to Compile PixelGUI
 ```

@@ -23,6 +23,7 @@ protected:
     std::string textureName;
     glm::vec3 color;
     float alpha;
+    float rotation = 0.0f;         // angle in degrees
 
     float zIndex = 0.5f;
 

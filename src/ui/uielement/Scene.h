@@ -82,12 +82,12 @@ public:
     virtual void removeUIElement(const std::shared_ptr<UIElement> &uiElement);
 
     /// Set the child the uiElement is currently dragging on.
-    void setDraggingChild(const std::shared_ptr<UIElement> &uiElement);
+    void setDraggingChild(const std::weak_ptr<UIElement> &uiElement);
 
     void clearDraggingChild();
 
     /// Set the child which is currently receiving text input
-    void setTextInputChild(const std::shared_ptr<UIElement> &uiElement);
+    void setTextInputChild(const std::weak_ptr<UIElement> &uiElement);
 
     void clearTextInputChild();
 
@@ -97,6 +97,17 @@ public:
     /// Set policy on owner change.
     void setChangeOwnerMode(enum changeOwnerMode changeOwner_);
 
+    void setGlobalPosition(glm::vec2 globalPosition_);
+
+    void setGlobalPosition(int left, int up);
+
+    void setPosition(glm::vec2 position_) override;
+
+    void setPosition(int left, int up) override;
+
+    void setPosition(glm::vec2 position_, pgu::positionAnchor anchor) override;
+
+    void setPosition(int left, int up, pgu::positionAnchor anchor) override;
 
     /// Get the child the uiElement is currently dragging on.
     [[nodiscard]] std::shared_ptr<UIElement> getDraggingChild();
@@ -114,19 +125,6 @@ public:
     [[nodiscard]] enum changeOwnerMode getChangeOwnerMode() const;
 
     glm::vec2 getGlobalPosition() const;
-
-    void setGlobalPosition(glm::vec2 globalPosition_);
-
-    void setGlobalPosition(int left, int up);
-
-    void setPosition(glm::vec2 position_) override;
-
-    void setPosition(int left, int up) override;
-
-    void setPosition(glm::vec2 position_, pgu::positionAnchor anchor) override;
-
-    void setPosition(int left, int up, pgu::positionAnchor anchor) override;
-
 };
 
 }

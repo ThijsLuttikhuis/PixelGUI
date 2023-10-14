@@ -9,7 +9,8 @@
 
 namespace PG {
 
-void CustomMouseSprite::setMouse() {
+void CustomMouseSprite::setMouse(float rotation_) {
+    rotation = rotation_;
     rootScene->setCurrentMouseSprite(std::dynamic_pointer_cast<CustomMouseSprite>(getSharedFromThis()));
 }
 
