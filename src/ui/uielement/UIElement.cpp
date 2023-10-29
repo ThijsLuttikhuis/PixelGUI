@@ -44,10 +44,20 @@ bool UIElement::hasParent() const {
 }
 
 std::shared_ptr<Scene> UIElement::getParent() const {
-    if (parentPtr.expired()) {
+    if (!hasParent()) {
         throw messageException("UIElement::getParent: parent deleted :(");
     }
     return std::shared_ptr<Scene>(parentPtr);
+}
+
+std::vector<std::shared_ptr<UIElement>> Scene::getSiblings() {
+    if (!hasParent()) {
+        auto onlyChildUIElement = getSharedFromThis();
+        return {onlyChildUIElement};
+    }
+
+    auto parent = getParent();
+    return parent->getChildren();
 }
 
 void UIElement::setParent(std::weak_ptr<Scene> parent_) {

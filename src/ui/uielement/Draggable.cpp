@@ -3,7 +3,6 @@
 //
 
 #include "Draggable.h"
-#include "Scene.h"
 
 namespace PG {
 

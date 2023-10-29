@@ -10,7 +10,7 @@
 
 namespace PG {
 
-class ExtendedScene : public Scene {
+class ExtendedScene : public Scene, public Slider<int> {
 public:
     ExtendedScene(std::string name, const glm::vec2 &position_, const glm::vec2 &size)
     : Scene(std::move(name), position_, size) {

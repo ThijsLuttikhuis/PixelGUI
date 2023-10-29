@@ -35,16 +35,15 @@ set(LIBS
         glfw
         utils
         ${OPENGL_LIBRARY}
-        ${GLFW_LIBRARIES}
-        )
+        ${GLFW_LIBRARIES})
 
 set(INCLUDE_UI
         src/ui/uielement/Button.h
         src/ui/uielement/Button.cpp
         src/ui/uielement/UIElement.h
         src/ui/uielement/UIElement.cpp
-        src/ui/uielement/Scene.cpp
-        src/ui/uielement/Scene.h
+        src/ui/uielement/Container.cpp
+        src/ui/uielement/Container.h
         src/ui/uielement/Callbackable.cpp
         src/ui/uielement/Callbackable.h
         src/ui/uielement/Draggable.cpp
@@ -65,6 +64,14 @@ set(INCLUDE_UI
         src/ui/uielement/ButtonOnRelease.h
         src/ui/uielement/EditableValue.cpp
         src/ui/uielement/EditableValue.h
+        src/ui/uielement/Scene.cpp
+        src/ui/uielement/Scene.h
+        src/ui/uielement/Widget.cpp
+        src/ui/uielement/Widget.h
+        src/ui/uielement/HelperSprite.cpp
+        src/ui/uielement/HelperSprite.h
+        src/ui/uielement/ExtendedScene.cpp
+        src/ui/uielement/ExtendedScene.h
 
         src/ui/sprite/Sprite.h
         src/ui/sprite/Sprite.cpp
@@ -72,14 +79,16 @@ set(INCLUDE_UI
         src/ui/sprite/MultiSprite.h
         src/ui/sprite/SpriteComposite.cpp
         src/ui/sprite/SpriteComposite.h
-        )
+        src/ui/sprite/RectangleSpriteComposite.cpp
+        src/ui/sprite/RectangleSpriteComposite.h
+        src/ui/sprite/CustomMouseSprite.cpp
+        src/ui/sprite/CustomMouseSprite.h)
 
 set(INCLUDE_UI_EDITOR
         src/uieditor/UIEditor.cpp
         src/uieditor/UIEditor.h
         src/ui/uielement/DraggableButtonResizable.cpp
-        src/ui/uielement/DraggableButtonResizable.h
-        )
+        src/ui/uielement/DraggableButtonResizable.h)
 
 set(INCLUDE_WINDOW
         src/window/Window.h
@@ -93,8 +102,7 @@ set(INCLUDE_WINDOW
         src/window/render/SpriteRenderer.h
         src/window/render/SpriteRenderer.cpp
         src/window/render/TextRenderer.h
-        src/window/render/TextRenderer.cpp
-        )
+        src/window/render/TextRenderer.cpp)
 
 set(INCLUDE_SOURCE_FILES
         src/glad.c
@@ -102,13 +110,11 @@ set(INCLUDE_SOURCE_FILES
         src/window_callback.cpp
         ${INCLUDE_UI_EDITOR}
         ${INCLUDE_WINDOW}
-        ${INCLUDE_UI}
-        )
+        ${INCLUDE_UI})
 
 add_executable(PixelGUI
         main.cpp
-        ${INCLUDE_SOURCE_FILES}
-        src/ui/sprite/RectangleSpriteComposite.cpp src/ui/sprite/RectangleSpriteComposite.h src/ui/sprite/CustomMouseSprite.cpp src/ui/sprite/CustomMouseSprite.h src/ui/uielement/HelperSprite.cpp src/ui/uielement/HelperSprite.h src/ui/uielement/ExtendedScene.cpp src/ui/uielement/ExtendedScene.h)
+        ${INCLUDE_SOURCE_FILES})
 
 target_link_libraries(PixelGUI ${LIBS})
 
@@ -119,4 +125,3 @@ add_library(PIXELGUI_lib STATIC ${INCLUDE_SOURCE_FILES})
 target_link_libraries(PIXELGUI_lib ${LIBS})
 
 add_subdirectory(test)
-

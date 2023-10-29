@@ -10,7 +10,7 @@
 
 #include "SpriteRenderer.h"
 #include "ui/sprite/Sprite.h"
-#include "ui/uielement/Scene.h"
+#include "ui/uielement/Container.h"
 #include "utilities/DebugPrinter.h"
 
 namespace PG {
@@ -80,7 +80,7 @@ bool SpriteRenderer::hasTexture(const std::string &textureName) {
     return textures.find(textureName) != textures.end();
 }
 
-void SpriteRenderer::setBaseUI(const std::shared_ptr<Scene> &baseUI_) {
+void SpriteRenderer::setBaseUI(const std::shared_ptr<Container> &baseUI_) {
     baseUI = baseUI_;
 }
 
